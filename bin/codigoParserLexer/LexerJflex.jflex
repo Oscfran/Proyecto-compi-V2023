@@ -1,4 +1,5 @@
 /* JFlex example: partial Java language lexer specification */
+package ParserLexer;
 import java_cup.runtime.*;
 
 /**
@@ -6,8 +7,8 @@ import java_cup.runtime.*;
  */
 %%
 
-%class Lexer
-%unicode
+%class LexerJflex
+%public
 %cup
 %line
 %column
@@ -30,37 +31,37 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 /* comments */
 Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
 
-TraditionalComment   = "/_" [^*] ~"_/" | "/_" "_"+ "/"
+TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
 // Comment can be the last line of the file, without line terminator.
-EndOfLineComment     = "@" {InputCharacter}* {LineTerminator}?
-DocumentationComment = "/__" {CommentContent} "_"+ "/"
+EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
+DocumentationComment = "/**" {CommentContent} "*"+ "/"
 CommentContent       = ( [^*] | \*+ [^/*] )*
 
 Identifier = [:jletter:] [:jletterdigit:]*
 
 DecIntegerLiteral = 0 | [1-9][0-9]*
 
-%state STRING
+%state CADENA
 
 %%
 
 /* keywords */
-<YYINITIAL> "abstract"           { return symbol(sym.ABSTRACT); }
-<YYINITIAL> "boolean"            { return symbol(sym.BOOLEAN); }
-<YYINITIAL> "break"              { return symbol(sym.BREAK); }
+<YYINITIAL> "abstract"           { return symbol(sym.NAVIDAD); }
+<YYINITIAL> "public"              { return symbol(sym.FESTIVAL); }
+<YYINITIAL> "private"              { return symbol(sym.FIESTA); }
 
 <YYINITIAL> {
   /* identifiers */ 
-  {Identifier}                   { return symbol(sym.IDENTIFIER); }
+  {Identifier}                   { return symbol(sym.PERSONA); }
  
   /* literals */
-  {DecIntegerLiteral}            { return symbol(sym.INTEGER_LITERAL); }
-  \"                             { string.setLength(0); yybegin(STRING); }
+  {DecIntegerLiteral}            { return symbol(sym.l_SANTA); }
+  \"                             { string.setLength(0); yybegin(CADENA); }
 
   /* operators */
-  "="                            { return symbol(sym.EQ); }
-  "=="                           { return symbol(sym.EQEQ); }
-  "+"                            { return symbol(sym.PLUS); }
+  "="                            { return symbol(sym.ENTREGA); }
+  "=="                           { return symbol(sym.ELFO1); }
+  "+"                            { return symbol(sym.RODOLFO); }
 
   /* comments */
   {Comment}                      { /* ignore */ }
@@ -69,10 +70,10 @@ DecIntegerLiteral = 0 | [1-9][0-9]*
   {WhiteSpace}                   { /* ignore */ }
 }
 
-<STRING> {
+<CADENA> {
   \"                             { yybegin(YYINITIAL); 
-                                   return symbol(sym.STRING_LITERAL, 
-                                   string.toString()); }
+                                   return symbol(sym.l_PAPANOEL, 
+                                   '"'+string.toString()+'"'); }
   [^\n\r\"\\]+                   { string.append( yytext() ); }
   \\t                            { string.append('\t'); }
   \\n                            { string.append('\n'); }

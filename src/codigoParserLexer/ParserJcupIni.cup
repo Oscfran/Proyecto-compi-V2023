@@ -1,0 +1,58 @@
+package ParserLexer;
+import java_cup.runtime.*;
+
+action code {:
+
+    public void hola(){
+        System.out.println("Hola");
+    }
+
+    public void adios(){
+        System.out.println("Adios");
+    }
+:}
+
+parser code {:
+    //Conectar parser a un escaner
+    LexerJflex lex;
+
+    @SuppressWarnings(value = { "deprecation" })
+    public parser(LexerJflex lex){
+        this.lex = lex;
+        this.symbolFactory = new DefaultSymbolFactory();
+    }
+    
+:}
+
+init with {: :};
+scan with {: return lex.next_token(); :};
+
+/* Palabras Reservadas */
+terminal            ABSTRACT, PUBLIC, PRIVATE;
+
+/* Literales */
+terminal            IDENTIFIER, INTEGER_INTEGRAL, STRING_LITERAL;
+
+/*Operadores*/
+terminal            EQ, EQEQ, PLUS;
+
+/*Lexer Basico*/
+terminal            BREAK, BOOLEAN;
+
+/* Lexer navideño */
+terminal            NAVIDAD, FESTIVAL, FIESTA, PERSONA, l_SANTA, ENTREGA, ELFO1, RODOLFO, l_PAPANOEL;
+
+/* No terminales */
+non terminal            miLenguaje;
+
+/* Inicio */
+start with miLenguaje;
+
+miLenguaje ::=  {:
+                    hola();
+                :}
+                IDENTIFIER
+                {:
+                    adios();
+                :}
+                ;
