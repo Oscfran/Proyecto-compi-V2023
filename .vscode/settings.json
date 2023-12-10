@@ -1,0 +1,12 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar"
+        ],
+        "exclude": [
+            "d:\\TEC\\Compi-Verano\\Semana#1\\java-cup-bin-11b-20160615\\java-cup-11b-runtime.jar"
+        ]
+    }
+}
