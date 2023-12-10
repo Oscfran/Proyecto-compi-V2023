@@ -6,11 +6,11 @@ import java.io.Reader;
 import ParserLexer.*;
 import java_cup.runtime.Symbol;
 import java_cup.internal_error;
-//import LexerJflex;
 import jflex.exceptions.SilentExit;
 
 public class MainJflexCup {
-
+    
+    //Funcio que invoca las subfunciones responsables de la generacion de los archivos del package ParserLexer
     public void iniLexerParser(String rutaLexer, String[] strArrParser) throws internal_error, Exception {
         GenerateLexer(rutaLexer);
         Generateparser(strArrParser);
@@ -26,7 +26,9 @@ public class MainJflexCup {
     public void Generateparser(String[] strArr) throws internal_error ,IOException, Exception {
         java_cup.Main.main(strArr);
     }
-    //Genera la revisi[on del archivo
+
+
+    //Genera la revision de los archivos de prueba (codigoPrueba)
     public void ejercicioParser(String rutaScanear) throws IOException{
         Reader reader = new BufferedReader(new FileReader(rutaScanear));
         reader.read();
