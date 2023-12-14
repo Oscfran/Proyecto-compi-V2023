@@ -59,20 +59,24 @@ public class App {
 
 
         //Archivo vacio
+        System.out.println("Primer Archivo:");
         mjfc.ejercicioParser(fullPathScanner);
 
         //Archivo de prueba simple (modificable)
+        System.out.println("\nSegundo Archivo:");
         mjfc.ejercicioParser(fullPathParser);
     }
     
     public static void main(String[] args) throws Exception {
-        //Quitar los comentarios de lo que se desee ejecutar se hace asi para evitar errores
+        /*Poner o quitar comentarios de lo que se desee ejecutar se hace asi para evitar errores(ejemplo al hacer cambios y 
+        ejecutar las pruebas en la primera pasada los cambio no se han guardado y dirá que tiene errores o directamente no se mostraran los cambios, 
+        pero en la segunda ejecución ya no estarán dichos errores)*/
 
-        //generarLexerParser();
+        generarLexerParser();
 
         /*Debido al package ParserLexer no se puede ejecutar si no hay archivos en dicha, carpeta mismos que se generan
         automaticamente al ejecutarse la funcion: generarLexerParser() (en la actual version deberia poder ejecutarse sin problemas)*/
        
-        //pruebasLexerParser();
+        pruebasLexerParser();
     }
 }

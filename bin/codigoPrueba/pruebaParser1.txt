@@ -1,1 +1,5 @@
- public abstract hola "hola" _1 _m1 "%$$$%%$"
+ public abstract hola "hola" _1 _m1 "%$$$%%$"  @Prueba de comentario de una linea public
+ public /_ prueba de comentario en medio_/ abstract
+ adios "prueba de string largo con espacios" /_comentario en 
+ varias lineas_/ if else elif for do until return break
+  + == - / * ++ -- true 13 True "final" @comentario extra final de prueba 
