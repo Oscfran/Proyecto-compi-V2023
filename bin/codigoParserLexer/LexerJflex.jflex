@@ -1,7 +1,6 @@
 package ParserLexer;
 import java_cup.runtime.*;
 
-
 %%
 
 %class LexerJflex
@@ -29,6 +28,7 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
 
 TraditionalComment   = "/_" [^*] ~"_/" | "/_" "_"+ "/"
+
 // El comentario puede ser final de documento sin necesidad de final de linea.
 EndOfLineComment     = "@" {InputCharacter}* {LineTerminator}?
 DocumentationComment = "/**" {CommentContent} "*"+ "/"
@@ -46,56 +46,89 @@ Bool = "true" | "false"
 %%
 
 /* keywords */
-<YYINITIAL> "abstract"           { return symbol(sym.NAVIDAD); }
-<YYINITIAL> "public"              { return symbol(sym.FESTIVAL); }
-<YYINITIAL> "private"              { return symbol(sym.FIESTA); }
+<YYINITIAL> "abstract"           { return symbol(sym.NAVIDAD);  }
+<YYINITIAL> "public"             { return symbol(sym.FESTIVAL); }
+<YYINITIAL> "private"            { return symbol(sym.FIESTA);   }
 
 <YYINITIAL> {
-  /* literales booleanos(se coloca aqui antes de los identidficadores para evitar ser declarado como id en vez de boolean) */
-  {Bool}                        { return symbol(sym.l_SANTA_CLAUS); }
+  /* literales booleanos(se coloca aqui antes de los identificadores para evitar ser declarado como id en vez de boolean) */
+  {Bool}                         { return symbol(sym.l_SANTA_CLAUS); }
 
-    /* Estructuras de control */
-  "if"                           { return symbol(sym.ELFO); }
-  "elif"                         { return symbol(sym.HADA); }
-  "else"                         { return symbol(sym.DUENDE); }
+  /* Estructuras de control */
+  "if"                           { return symbol(sym.ELFO);     }
+  "elif"                         { return symbol(sym.HADA);     }
+  "else"                         { return symbol(sym.DUENDE);   }
   "for"                          { return symbol(sym.ENVUELVE); }
-  "do"                           { return symbol(sym.HACE); }
-  "until"                        { return symbol(sym.REVISA); }
-  "return"                       { return symbol(sym.ENVIA); }
-  "break"                        { return symbol(sym.CORTA); }
+  "do"                           { return symbol(sym.HACE);     }
+  "until"                        { return symbol(sym.REVISA);   }
+  "return"                       { return symbol(sym.ENVIA);    }
+  "break"                        { return symbol(sym.CORTA);    }
 
   /* identificadores */ 
-  {Identifier}                   { return symbol(sym.PERSONA); }
+  {Identifier}                   { return symbol(sym.PERSONA);  }
  
   /* literales */
-  {DecIntegerLiteral}            { return symbol(sym.l_SANTA); }
+  {DecIntegerLiteral}            { return symbol(sym.l_SANTA);  }
   \"                             { string.setLength(0); yybegin(CADENA); }
 
-  /* operadores */
-  "="                            { return symbol(sym.ENTREGA); }
-
+  /* operadores comparación*/
   "=="                           { return symbol(sym.ELFO1); }
   "!="                           { return symbol(sym.ELFO2); }
-  ">"                           { return symbol(sym.ELFO3); }
-  "<"                           { return symbol(sym.ELFO4); }
+  ">"                            { return symbol(sym.ELFO3); }
+  "<"                            { return symbol(sym.ELFO4); }
   ">="                           { return symbol(sym.ELFO5); }
   "<="                           { return symbol(sym.ELFO6); }
 
-  "++"                           { return symbol(sym.GRINCH); }
+   /* operadores lógicos */
+  "||"                           { return symbol(sym.MELCHOR); }
+  "&&"                           { return symbol(sym.GASPAR); }
+  "!"                            { return symbol(sym.BALTASAR); }
+
+  /* operadores unarios */
+  "++"                           { return symbol(sym.GRINCH);}
   "--"                           { return symbol(sym.QUIEN); }
 
-  "+"                            { return symbol(sym.RODOLFO); }
+  /* operadores aritméticos*/
+  "+"                            { return symbol(sym.RODOLFO);}
   "-"                            { return symbol(sym.COMETA); }
-  "*"                            { return symbol(sym.BAILARIN); }
+  "*"                            { return symbol(sym.BAILARIN);}
   "/"                            { return symbol(sym.CUPIDO); }
 
+  /* Paréntesis*/
+  "("                            { return symbol(sym.ABRECUENTO);}
+  ")"                            { return symbol(sym.CIERRECUENTO);}
 
+  /* Paréntesis cuadrados*/
+  "["                            { return symbol(sym.ABREEMPAQUE);}
+  "]"                            { return symbol(sym.CIERRAEMPAQUE);}
+
+  /* Llaves*/
+  "{"                            { return symbol(sym.ABREREGALO);}
+  "}"                            { return symbol(sym.CIERREREGALO);}
+ 
+  /* Tipos*/
+  "string"                       { return symbol(sym.SANTACLAUS);}
+  "integer"                      { return symbol(sym.PAPANOEL);}
+  "float"                        { return symbol(sym.SANNICOLAS);}
+  "double"                       { return symbol(sym.SINTERKLASS);}
+  "void"                         { return symbol(sym.VIEJITOPASCUERO);}
+
+  /* operador asignación */
+  "="                            { return symbol(sym.ENTREGA);}
+
+  /* Fin de expresión */
+  ";"                            { return symbol(sym.FINREGALO); }
+
+  /* Separador */
+  ","                            { return symbol(sym.MUERDAGO); }
 
   /* Comentarios */
   {Comment}                      { /* Se ignora */ }
  
   /* whitespace */
   {WhiteSpace}                   { /* Se ignora */ }
+
+ 
 }
 
 
