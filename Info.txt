@@ -1,7 +1,7 @@
 a. Nombre del curso: Compiladores E Interpretes GR 60
 b. Número de semestre y año lectivo: Verano 1 2023
-c. Nombre de los Estudiantes: Oscar Hernández Ramírez - Sebastian Bogantes
-d. Número de carnet de los estudiantes: 2020039675 - 
-e. Número de proyecto programado: Proyecto #1
+c. Nombre de los Estudiantes: Oscar Hernández Ramírez - Sebastian Bogantes Rodríguez 
+d. Número de carnet de los estudiantes: 2020039675 - 2020028437
+e. Número de proyecto programado: Proyecto #1 Análisis Léxico
 f. Fecha de entrega: sábado 16 de diciembre
-g. Estatus de la entrega: Regular
+g. Estatus de la entrega: Muy Buena

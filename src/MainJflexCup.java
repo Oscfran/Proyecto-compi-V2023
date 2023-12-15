@@ -41,7 +41,7 @@ public class MainJflexCup {
                 System.out.println("Token: " + token.sym + ", Valor: " + (token.value==null?lex.yytext():token.value.toString()));
             }
             else{
-                System.out.println("Cantida de lexemas encontrados: " + i);
+                System.out.println("Cantidad de lexemas encontrados: " + i);
                 return;
             }
             i++;

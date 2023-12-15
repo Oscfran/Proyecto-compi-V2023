@@ -41,13 +41,14 @@ public class App {
     }
     //Funcion que prepara los archivos para ser probados por el LexerParser
     public static void pruebasLexerParser() throws Exception {
-        String basePath, fullPathScanner, fullPathParser;
+        String basePath, fullPathScanner, fullPathParser, fullPathError;
         MainJflexCup mjfc;
 
         //Rutas de archivos txt de prueba
         basePath = System.getProperty("user.dir");
         fullPathScanner = basePath + "\\src\\codigoPrueba\\prueba.txt";
         fullPathParser = basePath + "\\src\\codigoPrueba\\pruebaParser1.txt";
+        fullPathError = basePath + "\\src\\codigoPrueba\\pruebaError.txt";
 
         mjfc = new MainJflexCup();
 
@@ -58,6 +59,10 @@ public class App {
         //Archivo de prueba simple (modificable)
         System.out.println("\nSegundo Archivo:");
         mjfc.ejercicioParser(fullPathParser);
+
+        //Archivo de prueba con errores
+        System.out.println("\nTercer Archivo:");
+        mjfc.ejercicioParser(fullPathError);
     }
     
     public static void main(String[] args) throws Exception {
