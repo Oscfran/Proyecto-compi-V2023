@@ -10,9 +10,10 @@ public class App {
 
         //java de paser y lexer default
 
+         //Guarda los nombres finales que tendran los .java generados por el programa
         jparser = "parser.java";
-        jlexer = "MyLexer.java";
-        jlexerCarpeta = "";
+        jlexer = "LexerJflex.java";
+        jlexerCarpeta = "codigoParserLexer";
 
         mjfc = new MainJflexCup();
 
@@ -20,24 +21,17 @@ public class App {
         //Elimina el archivo sym.java si existe para crear el nuevo y evitar errores
         Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\sym.java"));
 
-        //Guarda las ubicaciones de los archivos JFlex y Java Cup
-        fullPathLexer = basePath + "\\src\\codigoParserLexer\\LexerJflex.jflex";
-        fullPathParser = basePath + "\\src\\codigoParserLexer\\ParserJcupIni.cup";
-
-        //Guarda los nombres finales que tendran los .java generados por el programa
-        jparser = "parser.java";
-        jlexer = "LexerJflex.java";
-        jlexerCarpeta = "codigoParserLexer";
-
         //Elimina versiones anteriores de los Lexer y Parser correspondientemente
         Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\" + jlexer));
         Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\" + jparser));
 
-        //crear el analizador lexico y sintactico
+        //Guarda las ubicaciones de los archivos JFlex y Java Cup
+        fullPathLexer = basePath + "\\src\\codigoParserLexer\\LexerJflex.jflex";
+        fullPathParser = basePath + "\\src\\codigoParserLexer\\ParserJcupIni.cup";
 
+        //crear el analizador lexico y sintactico
         String[] strArrParser = {fullPathParser}; //flag para el nombre del parser
         mjfc.iniLexerParser(fullPathLexer, strArrParser);
-
 
         //Mueve los archivos generados a la carpeta parser lexer para mauor facilidad
         Files.move(Paths.get(basePath + "\\sym.java"),Paths.get(basePath + "\\src\\ParserLexer\\sym.java"));
@@ -56,7 +50,6 @@ public class App {
         fullPathParser = basePath + "\\src\\codigoPrueba\\pruebaParser1.txt";
 
         mjfc = new MainJflexCup();
-
 
         //Archivo vacio
         System.out.println("Primer Archivo:");
