@@ -71,6 +71,14 @@ Bool = "true" | "false"
   {DecIntegerLiteral}            { return symbol(sym.l_SANTA);  }
   \"                             { string.setLength(0); yybegin(CADENA); }
 
+ /* Tipos*/
+  "string"                       { return symbol(sym.SANTACLAUS);}
+  "int"                          { return symbol(sym.PAPANOEL);}
+  "float"                        { return symbol(sym.SANNICOLAS);}
+  "double"                       { return symbol(sym.SINTERKLASS);}
+  "void"                         { return symbol(sym.VIEJITOPASCUERO);}
+  "char"                         { return symbol(sym.COLACHO);}
+  
   /* operadores comparación*/
   "=="                           { return symbol(sym.ELFO1); }
   "!="                           { return symbol(sym.ELFO2); }
@@ -79,7 +87,7 @@ Bool = "true" | "false"
   ">="                           { return symbol(sym.ELFO5); }
   "<="                           { return symbol(sym.ELFO6); }
 
-   /* operadores lógicos */
+  /* operadores lógicos */
   "||"                           { return symbol(sym.MELCHOR); }
   "&&"                           { return symbol(sym.GASPAR); }
   "!"                            { return symbol(sym.BALTASAR); }
@@ -96,7 +104,7 @@ Bool = "true" | "false"
 
   /* Paréntesis*/
   "("                            { return symbol(sym.ABRECUENTO);}
-  ")"                            { return symbol(sym.CIERRECUENTO);}
+  ")"                            { return symbol(sym.CIERRACUENTO);}
 
   /* Paréntesis cuadrados*/
   "["                            { return symbol(sym.ABREEMPAQUE);}
@@ -104,15 +112,8 @@ Bool = "true" | "false"
 
   /* Llaves*/
   "{"                            { return symbol(sym.ABREREGALO);}
-  "}"                            { return symbol(sym.CIERREREGALO);}
+  "}"                            { return symbol(sym.CIERRAREGALO);}
  
-  /* Tipos*/
-  "string"                       { return symbol(sym.SANTACLAUS);}
-  "integer"                      { return symbol(sym.PAPANOEL);}
-  "float"                        { return symbol(sym.SANNICOLAS);}
-  "double"                       { return symbol(sym.SINTERKLASS);}
-  "void"                         { return symbol(sym.VIEJITOPASCUERO);}
-
   /* operador asignación */
   "="                            { return symbol(sym.ENTREGA);}
 
@@ -122,13 +123,17 @@ Bool = "true" | "false"
   /* Separador */
   ","                            { return symbol(sym.MUERDAGO); }
 
+  /* print */
+  "print"                        { return symbol(sym.NARRA); }
+
+  /* read */
+  "read"                         { return symbol(sym.ESCUCHA); }
+  
   /* Comentarios */
   {Comment}                      { /* Se ignora */ }
  
   /* whitespace */
   {WhiteSpace}                   { /* Se ignora */ }
-
- 
 }
 
 
