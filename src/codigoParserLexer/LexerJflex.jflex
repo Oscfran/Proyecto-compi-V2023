@@ -147,5 +147,6 @@ Bool = "true" | "false"
 }
 
 /* Manejo de errores */
-[^]                              { throw new Error("Illegal character <"+
-                                                    yytext()+">"); }
+[^] {
+    System.err.println("Error léxico en la línea " + (yyline + 1) + ": Carácter no reconocido '" + yytext() + "'");
+}
