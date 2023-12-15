@@ -9,13 +9,20 @@ package ParserLexer;
 public class sym {
   /* terminals */
   public static final int STRING_LITERAL = 7;
+  public static final int SANNICOLAS = 53;
   public static final int l_SANTA = 17;
+  public static final int FINREGALO = 50;
   public static final int HADA = 34;
   public static final int PERSONA = 16;
+  public static final int CIERRECUENTO = 45;
   public static final int DUENDE = 35;
   public static final int PRIVATE = 4;
+  public static final int CIERREREGALO = 49;
   public static final int ENTREGA = 20;
+  public static final int VIEJITOPASCUERO = 55;
+  public static final int ABREEMPAQUE = 46;
   public static final int RODOLFO = 29;
+  public static final int CIERRAEMPAQUE = 57;
   public static final int l_SANTA_CLAUS = 18;
   public static final int NAVIDAD = 13;
   public static final int INTEGER_INTEGRAL = 6;
@@ -23,28 +30,38 @@ public class sym {
   public static final int PLUS = 10;
   public static final int HACE = 37;
   public static final int ENVUELVE = 36;
+  public static final int PAPANOEL = 52;
   public static final int COMETA = 30;
   public static final int GRINCH = 27;
   public static final int FESTIVAL = 14;
   public static final int ABSTRACT = 2;
   public static final int EOF = 0;
   public static final int BOOLEAN = 12;
+  public static final int SANTACLAUS = 51;
   public static final int CORTA = 40;
+  public static final int MELCHOR = 41;
   public static final int REVISA = 38;
   public static final int error = 1;
+  public static final int BALTASAR = 43;
+  public static final int ABRECUENTO = 44;
+  public static final int GASPAR = 42;
   public static final int EQEQ = 9;
   public static final int BREAK = 11;
+  public static final int ABREREGALO = 48;
   public static final int EQ = 8;
+  public static final int CIERREEMPAQUE = 47;
   public static final int CUPIDO = 32;
   public static final int ENVIA = 39;
   public static final int BAILARIN = 31;
   public static final int FIESTA = 15;
+  public static final int MUERDAGO = 56;
   public static final int PUBLIC = 3;
   public static final int ELFO = 33;
   public static final int ELFO6 = 26;
   public static final int ELFO5 = 25;
   public static final int ELFO4 = 24;
   public static final int ELFO3 = 23;
+  public static final int SINTERKLASS = 54;
   public static final int ELFO2 = 22;
   public static final int ELFO1 = 21;
   public static final int QUIEN = 28;
@@ -90,7 +107,24 @@ public class sym {
   "HACE",
   "REVISA",
   "ENVIA",
-  "CORTA"
+  "CORTA",
+  "MELCHOR",
+  "GASPAR",
+  "BALTASAR",
+  "ABRECUENTO",
+  "CIERRECUENTO",
+  "ABREEMPAQUE",
+  "CIERREEMPAQUE",
+  "ABREREGALO",
+  "CIERREREGALO",
+  "FINREGALO",
+  "SANTACLAUS",
+  "PAPANOEL",
+  "SANNICOLAS",
+  "SINTERKLASS",
+  "VIEJITOPASCUERO",
+  "MUERDAGO",
+  "CIERRAEMPAQUE"
   };
 }
 
