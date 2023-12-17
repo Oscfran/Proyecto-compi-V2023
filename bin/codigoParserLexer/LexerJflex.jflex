@@ -38,6 +38,8 @@ Identifier = [:jletter:] [:jletterdigit:]*
 
 DecIntegerLiteral = 0 | [1-9][0-9]*
 
+Digits = [0-9]*
+
 Bool = "true" | "false"
 
 
@@ -51,8 +53,15 @@ Bool = "true" | "false"
 <YYINITIAL> "private"            { return symbol(sym.FIESTA);   }
 
 <YYINITIAL> {
+  /* Main */
+  "main"                         { return symbol(sym.EMPEZONAVIDAD); }
+
   /* literales booleanos(se coloca aqui antes de los identificadores para evitar ser declarado como id en vez de boolean) */
   {Bool}                         { return symbol(sym.l_SANTA_CLAUS); }
+
+  /* Separador de expresiones */
+  "|"                         { return symbol(sym.POLONORTE); }
+
 
   /* Estructuras de control */
   "if"                           { return symbol(sym.ELFO);     }
@@ -70,6 +79,9 @@ Bool = "true" | "false"
   /* literales */
   {DecIntegerLiteral}            { return symbol(sym.l_SANTA);  }
   \"                             { string.setLength(0); yybegin(CADENA); }
+  /* Número literal flotante */
+  {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
+  "0" "." {Digits}?                      { return symbol(sym.l_PASCUERO, yytext()); }
 
  /* Tipos*/
   "string"                       { return symbol(sym.SANTACLAUS);}
@@ -84,12 +96,10 @@ Bool = "true" | "false"
   "!="                           { return symbol(sym.ELFO2); }
   ">"                            { return symbol(sym.ELFO3); }
   "<"                            { return symbol(sym.ELFO4); }
-  ">="                           { return symbol(sym.ELFO5); }
-  "<="                           { return symbol(sym.ELFO6); }
 
   /* operadores lógicos */
-  "||"                           { return symbol(sym.MELCHOR); }
-  "&&"                           { return symbol(sym.GASPAR); }
+  "#"                           { return symbol(sym.MELCHOR); }
+  "^"                           { return symbol(sym.GASPAR); }
   "!"                            { return symbol(sym.BALTASAR); }
 
   /* operadores unarios */
@@ -101,6 +111,8 @@ Bool = "true" | "false"
   "-"                            { return symbol(sym.COMETA); }
   "*"                            { return symbol(sym.BAILARIN);}
   "/"                            { return symbol(sym.CUPIDO); }
+  "~"                            { return symbol(sym.DONNER); }
+  "**"                            { return symbol(sym.DASHER); }
 
   /* Paréntesis*/
   "("                            { return symbol(sym.ABRECUENTO);}
@@ -115,7 +127,7 @@ Bool = "true" | "false"
   "}"                            { return symbol(sym.CIERRAREGALO);}
  
   /* operador asignación */
-  "="                            { return symbol(sym.ENTREGA);}
+  "<="                            { return symbol(sym.ENTREGA);}
 
   /* Fin de expresión */
   ";"                            { return symbol(sym.FINREGALO); }
