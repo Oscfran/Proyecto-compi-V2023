@@ -10,58 +10,57 @@ public class sym {
   /* terminals */
   public static final int EMPEZONAVIDAD = 5;
   public static final int STRING_LITERAL = 4;
-  public static final int DONNER = 26;
-  public static final int SANNICOLAS = 48;
-  public static final int l_SANTA = 11;
-  public static final int FINREGALO = 45;
-  public static final int l_PASCUERO = 14;
-  public static final int HADA = 29;
-  public static final int CIERRACUENTO = 40;
-  public static final int PERSONA = 10;
-  public static final int DUENDE = 30;
-  public static final int CIERRAREGALO = 44;
-  public static final int ENTREGA = 15;
-  public static final int VIEJITOPASCUERO = 50;
-  public static final int ABREEMPAQUE = 41;
-  public static final int RODOLFO = 22;
-  public static final int CIERRAEMPAQUE = 42;
-  public static final int l_SANTA_CLAUS = 12;
-  public static final int NAVIDAD = 7;
+  public static final int DONNER = 25;
+  public static final int SANNICOLAS = 47;
+  public static final int l_SANTA = 10;
+  public static final int FINREGALO = 44;
+  public static final int l_PASCUERO = 13;
+  public static final int HADA = 28;
+  public static final int CIERRACUENTO = 39;
+  public static final int PERSONA = 9;
+  public static final int DUENDE = 29;
+  public static final int CIERRAREGALO = 43;
+  public static final int ENTREGA = 14;
+  public static final int VIEJITOPASCUERO = 49;
+  public static final int ABREEMPAQUE = 40;
+  public static final int RODOLFO = 21;
+  public static final int CIERRAEMPAQUE = 41;
+  public static final int l_SANTA_CLAUS = 11;
+  public static final int NAVIDAD = 6;
   public static final int INTEGER_INTEGRAL = 3;
-  public static final int l_PAPANOEL = 13;
-  public static final int NARRA = 53;
-  public static final int HACE = 32;
-  public static final int ENVUELVE = 31;
-  public static final int PAPANOEL = 47;
-  public static final int COMETA = 23;
-  public static final int GRINCH = 20;
-  public static final int FESTIVAL = 8;
+  public static final int l_PAPANOEL = 12;
+  public static final int NARRA = 52;
+  public static final int HACE = 31;
+  public static final int ENVUELVE = 30;
+  public static final int PAPANOEL = 46;
+  public static final int COMETA = 22;
+  public static final int GRINCH = 19;
+  public static final int FESTIVAL = 7;
   public static final int EOF = 0;
-  public static final int SANTACLAUS = 46;
-  public static final int CORTA = 35;
-  public static final int MELCHOR = 36;
-  public static final int REVISA = 33;
+  public static final int SANTACLAUS = 45;
+  public static final int CORTA = 34;
+  public static final int MELCHOR = 35;
+  public static final int REVISA = 32;
   public static final int error = 1;
-  public static final int BALTASAR = 38;
-  public static final int ABRECUENTO = 39;
-  public static final int GASPAR = 37;
-  public static final int ESCUCHA = 54;
-  public static final int ABREREGALO = 43;
-  public static final int DASHER = 27;
-  public static final int CUPIDO = 25;
-  public static final int ENVIA = 34;
-  public static final int POLONORTE = 6;
-  public static final int COLACHO = 51;
-  public static final int BAILARIN = 24;
-  public static final int FIESTA = 9;
-  public static final int MUERDAGO = 52;
-  public static final int ELFO = 28;
-  public static final int ELFO4 = 19;
-  public static final int ELFO3 = 18;
-  public static final int SINTERKLASS = 49;
-  public static final int ELFO2 = 17;
-  public static final int ELFO1 = 16;
-  public static final int QUIEN = 21;
+  public static final int BALTASAR = 37;
+  public static final int ABRECUENTO = 38;
+  public static final int GASPAR = 36;
+  public static final int ESCUCHA = 53;
+  public static final int ABREREGALO = 42;
+  public static final int DASHER = 26;
+  public static final int CUPIDO = 24;
+  public static final int ENVIA = 33;
+  public static final int COLACHO = 50;
+  public static final int BAILARIN = 23;
+  public static final int FIESTA = 8;
+  public static final int MUERDAGO = 51;
+  public static final int ELFO = 27;
+  public static final int ELFO4 = 18;
+  public static final int ELFO3 = 17;
+  public static final int SINTERKLASS = 48;
+  public static final int ELFO2 = 16;
+  public static final int ELFO1 = 15;
+  public static final int QUIEN = 20;
   public static final int IDENTIFIER = 2;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -70,7 +69,6 @@ public class sym {
   "INTEGER_INTEGRAL",
   "STRING_LITERAL",
   "EMPEZONAVIDAD",
-  "POLONORTE",
   "NAVIDAD",
   "FESTIVAL",
   "FIESTA",

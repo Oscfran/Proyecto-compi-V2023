@@ -59,9 +59,6 @@ Bool = "true" | "false"
   /* literales booleanos(se coloca aqui antes de los identificadores para evitar ser declarado como id en vez de boolean) */
   {Bool}                         { return symbol(sym.l_SANTA_CLAUS); }
 
-  /* Separador de expresiones */
-  "|"                         { return symbol(sym.POLONORTE); }
-
 
   /* Estructuras de control */
   "if"                           { return symbol(sym.ELFO);     }
@@ -130,7 +127,7 @@ Bool = "true" | "false"
   "<="                            { return symbol(sym.ENTREGA);}
 
   /* Fin de expresión */
-  ";"                            { return symbol(sym.FINREGALO); }
+  "|"                            { return symbol(sym.FINREGALO); }
 
   /* Separador */
   ","                            { return symbol(sym.MUERDAGO); }
