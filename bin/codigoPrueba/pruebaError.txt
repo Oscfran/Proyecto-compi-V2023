@@ -1,4 +1,4 @@
- public abstract main (){
-    print("hola");:
-    break;
+ public main (){
+    print("hola")|
+    break|
  } 

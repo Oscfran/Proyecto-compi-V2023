@@ -31,7 +31,7 @@ TraditionalComment   = "/_" [^*] ~"_/" | "/_" "_"+ "/"
 
 // El comentario puede ser final de documento sin necesidad de final de linea.
 EndOfLineComment     = "@" {InputCharacter}* {LineTerminator}?
-DocumentationComment = "/**" {CommentContent} "*"+ "/"
+DocumentationComment = "/__" {CommentContent} "_"+ "/"
 CommentContent       = ( [^*] | \*+ [^/*] )*
 
 Identifier = [:jletter:] [:jletterdigit:]*
@@ -56,8 +56,8 @@ Bool = "true" | "false"
   /* Main */
   "main"                         { return symbol(sym.EMPEZONAVIDAD); }
 
-  /* literales booleanos(se coloca aqui antes de los identificadores para evitar ser declarado como id en vez de boolean) */
-  {Bool}                         { return symbol(sym.l_SANTA_CLAUS); }
+  /* literales booleanos */
+  {Bool}                         { return symbol(sym.l_SANTA_CLAUS, yytext()); }
 
 
   /* Estructuras de control */
@@ -70,8 +70,6 @@ Bool = "true" | "false"
   "return"                       { return symbol(sym.ENVIA);    }
   "break"                        { return symbol(sym.CORTA);    }
 
-  /* identificadores */ 
-  {Identifier}                   { return symbol(sym.PERSONA);  }
  
   /* literales */
   {DecIntegerLiteral}            { return symbol(sym.l_SANTA);  }
@@ -93,6 +91,8 @@ Bool = "true" | "false"
   "!="                           { return symbol(sym.ELFO2); }
   ">"                            { return symbol(sym.ELFO3); }
   "<"                            { return symbol(sym.ELFO4); }
+  ">="                           { return symbol(sym.ELFO5);}
+  "<_"                           { return symbol(sym.ELFO6);}
 
   /* operadores lógicos */
   "#"                           { return symbol(sym.MELCHOR); }
@@ -143,6 +143,9 @@ Bool = "true" | "false"
  
   /* whitespace */
   {WhiteSpace}                   { /* Se ignora */ }
+
+  /* identificadores (se coloca al final para eviotar ambiguedades)*/ 
+  {Identifier}                   { return symbol(sym.PERSONA);  }
 }
 
 

@@ -47,4 +47,12 @@ public class MainJflexCup {
             i++;
         }
     }
+    //Revision syntax
+    public void ejercicioParserSintax(String rutaScanear) throws Exception{
+        Reader reader = new FileReader(rutaScanear);
+        LexerJflex lex = new LexerJflex(reader);
+
+        parser myParser = new parser(lex);
+        myParser.parse();
+    }
 }

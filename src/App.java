@@ -41,7 +41,7 @@ public class App {
     }
     //Funcion que prepara los archivos para ser probados por el LexerParser
     public static void pruebasLexerParser() throws Exception {
-        String basePath, fullPathScanner, fullPathParser, fullPathError;
+        String basePath, fullPathScanner, fullPathParser, fullPathError, fullPathSyntax, fullPathSyntax2;
         MainJflexCup mjfc;
 
         //Rutas de archivos txt de prueba
@@ -49,10 +49,12 @@ public class App {
         fullPathScanner = basePath + "\\src\\codigoPrueba\\prueba.txt";
         fullPathParser = basePath + "\\src\\codigoPrueba\\pruebaParser1.txt";
         fullPathError = basePath + "\\src\\codigoPrueba\\pruebaError.txt";
+        fullPathSyntax = basePath + "\\src\\codigoPrueba\\pruebaSintax.txt";
+        fullPathSyntax2 = basePath + "\\src\\codigoPrueba\\pruebaSintax2.txt";
 
         mjfc = new MainJflexCup();
 
-        //Archivo vacio
+        /*//Archivo vacio
         System.out.println("Primer Archivo:");
         mjfc.ejercicioParser(fullPathScanner);
 
@@ -62,7 +64,21 @@ public class App {
 
         //Archivo de prueba con errores
         System.out.println("\nTercer Archivo:");
-        mjfc.ejercicioParser(fullPathError);
+        mjfc.ejercicioParser(fullPathError);*/
+
+        //Archivos de prueba sintax Proyecto 2(se debe realizar un analisis lexico primero para que se genere de manera correcta)
+        System.out.println("\nPrueba 1 (analisis lexico):");
+        mjfc.ejercicioParser(fullPathSyntax);
+
+        System.out.println("\nPrueba 1 (analisis sintactico):");
+        mjfc.ejercicioParserSintax(fullPathSyntax);
+
+
+        /*System.out.println("\nPrueba 2 (analisis lexico):");
+        mjfc.ejercicioParser(fullPathSyntax2);
+
+        System.out.println("\nPrueba 2 (analisis sintactico):");
+        mjfc.ejercicioParserSintax(fullPathSyntax2);*/
     }
     
     public static void main(String[] args) throws Exception {

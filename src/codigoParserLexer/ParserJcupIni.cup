@@ -31,19 +31,45 @@ scan with {: return lex.next_token(); :};
 terminal            IDENTIFIER, INTEGER_INTEGRAL, STRING_LITERAL;
 
 /* Lexer navideño */
-terminal            EMPEZONAVIDAD, NAVIDAD, FESTIVAL, FIESTA, PERSONA, l_SANTA , l_SANTA_CLAUS, l_PAPANOEL, l_PASCUERO, ENTREGA, ELFO1, ELFO2, ELFO3, ELFO4, GRINCH, QUIEN, RODOLFO, COMETA, BAILARIN, CUPIDO, DONNER, DASHER, ELFO, HADA, DUENDE, ENVUELVE, HACE, REVISA, ENVIA, CORTA, MELCHOR, GASPAR, BALTASAR, ABRECUENTO, CIERRACUENTO, ABREEMPAQUE, CIERRAEMPAQUE, ABREREGALO, CIERRAREGALO, FINREGALO, SANTACLAUS, PAPANOEL, SANNICOLAS, SINTERKLASS, VIEJITOPASCUERO, COLACHO, MUERDAGO, NARRA, ESCUCHA;
+terminal            EMPEZONAVIDAD, NAVIDAD, FESTIVAL, FIESTA, PERSONA, l_SANTA , l_SANTA_CLAUS, l_PAPANOEL, l_PASCUERO, ENTREGA, ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6;
+terminal            GRINCH, QUIEN, RODOLFO, COMETA, BAILARIN, CUPIDO, DONNER, DASHER, ELFO, HADA, DUENDE, ENVUELVE, HACE, REVISA, ENVIA, CORTA, MELCHOR, GASPAR, BALTASAR;
+terminal            ABRECUENTO, CIERRACUENTO, ABREEMPAQUE, CIERRAEMPAQUE, ABREREGALO, CIERRAREGALO, FINREGALO, SANTACLAUS, PAPANOEL, SANNICOLAS, SINTERKLASS, VIEJITOPASCUERO, COLACHO, MUERDAGO, NARRA, ESCUCHA;
 
 /* No terminales */
-non terminal            miLenguaje;
+non terminal            poloNorte, t_navidad, literales_navidenios, literal_nums, funcionNavidenia, pNocheBuena, pfuncionNavideniaAux, narraNavidad;
+non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, elMundo;
 
 /* Inicio */
-start with miLenguaje;
+start with pNocheBuena;
 
-miLenguaje ::=  {:
-                    hola();
-                :}
-                IDENTIFIER
-                {:
-                    adios();
-                :}
-                ;
+//Grupos de literales
+literales_navidenios ::= l_SANTA | l_SANTA_CLAUS | l_PAPANOEL | l_PASCUERO;
+
+literal_nums ::= l_SANTA | l_PASCUERO;
+
+//Operadores unarios
+unidadNavidenia ::= GRINCH | QUIEN;
+grinchYQuien ::= unidadNavidenia literal_nums;
+
+//Operadores logicos
+logisticadeNavidad ::= MELCHOR | GASPAR | BALTASAR;
+reyesMagos ::= logisticadeNavidad literal_nums;
+
+//Funciones
+t_navidad ::= FESTIVAL | FIESTA;
+
+funcionNavidenia ::= t_navidad PERSONA ABRECUENTO CIERRACUENTO;
+
+pfuncionNavideniaAux ::= funcionNavidenia
+                            | pfuncionNavideniaAux funcionNavidenia;
+
+pNocheBuena ::= pfuncionNavideniaAux;
+
+//Print
+narraNavidad ::= NARRA ABRECUENTO l_PAPANOEL CIERRACUENTO FINREGALO;
+
+//Encapsula todas las expresiones para que se puedan colocar dentro de las funciones
+poloNorte  ::= narraNavidad | reyesMagos |grinchYQuien;
+//permite que se puedan concadenar en cualquier orden y cantidad
+elMundo ::= poloNorte
+            | elMundo poloNorte;

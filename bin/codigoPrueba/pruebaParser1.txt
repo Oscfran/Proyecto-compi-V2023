@@ -2,4 +2,5 @@
  public /_ prueba de comentario en medio_/ abstract
  adios "prueba de string largo con espacios" /_comentario en 
  varias lineas_/ if else elif for do until return break
+ string char float
   + == - / * ++ -- true 13 True "final" @comentario extra final de prueba 
