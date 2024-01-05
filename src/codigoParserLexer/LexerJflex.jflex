@@ -42,6 +42,7 @@ Digits = [0-9]*
 
 Bool = "true" | "false"
 
+char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
 
 %state CADENA
 
@@ -54,7 +55,7 @@ Bool = "true" | "false"
 
 <YYINITIAL> {
   /* Main */
-  "main"                         { return symbol(sym.EMPEZONAVIDAD); }
+  "funtion"                         { return symbol(sym.EMPEZONAVIDAD); }
 
   /* literales booleanos */
   {Bool}                         { return symbol(sym.l_SANTA_CLAUS, yytext()); }
@@ -69,22 +70,27 @@ Bool = "true" | "false"
   "until"                        { return symbol(sym.REVISA);   }
   "return"                       { return symbol(sym.ENVIA);    }
   "break"                        { return symbol(sym.CORTA);    }
+  "local"                        { return symbol(sym.POLO);    }
 
  
   /* literales */
-  {DecIntegerLiteral}            { return symbol(sym.l_SANTA);  }
+  {DecIntegerLiteral}            { return symbol(sym.l_SANTA, yytext());  }
   \"                             { string.setLength(0); yybegin(CADENA); }
   /* Número literal flotante */
   {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
   "0" "." {Digits}?                      { return symbol(sym.l_PASCUERO, yytext()); }
 
+
+  //intento de char BAJO REVISION
+  {char}                         { return symbol(sym.l_COLACHO, yytext()); }
+
  /* Tipos*/
+  "char"                          { return symbol(sym.COLACHO);}
   "string"                       { return symbol(sym.SANTACLAUS);}
   "int"                          { return symbol(sym.PAPANOEL);}
   "float"                        { return symbol(sym.SANNICOLAS);}
   "double"                       { return symbol(sym.SINTERKLASS);}
   "void"                         { return symbol(sym.VIEJITOPASCUERO);}
-  "char"                         { return symbol(sym.COLACHO);}
   
   /* operadores comparación*/
   "=="                           { return symbol(sym.ELFO1); }
@@ -145,7 +151,7 @@ Bool = "true" | "false"
   {WhiteSpace}                   { /* Se ignora */ }
 
   /* identificadores (se coloca al final para eviotar ambiguedades)*/ 
-  {Identifier}                   { return symbol(sym.PERSONA);  }
+  {Identifier}                   { return symbol(sym.PERSONA, yytext());  }
 }
 
 
