@@ -1,15 +1,44 @@
- funtion string adios(){
+ funtion void main(){
     print("Hola mundo")|
- }
- funtion int asdf(int x, string prueba){
-    print("HASD")|
-    3 == 2
-    5 != "hola"
-    hasta == aqui
-    int x <= 5|
-    int vary <= 5|
-    -(5+4)-2*4**(2-1)*(3+1)+x/2.0**vary
-    !1
+
+    funtion int asdf(int x, string prueba){
+        print("HASD")|
+        3 == 2
+        5 != "hola"
+        x <_ 20
+        x > y
+        hasta == aqui
+        local int x <= 5|
+        local int vary <= 5+3-(3+4)*8|
+        -(5+4)-2*4**(2-1)*(3+1)+x/2.0**vary
+        !1
+        break|
+    }
+
+    while ( x == 3 ){
+        print("Prueba while")|
+        break|
+    }
+
+    for(local int x <= 2| x < 20 | x++){
+        if (x == 3 ){
+            print("Prueba if")|
+        }
+        elif(x == 0){
+            print("Prueba elif")|
+        }
+        else{
+            print("Prueba else")|
+        }
+        print("Prueba for")|
+    }
+
+    funtion string after(){
+        do{
+            print("do While")|
+        }while (true)|
+    }
+
     break|
+    funtion int asd(int a){return a+4|}
  }
- funtion void asda()

@@ -32,13 +32,15 @@ terminal            IDENTIFIER, INTEGER_INTEGRAL, STRING_LITERAL;
 
 /* Lexer navideño */
 terminal            EMPEZONAVIDAD, NAVIDAD, FESTIVAL, FIESTA, PERSONA, l_SANTA , l_SANTA_CLAUS, l_PAPANOEL, l_PASCUERO, l_COLACHO, ENTREGA, ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6;
-terminal            GRINCH, QUIEN, RODOLFO, COMETA, BAILARIN, CUPIDO, DONNER, DASHER, ELFO, HADA, DUENDE, ENVUELVE, HACE, REVISA, ENVIA, CORTA, MELCHOR, GASPAR, BALTASAR, POLO;
-terminal            ABRECUENTO, CIERRACUENTO, ABREEMPAQUE, CIERRAEMPAQUE, ABREREGALO, CIERRAREGALO, FINREGALO, SANTACLAUS, PAPANOEL, SANNICOLAS, SINTERKLASS, VIEJITOPASCUERO, COLACHO, MUERDAGO, NARRA, ESCUCHA;
+terminal            GRINCH, QUIEN, RODOLFO, COMETA, BAILARIN, CUPIDO, DONNER, DASHER, ELFO, HADA, DUENDE, ENVUELVE, ENVOLTURA, HACE, REVISA, ENVIA, CORTA, MELCHOR, GASPAR, BALTASAR, POLO;
+terminal            ABRECUENTO, CIERRACUENTO, ABREEMPAQUE, CIERRAEMPAQUE, ABREREGALO, CIERRAREGALO, FINREGALO, SANTACLAUS, PAPANOEL, SANNICOLAS, SINTERKLASS, VIEJITOPASCUERO, COLACHO;
+terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA;
 
 /* No terminales */
-non terminal            poloNorte, t_navidad, t_santas, literales_navidenios, literal_nums, funcionNavidenia, pNocheBuena, pfuncionNavideniaAux, narraNavidad;
-non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, elMundo, cuerpoFunc, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
-non terminal            elfos, elfos_g, elfos_nums, comp_elfosN, comp_elfos, expr, declPapaNoel, declSanNicolas, declSantaClaus, declColacho, inicioNav;
+non terminal            poloNorte, t_navidad, t_santas, literales_navidenios, literal_nums, bolsanavidenia, pNocheBuena, pbolsanavideniaAux, narraNavidad, entregaRegalos;
+non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
+non terminal            elfos, elfos_g, elfos_nums, comp_elfosN, comp_elfosG, regaloprin, declPapaNoel, declSanNicolas, declSantaClaus, declColacho, inicioNav;
+non terminal            opcionesVillaQuien, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, compN, compG, doWhileStmt, envia, elfoStm, hadaStm, duendeStm;
 
 //Precedence
 precedence left RODOLFO,COMETA;
@@ -46,7 +48,7 @@ precedence left BAILARIN,CUPIDO;
 precedence left DONNER,DASHER;
 
 /* Inicio */
-start with pNocheBuena;
+start with entregaRegalos;
 
 //Grupos de literales
 literales_navidenios ::= l_SANTA | l_SANTA_CLAUS | l_PAPANOEL | l_PASCUERO;
@@ -55,11 +57,12 @@ literal_nums ::= l_SANTA | l_PASCUERO;
 
 //Operadores unarios
 unidadNavidenia ::= GRINCH | QUIEN;
-grinchYQuien ::= unidadNavidenia literal_nums FINREGALO;
+opcionesVillaQuien ::=literal_nums | PERSONA;
+grinchYQuien ::= opcionesVillaQuien unidadNavidenia;
 
 //Operadores logicos
 logisticadeNavidad ::= MELCHOR | GASPAR | BALTASAR;
-reyesMagos ::= logisticadeNavidad literal_nums;
+reyesMagos ::= logisticadeNavidad opcionesVillaQuien;
 
 //Print
 narraNavidad ::= NARRA ABRECUENTO l_PAPANOEL CIERRACUENTO FINREGALO;
@@ -71,6 +74,13 @@ t_santas ::= SANTACLAUS | PAPANOEL | SANNICOLAS | SINTERKLASS | VIEJITOPASCUERO 
 t_navidad ::= FESTIVAL | FIESTA;
 
 //Estructuras de control
+
+//until
+
+//return
+envia ::= ENVIA regaloprin FINREGALO;
+
+//Break
 corta ::= CORTA FINREGALO;
 
 elfos ::= ELFO1 | ELFO2 | ELFO3 | ELFO4 | ELFO5 | ELFO6;
@@ -80,22 +90,22 @@ elfos_g ::= ELFO1 | ELFO2;
 elfos_nums ::= ELFO3 | ELFO4 | ELFO5 | ELFO6;
 
 //comparaciones que requieren numeros(>, <, >= <_)
-comp_elfosN ::= literal_nums elfos_nums literal_nums
-                | PERSONA elfos_nums PERSONA;
+compN ::= literal_nums | PERSONA;
+comp_elfosN ::= compN elfos_nums compN;
 
 //comparaciones generales(==, !=)
-comp_elfos ::= literales_navidenios elfos_g literales_navidenios
-                | PERSONA elfos_g PERSONA;
+compG ::= literales_navidenios | PERSONA;
+comp_elfosG ::= compG elfos_g compG;
 
 //operaciones aritmeticas
-expr ::= COMETA expr
-       | expr RODOLFO expr
-       | expr COMETA expr
-       | expr BAILARIN expr
-       | expr CUPIDO expr
-       | expr DONNER expr
-       | expr DASHER expr
-       | ABRECUENTO expr CIERRACUENTO
+regaloprin ::= COMETA regaloprin
+       | regaloprin RODOLFO regaloprin
+       | regaloprin COMETA regaloprin
+       | regaloprin BAILARIN regaloprin
+       | regaloprin CUPIDO regaloprin
+       | regaloprin DONNER regaloprin
+       | regaloprin DASHER regaloprin
+       | ABRECUENTO regaloprin CIERRACUENTO
        | literal_nums
        | PERSONA;
 
@@ -103,24 +113,55 @@ expr ::= COMETA expr
 //Declaracion de variables
 
 //int
-declPapaNoel ::= PAPANOEL PERSONA ENTREGA expr FINREGALO;
+declPapaNoel ::= POLO PAPANOEL PERSONA ENTREGA regaloprin FINREGALO;
 
 //float
-declSanNicolas ::= SANNICOLAS PERSONA ENTREGA expr FINREGALO;
+declSanNicolas ::= POLO SANNICOLAS PERSONA ENTREGA regaloprin FINREGALO;
 
 //string
-declSantaClaus ::= SANTACLAUS PERSONA ENTREGA l_PAPANOEL FINREGALO
-                | SANTACLAUS PERSONA ENTREGA PERSONA FINREGALO;
+declSantaClaus ::= POLO SANTACLAUS PERSONA ENTREGA l_PAPANOEL FINREGALO
+                | POLO SANTACLAUS PERSONA ENTREGA PERSONA FINREGALO;
 
 //char (necesita cambiarse actualmente usa el literal de string)
-declColacho ::= COLACHO PERSONA ENTREGA l_PAPANOEL FINREGALO
-                | COLACHO PERSONA ENTREGA PERSONA FINREGALO;
+declColacho ::= POLO COLACHO PERSONA ENTREGA l_PAPANOEL FINREGALO
+                | POLO COLACHO PERSONA ENTREGA PERSONA FINREGALO;
 
-
-
-//este se coloca para que la linea de delMundo sea más corta
+//este se coloca para que la linea de dregalo sea más corta
 inicioNav ::= declPapaNoel | declSanNicolas | declSantaClaus | declColacho;
 
+cuerpo ::= ABREREGALO regalo CIERRAREGALO;
+
+//Ciclos
+
+//While
+//while ( i <_ 5 ){}
+whileStmt ::= ENVOLTURA ABRECUENTO comp_elfosN CIERRACUENTO cuerpo
+            | ENVOLTURA ABRECUENTO comp_elfosG CIERRACUENTO cuerpo
+            | ENVOLTURA ABRECUENTO l_SANTA_CLAUS CIERRACUENTO cuerpo;
+
+//do while
+//do{ ejemplo }while ( i <_ 5 )|
+doWhileStmt ::= HACE cuerpo ENVOLTURA ABRECUENTO comp_elfosN CIERRACUENTO FINREGALO
+                | HACE cuerpo ENVOLTURA ABRECUENTO comp_elfosG CIERRACUENTO FINREGALO
+                | HACE cuerpo ENVOLTURA ABRECUENTO l_SANTA_CLAUS CIERRACUENTO FINREGALO;
+
+//For 
+//for(local int x=2|x<20|x++)
+forStmt ::= ENVUELVE ABRECUENTO declPapaNoel comp_elfosN FINREGALO grinchYQuien CIERRACUENTO cuerpo
+            | ENVUELVE ABRECUENTO declPapaNoel comp_elfosG FINREGALO grinchYQuien CIERRACUENTO cuerpo
+            | ENVUELVE ABRECUENTO declPapaNoel l_SANTA_CLAUS FINREGALO grinchYQuien CIERRACUENTO cuerpo;
+
+//if - elif - else
+//if
+elfoStm::= ELFO ABRECUENTO comp_elfosN CIERRACUENTO cuerpo
+            | ELFO ABRECUENTO comp_elfosG CIERRACUENTO cuerpo;
+
+//elif
+hadaStm::= HADA ABRECUENTO comp_elfosN CIERRACUENTO cuerpo
+            | HADA ABRECUENTO comp_elfosG CIERRACUENTO cuerpo;
+
+//else
+duendeStm ::= DUENDE cuerpo;
 
 
 //Funciones
@@ -129,21 +170,30 @@ ayudanteDeSanta ::= t_santas PERSONA;
 ayudaDefFunNav ::= ayudanteDeSanta
                     | ayudaDefFunNav MUERDAGO ayudanteDeSanta;
                     
-cuerpoFunc ::= ABREREGALO elMundo CIERRAREGALO;
+
 
 definirFunNav ::= EMPEZONAVIDAD t_santas PERSONA ABRECUENTO CIERRACUENTO
-                                | EMPEZONAVIDAD t_santas PERSONA ABRECUENTO ayudaDefFunNav CIERRACUENTO;
+                | EMPEZONAVIDAD t_santas PERSONA ABRECUENTO ayudaDefFunNav CIERRACUENTO;
 
-funcionNavidenia ::= definirFunNav
-                | definirFunNav cuerpoFunc;
+bolsanavidenia ::= definirFunNav
+                | definirFunNav cuerpo;
 
-pfuncionNavideniaAux ::= funcionNavidenia
-                            | pfuncionNavideniaAux funcionNavidenia;
+pbolsanavideniaAux ::=  bolsanavidenia
+                    | pbolsanavideniaAux bolsanavidenia;
 
-pNocheBuena ::= pfuncionNavideniaAux;
+pNocheBuena ::= pbolsanavideniaAux;
 
-//Encapsula todas las expresiones para que se puedan colocar dentro de las funciones
-poloNorte  ::= narraNavidad | reyesMagos |grinchYQuien | corta | comp_elfos | comp_elfosN | expr | inicioNav;
-//permite que se puedan concadenar en cualquier orden y cantidad
-elMundo ::= poloNorte
-            | elMundo poloNorte;
+//funcion main
+cuerpoMain ::= ABREREGALO regaloExtn CIERRAREGALO;
+entregaRegalos ::= EMPEZONAVIDAD VIEJITOPASCUERO ENTREGAREGALOS ABRECUENTO CIERRACUENTO cuerpoMain;
+
+//Encapsula todas las regaloprinesiones para que se puedan colocar dentro de las funciones
+poloNorte  ::= narraNavidad | reyesMagos |grinchYQuien | corta | envia | comp_elfosG | comp_elfosN | regaloprin | inicioNav | whileStmt | forStmt | doWhileStmt | elfoStm | hadaStm | duendeStm;
+//Produccion de expresiones
+regalo ::= poloNorte
+            | regalo poloNorte;
+
+antartica ::= bolsanavidenia | poloNorte;
+
+regaloExtn ::= antartica
+            | regaloExtn antartica;

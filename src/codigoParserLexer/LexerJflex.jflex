@@ -56,6 +56,7 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
 <YYINITIAL> {
   /* Main */
   "funtion"                         { return symbol(sym.EMPEZONAVIDAD); }
+  "main"                         { return symbol(sym.ENTREGAREGALOS); }
 
   /* literales booleanos */
   {Bool}                         { return symbol(sym.l_SANTA_CLAUS, yytext()); }
@@ -66,6 +67,7 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
   "elif"                         { return symbol(sym.HADA);     }
   "else"                         { return symbol(sym.DUENDE);   }
   "for"                          { return symbol(sym.ENVUELVE); }
+  "while"                        { return symbol(sym.ENVOLTURA); }
   "do"                           { return symbol(sym.HACE);     }
   "until"                        { return symbol(sym.REVISA);   }
   "return"                       { return symbol(sym.ENVIA);    }
