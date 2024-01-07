@@ -1,6 +1,34 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+
+    // Manejo de errores en modo pánico
+    /*public void modoPanico(int[] tokenDeSincronizacion) {
+        boolean encontrado = false;
+        while (!encontrado) {
+            try {
+                Symbol sym = next_token();
+                for (int tokenDeSincronizacion : tokensDeSincronizacion) {
+                    if (sym.sym == tokenDeSincronizacion) {
+                        encontrado = true;
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                // Manejo de la excepción, por ejemplo, fin de archivo
+                System.err.println("Error al recuperarse del error: " + e.getMessage());
+                return;
+            }
+        }
+
+        // Falta de implementar en las producciones necesarias, 99% seguro que es funcional
+        /*| error {:
+                   System.err.println("Error de sintactico en la línea " + (yyline + 1));
+                   modoPanico(new int[]{sym.CIERRAREGALO, sym.FINREGALO});
+               :};
+    }*/
+
+
 public class App {
     public static void generarLexerParser() throws Exception {
         String basePath, fullPathLexer, fullPathParser, jlexer, jparser, jlexerCarpeta;
@@ -16,7 +44,6 @@ public class App {
         jlexerCarpeta = "codigoParserLexer";
 
         mjfc = new MainJflexCup();
-
 
         //Elimina el archivo sym.java si existe para crear el nuevo y evitar errores
         Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\sym.java"));
