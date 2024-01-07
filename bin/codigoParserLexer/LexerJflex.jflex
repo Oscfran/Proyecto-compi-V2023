@@ -54,8 +54,9 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
 <YYINITIAL> "private"            { return symbol(sym.FIESTA);   }
 
 <YYINITIAL> {
+
   /* Main */
-  "function"                         { return symbol(sym.EMPEZONAVIDAD); }
+  "function"                         { return symbol(sym.EMPEZONAVIDAD, yytext()); }
   "main"                         { return symbol(sym.ENTREGAREGALOS, yytext()); }
 
   /* literales booleanos */
@@ -71,8 +72,8 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
   "do"                           { return symbol(sym.HACE);      }
   "until"                        { return symbol(sym.REVISA);    }
   "return"                       { return symbol(sym.ENVIA);     }
-  "break"                        { return symbol(sym.CORTA);    }
-  "local"                        { return symbol(sym.POLO);     }
+  "break"                        { return symbol(sym.CORTA);     }
+  "local"                        { return symbol(sym.POLO);      }
 
  
   /* literales */

@@ -665,21 +665,15 @@ class CUP$parser$actions {
 
 
 
-    /*public void hola(){
-        System.out.println("Hola");
-    }
-
-    public void adios(){
-        System.out.println("Adios");
-    }*/
-
+    // Definición del HashMap
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
      
+    // Función para imprimir la tabla de símbolor
     public void imprimirTablaSimbolos(){
         for (String key: listaTablaSimbolos.keySet()){
             System.out.println("Tabla de simbolo: " + key);
-            System.out.println("Valores: ");
+            System.out.println("La tabla contiene estos valores: ");
             for(String item: listaTablaSimbolos.get(key)){
                 System.out.println(item);
             }

@@ -1375,7 +1375,7 @@ public class LexerJflex implements java_cup.runtime.Scanner {
           // fall through
           case 127: break;
           case 64:
-            { return symbol(sym.EMPEZONAVIDAD);
+            { return symbol(sym.EMPEZONAVIDAD, yytext());
             }
           // fall through
           case 128: break;

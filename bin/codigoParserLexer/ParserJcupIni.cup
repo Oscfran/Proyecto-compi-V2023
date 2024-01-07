@@ -9,13 +9,15 @@ import java.util.ArrayList;
 
 action code {:
 
+    // Definición del HashMap
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
      
+    // Función para imprimir la tabla de símbolor
     public void imprimirTablaSimbolos(){
         for (String key: listaTablaSimbolos.keySet()){
             System.out.println("Tabla de simbolo: " + key);
-            System.out.println("Valores: ");
+            System.out.println("La tabla contiene estos valores: ");
             for(String item: listaTablaSimbolos.get(key)){
                 System.out.println(item);
             }
@@ -192,7 +194,8 @@ ayudaDefFunNav ::= ayudanteDeSanta
                     | ayudaDefFunNav MUERDAGO ayudanteDeSanta;
                     
 
-
+// Se asigna el token seleccionado a su respectiva tabla de símbolos
+// En este caso el valor de retorno, el nombre de la función y si es una función main o no
 definirFunNav ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO CIERRACUENTO 
                 {:
                 String tipoTabla = "main";
