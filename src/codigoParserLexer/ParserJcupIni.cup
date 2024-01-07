@@ -9,14 +9,6 @@ import java.util.ArrayList;
 
 action code {:
 
-    /*public void hola(){
-        System.out.println("Hola");
-    }
-
-    public void adios(){
-        System.out.println("Adios");
-    }*/
-
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
      
