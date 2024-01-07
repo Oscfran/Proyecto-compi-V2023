@@ -1,7 +1,7 @@
- funtion void main(){
+ function void main(){
     print("Hola mundo")|
 
-    funtion int asdf(int x, string prueba){
+    function int asdf(int x, string prueba){
         print("HASD")|
         3 == 2
         5 != "hola"
@@ -33,12 +33,12 @@
         print("Prueba for")|
     }
 
-    funtion string after(){
+    function string after(){
         do{
             print("do While")|
         }while (true)|
     }
 
     break|
-    funtion int asd(int a){return a+4|}
+    function int asd(int a){return a+4|}
  }

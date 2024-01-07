@@ -290,11 +290,11 @@ public class LexerJflex implements java_cup.runtime.Scanner {
     "\1\56\3\6\1\57\3\6\1\60\2\6\1\61\1\6"+
     "\1\62\1\6\2\0\1\2\1\6\1\63\1\6\1\64"+
     "\1\6\1\65\1\66\4\6\1\67\1\70\5\0\1\6"+
-    "\1\71\2\6\1\72\1\73\1\74\1\75\1\6\1\76"+
+    "\1\71\2\6\1\72\1\73\1\74\1\75\2\6\1\76"+
     "\1\77\1\100";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[170];
+    int [] result = new int[171];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -339,11 +339,11 @@ public class LexerJflex implements java_cup.runtime.Scanner {
     "\0\u14e2\0\u1518\0\u154e\0\u1584\0\u15ba\0\u010e\0\u15f0\0\u010e"+
     "\0\u1626\0\u010e\0\u010e\0\u165c\0\u1692\0\u16c8\0\u16fe\0\u010e"+
     "\0\u010e\0\u1734\0\u176a\0\u1584\0\u17a0\0\u17d6\0\u180c\0\u010e"+
-    "\0\u1842\0\u1878\0\u010e\0\u010e\0\u010e\0\154\0\u18ae\0\u010e"+
-    "\0\u010e\0\u010e";
+    "\0\u1842\0\u1878\0\u010e\0\u010e\0\u010e\0\154\0\u18ae\0\u18e4"+
+    "\0\u010e\0\u010e\0\u010e";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[170];
+    int [] result = new int[171];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -441,8 +441,8 @@ public class LexerJflex implements java_cup.runtime.Scanner {
     "\10\0\5\11\1\173\20\11\4\0\1\11\7\0\1\11"+
     "\11\0\2\11\10\0\21\11\1\153\4\11\4\0\1\11"+
     "\7\0\1\11\11\0\2\11\10\0\1\11\1\174\24\11"+
-    "\4\0\1\11\7\0\1\11\11\0\2\11\10\0\22\11"+
-    "\1\175\3\11\4\0\1\11\7\0\1\11\11\0\2\11"+
+    "\4\0\1\11\7\0\1\11\11\0\2\11\10\0\3\11"+
+    "\1\175\22\11\4\0\1\11\7\0\1\11\11\0\2\11"+
     "\10\0\1\11\1\176\24\11\4\0\1\11\7\0\1\11"+
     "\11\0\2\11\10\0\15\11\1\177\10\11\4\0\1\11"+
     "\7\0\1\11\11\0\2\11\10\0\15\11\1\200\6\11"+
@@ -465,7 +465,7 @@ public class LexerJflex implements java_cup.runtime.Scanner {
     "\4\0\1\11\7\0\1\11\11\0\2\11\10\0\13\11"+
     "\1\217\12\11\4\0\1\11\7\0\1\11\11\0\2\11"+
     "\10\0\22\11\1\220\3\11\4\0\1\11\7\0\1\11"+
-    "\11\0\2\11\10\0\11\11\1\221\14\11\4\0\1\11"+
+    "\11\0\2\11\10\0\22\11\1\221\3\11\4\0\1\11"+
     "\7\0\1\11\11\0\2\11\10\0\13\11\1\222\12\11"+
     "\4\0\1\11\7\0\1\11\11\0\2\11\10\0\22\11"+
     "\1\223\3\11\4\0\1\11\7\0\1\11\11\0\2\11"+
@@ -480,7 +480,7 @@ public class LexerJflex implements java_cup.runtime.Scanner {
     "\1\11\7\0\1\11\11\0\2\11\10\0\1\11\1\237"+
     "\24\11\4\0\1\11\7\0\1\11\11\0\2\11\10\0"+
     "\5\11\1\240\20\11\4\0\1\11\7\0\1\11\11\0"+
-    "\2\11\10\0\16\11\1\241\7\11\4\0\1\11\7\0"+
+    "\2\11\10\0\11\11\1\241\14\11\4\0\1\11\7\0"+
     "\1\11\11\0\2\11\10\0\22\11\1\242\3\11\4\0"+
     "\1\11\7\0\1\11\11\0\2\11\10\0\3\11\1\243"+
     "\22\11\4\0\1\11\7\0\1\11\11\0\2\11\10\0"+
@@ -490,12 +490,14 @@ public class LexerJflex implements java_cup.runtime.Scanner {
     "\1\0\60\234\1\235\4\234\1\214\12\234\1\236\31\234"+
     "\1\11\7\0\1\11\11\0\2\11\10\0\3\11\1\247"+
     "\22\11\4\0\1\11\7\0\1\11\11\0\2\11\10\0"+
-    "\15\11\1\250\10\11\4\0\1\11\7\0\1\11\11\0"+
+    "\16\11\1\250\7\11\4\0\1\11\7\0\1\11\11\0"+
     "\2\11\10\0\5\11\1\251\20\11\4\0\1\11\7\0"+
-    "\1\11\11\0\2\11\10\0\22\11\1\252\3\11\4\0";
+    "\1\11\11\0\2\11\10\0\22\11\1\252\3\11\4\0"+
+    "\1\11\7\0\1\11\11\0\2\11\10\0\15\11\1\253"+
+    "\10\11\4\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[6372];
+    int [] result = new int[6426];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -542,10 +544,10 @@ public class LexerJflex implements java_cup.runtime.Scanner {
     "\10\1\3\11\20\1\4\11\1\1\1\11\1\1\1\11"+
     "\1\0\3\11\1\0\1\1\4\11\25\1\4\11\3\0"+
     "\26\1\5\0\1\1\1\0\24\1\2\0\16\1\5\0"+
-    "\7\1\1\11\4\1";
+    "\7\1\1\11\5\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[170];
+    int [] result = new int[171];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -1288,7 +1290,7 @@ public class LexerJflex implements java_cup.runtime.Scanner {
           // fall through
           case 110: break;
           case 47:
-            { return symbol(sym.ENTREGAREGALOS);
+            { return symbol(sym.ENTREGAREGALOS, yytext());
             }
           // fall through
           case 111: break;
@@ -1363,17 +1365,17 @@ public class LexerJflex implements java_cup.runtime.Scanner {
           // fall through
           case 125: break;
           case 62:
-            { return symbol(sym.EMPEZONAVIDAD);
+            { return symbol(sym.FIESTA);
             }
           // fall through
           case 126: break;
           case 63:
-            { return symbol(sym.FIESTA);
+            { return symbol(sym.NAVIDAD);
             }
           // fall through
           case 127: break;
           case 64:
-            { return symbol(sym.NAVIDAD);
+            { return symbol(sym.EMPEZONAVIDAD);
             }
           // fall through
           case 128: break;

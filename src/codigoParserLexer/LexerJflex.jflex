@@ -55,8 +55,8 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
 
 <YYINITIAL> {
   /* Main */
-  "funtion"                         { return symbol(sym.EMPEZONAVIDAD); }
-  "main"                         { return symbol(sym.ENTREGAREGALOS); }
+  "function"                         { return symbol(sym.EMPEZONAVIDAD); }
+  "main"                         { return symbol(sym.ENTREGAREGALOS, yytext()); }
 
   /* literales booleanos */
   {Bool}                         { return symbol(sym.l_SANTA_CLAUS, yytext()); }

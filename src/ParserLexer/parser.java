@@ -6,6 +6,9 @@
 package ParserLexer;
 
 import java_cup.runtime.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -662,25 +665,25 @@ class CUP$parser$actions {
 
 
 
-    public void hola(){
+    /*public void hola(){
         System.out.println("Hola");
     }
 
     public void adios(){
         System.out.println("Adios");
-    }
+    }*/
 
-    //HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
-    //String currentHash;
+    HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
+    String currentHash;
      
     public void imprimirTablaSimbolos(){
         for (String key: listaTablaSimbolos.keySet()){
-            System.out.prinln("Tabla de simbolo: " + key);
-            System.out.prinln("Valores: ");
+            System.out.println("Tabla de simbolo: " + key);
+            System.out.println("Valores: ");
             for(String item: listaTablaSimbolos.get(key)){
-                System.out.prinln(item);
+                System.out.println(item);
             }
-            System.out.prinln("");
+            System.out.println("");
         }
     }
 
@@ -1515,6 +1518,9 @@ class CUP$parser$actions {
 		int tscleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int tscright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object tsc = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		System.out.println(tsc);
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ayudanteDeSanta",16, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1545,7 +1551,21 @@ class CUP$parser$actions {
 		int tscleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int tscright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Object tsc = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		
+                String tipoTabla = "main";
+                if (per.toString().equals("main"))
+                        tipoTabla = "tipo:main: "+tsc.toString();
+                else
+                        tipoTabla = "tipo:function: "+tsc.toString();
+                ArrayList<String> funcionMain = new ArrayList<String>();
+                currentHash = per.toString();
+                funcionMain.add(tipoTabla);
+                listaTablaSimbolos.put(currentHash, funcionMain);
+                
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("definirFunNav",18, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1557,7 +1577,21 @@ class CUP$parser$actions {
 		int tscleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
 		int tscright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
 		Object tsc = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
-
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		
+                String tipoTabla = "main";
+                if (per.toString().equals("main"))
+                        tipoTabla = "tipo:main: "+tsc.toString();
+                else
+                        tipoTabla = "tipo:function: "+tsc.toString();
+                ArrayList<String> funcionMain = new ArrayList<String>();
+                currentHash = per.toString();
+                funcionMain.add(tipoTabla);
+                listaTablaSimbolos.put(currentHash, funcionMain);
+                
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("definirFunNav",18, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1620,7 +1654,9 @@ class CUP$parser$actions {
           case 92: // NT$0 ::= 
             {
               Object RESULT =null;
-System.out.println("Empieza el asunto");
+
+                    System.out.println("Empieza el asunto");
+                    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$0",45, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1631,7 +1667,10 @@ System.out.println("Empieza el asunto");
               Object RESULT =null;
               // propagate RESULT from NT$0
                 RESULT = (Object) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-6)).value;
-		System.out.println("Termina el asunto");
+		
+                    imprimirTablaSimbolos();
+                    System.out.println("Termina el asunto");
+                    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("entregaRegalos",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

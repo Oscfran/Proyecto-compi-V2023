@@ -2,32 +2,32 @@ package ParserLexer;
 import java_cup.runtime.*;
 
 // Tabla de símbolos
-/*import java.util.Hashmap;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;*/
+import java.util.ArrayList;
 
 
 action code {:
 
-    public void hola(){
+    /*public void hola(){
         System.out.println("Hola");
     }
 
     public void adios(){
         System.out.println("Adios");
-    }
+    }*/
 
-    //HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
-    //String currentHash;
+    HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
+    String currentHash;
      
     public void imprimirTablaSimbolos(){
         for (String key: listaTablaSimbolos.keySet()){
-            System.out.prinln("Tabla de simbolo: " + key);
-            System.out.prinln("Valores: ");
+            System.out.println("Tabla de simbolo: " + key);
+            System.out.println("Valores: ");
             for(String item: listaTablaSimbolos.get(key)){
-                System.out.prinln(item);
+                System.out.println(item);
             }
-            System.out.prinln("");
+            System.out.println("");
         }
     }
 :}
@@ -193,16 +193,42 @@ hadaStm::= HADA ABRECUENTO comp_elfosN CIERRACUENTO cuerpo
 duendeStm ::= DUENDE cuerpo;
 
 
-//Funciones
-ayudanteDeSanta ::= t_santas:tsc PERSONA {:System.out.println(tsc);:};
+//Funciones 
+ayudanteDeSanta ::= t_santas:tsc PERSONA:per {:System.out.println(tsc);:};
 
 ayudaDefFunNav ::= ayudanteDeSanta
                     | ayudaDefFunNav MUERDAGO ayudanteDeSanta;
                     
 
 
-definirFunNav ::= EMPEZONAVIDAD t_santas:tsc PERSONA ABRECUENTO CIERRACUENTO
-                | EMPEZONAVIDAD t_santas:tsc PERSONA ABRECUENTO ayudaDefFunNav CIERRACUENTO;
+definirFunNav ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO CIERRACUENTO 
+                {:
+                String tipoTabla = "main";
+                if (per.toString().equals("main"))
+                        tipoTabla = "tipo:main: "+tsc.toString();
+                else
+                        tipoTabla = "tipo:function: "+tsc.toString();
+                ArrayList<String> funcionMain = new ArrayList<String>();
+                currentHash = per.toString();
+                funcionMain.add(tipoTabla);
+                listaTablaSimbolos.put(currentHash, funcionMain);
+                
+                :}
+                
+
+                | EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO ayudaDefFunNav CIERRACUENTO 
+                {:
+                String tipoTabla = "main";
+                if (per.toString().equals("main"))
+                        tipoTabla = "tipo:main: "+tsc.toString();
+                else
+                        tipoTabla = "tipo:function: "+tsc.toString();
+                ArrayList<String> funcionMain = new ArrayList<String>();
+                currentHash = per.toString();
+                funcionMain.add(tipoTabla);
+                listaTablaSimbolos.put(currentHash, funcionMain);
+                
+                :};
 
 bolsanavidenia ::= definirFunNav
                 | definirFunNav cuerpo;
@@ -216,7 +242,14 @@ pNocheBuena ::= pbolsanavideniaAux;
 //funcion main
 cuerpoMain ::= ABREREGALO regaloExtn CIERRAREGALO;
 
-entregaRegalos ::= {:System.out.println("Empieza el asunto");:} EMPEZONAVIDAD VIEJITOPASCUERO ENTREGAREGALOS ABRECUENTO CIERRACUENTO cuerpoMain {:System.out.println("Termina el asunto");:};
+entregaRegalos ::= {:
+                    System.out.println("Empieza el asunto");
+                    :} 
+                    EMPEZONAVIDAD VIEJITOPASCUERO ENTREGAREGALOS ABRECUENTO CIERRACUENTO cuerpoMain 
+                    {:
+                    imprimirTablaSimbolos();
+                    System.out.println("Termina el asunto");
+                    :};
 
 //Encapsula todas las regaloprinesiones para que se puedan colocar dentro de las funciones
 poloNorte  ::= narraNavidad | reyesMagos |grinchYQuien | corta | envia | comp_elfosG | comp_elfosN | regaloprin | inicioNav | whileStmt | forStmt | doWhileStmt | elfoStm | hadaStm | duendeStm;
