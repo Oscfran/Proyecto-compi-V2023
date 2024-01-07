@@ -63,16 +63,16 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
 
 
   /* Estructuras de control */
-  "if"                           { return symbol(sym.ELFO);     }
-  "elif"                         { return symbol(sym.HADA);     }
-  "else"                         { return symbol(sym.DUENDE);   }
-  "for"                          { return symbol(sym.ENVUELVE); }
+  "if"                           { return symbol(sym.ELFO);      }
+  "elif"                         { return symbol(sym.HADA);      }
+  "else"                         { return symbol(sym.DUENDE);    }
+  "for"                          { return symbol(sym.ENVUELVE);  }
   "while"                        { return symbol(sym.ENVOLTURA); }
-  "do"                           { return symbol(sym.HACE);     }
-  "until"                        { return symbol(sym.REVISA);   }
-  "return"                       { return symbol(sym.ENVIA);    }
+  "do"                           { return symbol(sym.HACE);      }
+  "until"                        { return symbol(sym.REVISA);    }
+  "return"                       { return symbol(sym.ENVIA);     }
   "break"                        { return symbol(sym.CORTA);    }
-  "local"                        { return symbol(sym.POLO);    }
+  "local"                        { return symbol(sym.POLO);     }
 
  
   /* literales */
@@ -82,17 +82,16 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
   {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
   "0" "." {Digits}?                      { return symbol(sym.l_PASCUERO, yytext()); }
 
-
   //intento de char BAJO REVISION
   {char}                         { return symbol(sym.l_COLACHO, yytext()); }
 
  /* Tipos*/
-  "char"                          { return symbol(sym.COLACHO);}
-  "string"                       { return symbol(sym.SANTACLAUS);}
-  "int"                          { return symbol(sym.PAPANOEL);}
-  "float"                        { return symbol(sym.SANNICOLAS);}
-  "double"                       { return symbol(sym.SINTERKLASS);}
-  "void"                         { return symbol(sym.VIEJITOPASCUERO);}
+  "char"                          { return symbol(sym.COLACHO, yytext());}
+  "string"                       { return symbol(sym.SANTACLAUS, yytext());}
+  "int"                          { return symbol(sym.PAPANOEL, yytext());}
+  "float"                        { return symbol(sym.SANNICOLAS, yytext());}
+  "double"                       { return symbol(sym.SINTERKLASS, yytext());}
+  "void"                         { return symbol(sym.VIEJITOPASCUERO, yytext());}
   
   /* operadores comparación*/
   "=="                           { return symbol(sym.ELFO1); }
@@ -112,12 +111,12 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
   "--"                           { return symbol(sym.QUIEN); }
 
   /* operadores aritméticos*/
-  "+"                            { return symbol(sym.RODOLFO);}
-  "-"                            { return symbol(sym.COMETA); }
-  "*"                            { return symbol(sym.BAILARIN);}
-  "/"                            { return symbol(sym.CUPIDO); }
-  "~"                            { return symbol(sym.DONNER); }
-  "**"                            { return symbol(sym.DASHER); }
+  "+"                            { return symbol(sym.RODOLFO, yytext());}
+  "-"                            { return symbol(sym.COMETA, yytext()); }
+  "*"                            { return symbol(sym.BAILARIN, yytext());}
+  "/"                            { return symbol(sym.CUPIDO, yytext()); }
+  "~"                            { return symbol(sym.DONNER, yytext()); }
+  "**"                           { return symbol(sym.DASHER, yytext()); }
 
   /* Paréntesis*/
   "("                            { return symbol(sym.ABRECUENTO);}
@@ -132,7 +131,7 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
   "}"                            { return symbol(sym.CIERRAREGALO);}
  
   /* operador asignación */
-  "<="                            { return symbol(sym.ENTREGA);}
+  "<="                            { return symbol(sym.ENTREGA, yytext());}
 
   /* Fin de expresión */
   "|"                            { return symbol(sym.FINREGALO); }

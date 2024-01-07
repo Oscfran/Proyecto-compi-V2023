@@ -1,6 +1,12 @@
 package ParserLexer;
 import java_cup.runtime.*;
 
+// Tabla de símbolos
+/*import java.util.Hashmap;
+import java.util.Map;
+import java.util.ArrayList;*/
+
+
 action code {:
 
     public void hola(){
@@ -9,6 +15,20 @@ action code {:
 
     public void adios(){
         System.out.println("Adios");
+    }
+
+    //HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
+    //String currentHash;
+     
+    public void imprimirTablaSimbolos(){
+        for (String key: listaTablaSimbolos.keySet()){
+            System.out.prinln("Tabla de simbolo: " + key);
+            System.out.prinln("Valores: ");
+            for(String item: listaTablaSimbolos.get(key)){
+                System.out.prinln(item);
+            }
+            System.out.prinln("");
+        }
     }
 :}
 
@@ -40,7 +60,7 @@ terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA;
 non terminal            poloNorte, t_navidad, t_santas, literales_navidenios, literal_nums, bolsanavidenia, pNocheBuena, pbolsanavideniaAux, narraNavidad, entregaRegalos;
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
 non terminal            elfos, elfos_g, elfos_nums, comp_elfosN, comp_elfosG, regaloprin, declPapaNoel, declSanNicolas, declSantaClaus, declColacho, inicioNav;
-non terminal            opcionesVillaQuien, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, compN, compG, doWhileStmt, envia, elfoStm, hadaStm, duendeStm;
+non terminal            opcionesVillaQuien, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, compN, compG, doWhileStmt, envia, elfoStm, hadaStm, duendeStm, renos;
 
 //Precedence
 precedence left RODOLFO,COMETA;
@@ -51,13 +71,13 @@ precedence left DONNER,DASHER;
 start with entregaRegalos;
 
 //Grupos de literales
-literales_navidenios ::= l_SANTA | l_SANTA_CLAUS | l_PAPANOEL | l_PASCUERO;
+literales_navidenios ::= l_SANTA:lst {:RESULT = lst;:} | l_SANTA_CLAUS:lst {:RESULT = lst;:} | l_PAPANOEL:lst {:RESULT = lst;:} | l_PASCUERO:lst {:RESULT = lst;:};
 
-literal_nums ::= l_SANTA | l_PASCUERO;
+literal_nums ::= l_SANTA:lst {:RESULT = lst;:} | l_PASCUERO:lst {:RESULT = lst;:};
 
 //Operadores unarios
 unidadNavidenia ::= GRINCH | QUIEN;
-opcionesVillaQuien ::=literal_nums | PERSONA;
+opcionesVillaQuien ::= literal_nums:lst | PERSONA;
 grinchYQuien ::= opcionesVillaQuien unidadNavidenia;
 
 //Operadores logicos
@@ -68,7 +88,12 @@ reyesMagos ::= logisticadeNavidad opcionesVillaQuien;
 narraNavidad ::= NARRA ABRECUENTO l_PAPANOEL CIERRACUENTO FINREGALO;
 
 //Tipos
-t_santas ::= SANTACLAUS | PAPANOEL | SANNICOLAS | SINTERKLASS | VIEJITOPASCUERO | COLACHO;
+t_santas ::= SANTACLAUS:tst {:RESULT = tst;:} 
+            | PAPANOEL:tst {:RESULT = tst;:} 
+            | SANNICOLAS:tst {:RESULT = tst;:}
+            | SINTERKLASS:tst {:RESULT = tst;:} 
+            | VIEJITOPASCUERO:tst {:RESULT = tst;:} 
+            | COLACHO:tst {:RESULT = tst;:};
 
 //public o private
 t_navidad ::= FESTIVAL | FIESTA;
@@ -90,23 +115,27 @@ elfos_g ::= ELFO1 | ELFO2;
 elfos_nums ::= ELFO3 | ELFO4 | ELFO5 | ELFO6;
 
 //comparaciones que requieren numeros(>, <, >= <_)
-compN ::= literal_nums | PERSONA;
+compN ::= literal_nums:lst | PERSONA;
 comp_elfosN ::= compN elfos_nums compN;
 
 //comparaciones generales(==, !=)
-compG ::= literales_navidenios | PERSONA;
+compG ::= literales_navidenios:tl | PERSONA;
 comp_elfosG ::= compG elfos_g compG;
+
+// Renos
+renos ::= COMETA:rn {:RESULT = rn;:}
+         | RODOLFO:rn {:RESULT = rn;:} 
+         | BAILARIN:rn {:RESULT = rn;:} 
+         | CUPIDO:rn {:RESULT = rn;:} 
+         | DONNER:rn {:RESULT = rn;:} 
+         | DASHER:rn {:RESULT = rn;:};
+
 
 //operaciones aritmeticas
 regaloprin ::= COMETA regaloprin
-       | regaloprin RODOLFO regaloprin
-       | regaloprin COMETA regaloprin
-       | regaloprin BAILARIN regaloprin
-       | regaloprin CUPIDO regaloprin
-       | regaloprin DONNER regaloprin
-       | regaloprin DASHER regaloprin
+       | regaloprin renos:rn regaloprin {:System.out.println(rn);:}
        | ABRECUENTO regaloprin CIERRACUENTO
-       | literal_nums
+       | literal_nums:lst {:System.out.println(lst);:}
        | PERSONA;
 
 
@@ -165,15 +194,15 @@ duendeStm ::= DUENDE cuerpo;
 
 
 //Funciones
-ayudanteDeSanta ::= t_santas PERSONA;
+ayudanteDeSanta ::= t_santas:tsc PERSONA {:System.out.println(tsc);:};
 
 ayudaDefFunNav ::= ayudanteDeSanta
                     | ayudaDefFunNav MUERDAGO ayudanteDeSanta;
                     
 
 
-definirFunNav ::= EMPEZONAVIDAD t_santas PERSONA ABRECUENTO CIERRACUENTO
-                | EMPEZONAVIDAD t_santas PERSONA ABRECUENTO ayudaDefFunNav CIERRACUENTO;
+definirFunNav ::= EMPEZONAVIDAD t_santas:tsc PERSONA ABRECUENTO CIERRACUENTO
+                | EMPEZONAVIDAD t_santas:tsc PERSONA ABRECUENTO ayudaDefFunNav CIERRACUENTO;
 
 bolsanavidenia ::= definirFunNav
                 | definirFunNav cuerpo;
@@ -183,12 +212,15 @@ pbolsanavideniaAux ::=  bolsanavidenia
 
 pNocheBuena ::= pbolsanavideniaAux;
 
+
 //funcion main
 cuerpoMain ::= ABREREGALO regaloExtn CIERRAREGALO;
-entregaRegalos ::= EMPEZONAVIDAD VIEJITOPASCUERO ENTREGAREGALOS ABRECUENTO CIERRACUENTO cuerpoMain;
+
+entregaRegalos ::= {:System.out.println("Empieza el asunto");:} EMPEZONAVIDAD VIEJITOPASCUERO ENTREGAREGALOS ABRECUENTO CIERRACUENTO cuerpoMain {:System.out.println("Termina el asunto");:};
 
 //Encapsula todas las regaloprinesiones para que se puedan colocar dentro de las funciones
 poloNorte  ::= narraNavidad | reyesMagos |grinchYQuien | corta | envia | comp_elfosG | comp_elfosN | regaloprin | inicioNav | whileStmt | forStmt | doWhileStmt | elfoStm | hadaStm | duendeStm;
+
 //Produccion de expresiones
 regalo ::= poloNorte
             | regalo poloNorte;
