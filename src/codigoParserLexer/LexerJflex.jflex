@@ -89,6 +89,7 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
  /* Tipos*/
   "char"                          { return symbol(sym.COLACHO, yytext());}
   "string"                       { return symbol(sym.SANTACLAUS, yytext());}
+  "bool"                       { return symbol(sym.SANTACLAUSULA, yytext());}
   "int"                          { return symbol(sym.PAPANOEL, yytext());}
   "float"                        { return symbol(sym.SANNICOLAS, yytext());}
   "double"                       { return symbol(sym.SINTERKLASS, yytext());}
@@ -99,8 +100,8 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
   "!="                           { return symbol(sym.ELFO2); }
   ">"                            { return symbol(sym.ELFO3); }
   "<"                            { return symbol(sym.ELFO4); }
-  ">="                           { return symbol(sym.ELFO5);}
-  "<_"                           { return symbol(sym.ELFO6);}
+  "=>"                           { return symbol(sym.ELFO5);}
+  "=<"                           { return symbol(sym.ELFO6);}
 
   /* operadores lógicos */
   "#"                           { return symbol(sym.MELCHOR); }

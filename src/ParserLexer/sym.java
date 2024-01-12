@@ -57,6 +57,7 @@ public class sym {
   public static final int BAILARIN = 26;
   public static final int FIESTA = 8;
   public static final int MUERDAGO = 57;
+  public static final int SANTACLAUSULA = 60;
   public static final int ELFO = 30;
   public static final int ELFO6 = 21;
   public static final int ENVOLTURA = 34;
@@ -128,7 +129,8 @@ public class sym {
   "ENTREGAREGALOS",
   "MUERDAGO",
   "NARRA",
-  "ESCUCHA"
+  "ESCUCHA",
+  "SANTACLAUSULA"
   };
 }
 
