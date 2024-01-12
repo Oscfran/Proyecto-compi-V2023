@@ -60,14 +60,15 @@ non terminal            decl_G, llamadaNavidenia, ids, accesoArray, arrayDeclara
 precedence left RODOLFO,COMETA;
 precedence left BAILARIN,CUPIDO;
 precedence left DONNER,DASHER;
-precedence left ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6, GRINCH, QUIEN, MELCHOR, GASPAR, BALTASAR;
+precedence left ABRECUENTO, ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6, GRINCH, QUIEN, MELCHOR, GASPAR, BALTASAR;
+precedence right   FINREGALO, CIERRACUENTO;
 
 
 /* Inicio */
 start with entregaRegalos;
 
 //Grupos de literales
-literales_navidenios ::= l_SANTA:lst {:RESULT = lst;:} | l_SANTA_CLAUS:lst {:RESULT = lst;:} | l_PAPANOEL:lst {:RESULT = lst;:} | l_PASCUERO:lst {:RESULT = lst;:};
+literales_navidenios ::= l_SANTA:lst {:RESULT = lst;:} | l_SANTA_CLAUS:lst {:RESULT = lst;:} | l_PAPANOEL:lst {:RESULT = lst;:} | l_PASCUERO:lst {:RESULT = lst;:} | l_COLACHO:lst {:RESULT = lst;:};
 
 literal_nums ::= l_SANTA:lst {:RESULT = lst;:} | l_PASCUERO:lst {:RESULT = lst;:};
 
@@ -142,6 +143,7 @@ regaloprin ::= COMETA regaloprin
        | regaloprin elfos_g regaloprin
        | regaloprin elfos_nums regaloprin
        | accesoArray
+       | llamadaNavidenia
        | PERSONA;
 
 
@@ -244,10 +246,13 @@ ayudaDefFunNav ::= ayudanteDeSanta
 //Llamada de funciones
 //hola|()
 //adios|(intx, in)
-ids ::= PERSONA
-    | ids MUERDAGO PERSONA;
-llamadaNavidenia ::= PERSONA FINREGALO ABRECUENTO CIERRACUENTO 
-                  |  PERSONA FINREGALO ABRECUENTO ids CIERRACUENTO;
+//error al poner funcion al final de una expresioncon final de linea ocupa doble final de linea para funcionar
+ids ::= regaloprin
+    | ids MUERDAGO regaloprin;
+llamadaNavidenia ::= PERSONA ABRECUENTO CIERRACUENTO
+                  |  PERSONA ABRECUENTO CIERRACUENTO FINREGALO
+                  |  PERSONA ABRECUENTO ids CIERRACUENTO
+                  |  PERSONA ABRECUENTO ids CIERRACUENTO FINREGALO;
 
 
 // Se asigna el token seleccionado a su respectiva tabla de símbolos
@@ -303,7 +308,7 @@ entregaRegalos ::= {:
                     :};
 
 //Encapsula todas las regaloprinesiones para que se puedan colocar dentro de las funciones
-poloNorte  ::= narraNavidad | corta | envia | regaloprin | inicioNav | whileStmt | forStmt | doWhileStmt | elfoStm | hadaStm | duendeStm | decl_G | llamadaNavidenia | escuchaNavidad;
+poloNorte  ::= narraNavidad | corta | envia | regaloprin | inicioNav | whileStmt | forStmt | doWhileStmt | elfoStm | hadaStm | duendeStm | decl_G | escuchaNavidad;
 
 //Produccion de expresiones
 regalo ::= poloNorte

@@ -42,8 +42,6 @@ Digits = [0-9]*
 
 Bool = "true" | "false"
 
-comillaS = "'"
-
 char = "'" {InputCharacter} "'"
 
 

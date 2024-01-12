@@ -65,14 +65,12 @@
         read(s1)| @semantico
         print(b1)| @semantico
         print(true)| @semantico
-        hola|()
-        adios|(a,b)
-        
+        hola()|
+        adios('a',b)|
         print(-6.7)|
-        @miFunc(miFunc(),'a')| semantico miFunc, hola
+        miFunc(miFunc(),'a')| @semantico miFunc, hola
         local bool bl0 <= 6.7 != 8.9| @ok
-        local bool bl1 <= in1 > fl1 # false # 56 - !3|@ semantico in1 >= fl1, func2
-        local int x <= 1003|
+        local bool bl1 <= in1 > fl1 # false # 56 - !3 * func2(a,b) - func3()||@ error necesita doble pipe para funcionar
         return bl1| @semantico
     }
  }
