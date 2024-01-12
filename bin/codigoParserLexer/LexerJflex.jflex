@@ -42,9 +42,13 @@ Digits = [0-9]*
 
 Bool = "true" | "false"
 
-char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
+comillaS = "'"
+
+char = "'" {InputCharacter} "'"
+
 
 %state CADENA
+%state INICIAL 
 
 %%
 
@@ -56,11 +60,13 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
 <YYINITIAL> {
 
   /* Main */
-  "function"                         { return symbol(sym.EMPEZONAVIDAD, yytext()); }
+  "function"                     { return symbol(sym.EMPEZONAVIDAD, yytext()); }
   "main"                         { return symbol(sym.ENTREGAREGALOS, yytext()); }
 
   /* literales booleanos */
   {Bool}                         { return symbol(sym.l_SANTA_CLAUS, yytext()); }
+
+  {char}                         { return symbol(sym.l_COLACHO, yytext()); }
 
 
   /* Estructuras de control */
@@ -83,13 +89,10 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
   {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
   "0" "." {Digits}?                      { return symbol(sym.l_PASCUERO, yytext()); }
 
-  //intento de char BAJO REVISION
-  {char}                         { return symbol(sym.l_COLACHO, yytext()); }
-
  /* Tipos*/
-  "char"                          { return symbol(sym.COLACHO, yytext());}
+  "char"                         { return symbol(sym.COLACHO, yytext());}
   "string"                       { return symbol(sym.SANTACLAUS, yytext());}
-  "bool"                       { return symbol(sym.SANTACLAUSULA, yytext());}
+  "bool"                         { return symbol(sym.SANTACLAUSULA, yytext());}
   "int"                          { return symbol(sym.PAPANOEL, yytext());}
   "float"                        { return symbol(sym.SANNICOLAS, yytext());}
   "double"                       { return symbol(sym.SINTERKLASS, yytext());}
@@ -104,8 +107,8 @@ char = '\'' ( [^'\n\r] | '\\' [^\n\r] ) '\''
   "=<"                           { return symbol(sym.ELFO6);}
 
   /* operadores lógicos */
-  "#"                           { return symbol(sym.MELCHOR); }
-  "^"                           { return symbol(sym.GASPAR); }
+  "#"                            { return symbol(sym.MELCHOR); }
+  "^"                            { return symbol(sym.GASPAR); }
   "!"                            { return symbol(sym.BALTASAR); }
 
   /* operadores unarios */

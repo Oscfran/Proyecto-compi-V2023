@@ -54,7 +54,7 @@ non terminal            poloNorte, t_navidad, t_santas, literales_navidenios, li
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
 non terminal            elfos, elfos_g, elfos_nums, comp_elfosN, comp_elfosG, regaloprin, declPapaNoel, declSanNicolas, declSantaClaus, declSantaClausula, declColacho, inicioNav;
 non terminal            opciones, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, compN, compG, doWhileStmt, envia, elfoStm, hadaStm, duendeStm, renos;
-non terminal            decl_G, llamadaNavidenia, ids;
+non terminal            decl_G, llamadaNavidenia, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
 
 //Precedence
 precedence left RODOLFO,COMETA;
@@ -141,6 +141,7 @@ regaloprin ::= COMETA regaloprin
        | regaloprin unidadNavidenia regaloprin
        | regaloprin elfos_g regaloprin
        | regaloprin elfos_nums regaloprin
+       | accesoArray
        | PERSONA;
 
 
@@ -170,13 +171,29 @@ declSantaClaus ::= POLO SANTACLAUS PERSONA FINREGALO
 
 //char (necesita cambiarse actualmente usa el literal de string)
 declColacho ::= POLO COLACHO PERSONA FINREGALO
-                | POLO COLACHO PERSONA ENTREGA l_PAPANOEL FINREGALO
+                | POLO COLACHO PERSONA ENTREGA l_COLACHO FINREGALO
                 | POLO COLACHO PERSONA ENTREGA PERSONA FINREGALO;
 
 //este se coloca para que la linea de dregalo sea más corta
 inicioNav ::= declPapaNoel | declSanNicolas | declSantaClaus | declSantaClausula | declColacho;
 
 cuerpo ::= ABREREGALO regalo CIERRAREGALO;
+
+
+//arrays
+//local int arr[3]|
+arrayDeclaration ::= POLO t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE FINREGALO;
+
+// Regla de inicialización de arrays
+//int arr[3] <= {a,b,3}|
+arrayInitialization ::= t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO;
+
+listaExpresiones ::= regaloprin
+                 | listaExpresiones MUERDAGO regaloprin;
+//Acceso y asignacion array
+//arr[1] ó  arr[3] <= 4|
+accesoArray ::= PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE
+            | PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE ENTREGA regaloprin FINREGALO;
 
 //Ciclos
 
