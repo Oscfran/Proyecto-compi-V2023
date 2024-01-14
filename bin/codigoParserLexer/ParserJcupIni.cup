@@ -136,7 +136,7 @@ renos ::= COMETA:rn {:RESULT = rn;:}
 
 regaloprin ::= COMETA regaloprin
        | BALTASAR regaloprin
-       | regaloprin renos:rn regaloprin {:System.out.println(rn);:}
+       | regaloprin renos:rn regaloprin
        | ABRECUENTO regaloprin CIERRACUENTO
        | literales_navidenios
        | regaloprin logisticadeNavidad regaloprin
@@ -158,12 +158,20 @@ decl_G ::= PERSONA ENTREGA regaloprin FINREGALO;
 
 //declaracion de variables simplificado
 //local int x <= 6
-creaRegaloAux ::= POLO t_santas:tsc PERSONA:per
+creaRegaloAux ::= POLO t_santas:tst PERSONA:per
                 {:
-                //tabla de simbolos
+                if (!listaTablaSimbolos.containsKey(currentHash)) {
+                listaTablaSimbolos.put(currentHash, new ArrayList<String>());
+                }
+                listaTablaSimbolos.get(currentHash).add("tipo:Local: " + per.toString()+": "+ tst.toString());
                 :}
-                | POLO t_santas:tsc PERSONA:per ENTREGA regaloprin
-                ;
+                | POLO t_santas:tst PERSONA:per ENTREGA regaloprin
+                {:
+                if (!listaTablaSimbolos.containsKey(currentHash)) {
+                listaTablaSimbolos.put(currentHash, new ArrayList<String>());
+                }
+                listaTablaSimbolos.get(currentHash).add("tipo:Local: " + per.toString()+": "+ tst.toString());
+                :};
 
 creaRegalo ::= creaRegaloAux FINREGALO;
 
@@ -225,8 +233,22 @@ duendeStm ::= DUENDE cuerpo;
 
 
 //Funciones 
-ayudanteDeSanta ::= t_santas:tsc PERSONA:per {:System.out.println(tsc);:}
-                    | PERSONA;
+//Funciones 
+ayudanteDeSanta ::= t_santas:tst PERSONA:per
+                {:
+                if (!listaTablaSimbolos.containsKey(currentHash)) {
+                listaTablaSimbolos.put(currentHash, new ArrayList<String>());
+                }
+                listaTablaSimbolos.get(currentHash).add("tipo: parámetro: " + per.toString()+": "+ tst.toString());
+                :}
+                | PERSONA:per
+                {:
+                if (!listaTablaSimbolos.containsKey(currentHash)) {
+                listaTablaSimbolos.put(currentHash, new ArrayList<String>());
+                }
+                listaTablaSimbolos.get(currentHash).add("tipo: parámetro: " + per.toString());
+                :};
+
 
 ayudaDefFunNav ::= ayudanteDeSanta
                     | ayudaDefFunNav MUERDAGO ayudanteDeSanta;
