@@ -1,5 +1,6 @@
  function void main(){
     print("Hola mundo")|
+    local bool x|
     local int x <= 5|
     function int asdf(int x, string prueba){
         print("HASD")|
@@ -19,7 +20,7 @@
         print("Prueba while")|
         break|
     }
-
+    @hola
     for(local int x <= 2, x < 20 , ++x){
         if (x == 3 ){
             print("Prueba if")|
@@ -57,8 +58,7 @@
     function int sad(){ @function
     /_
     Comentario 1
-    _/
-        
+    _/ 
     @comentario 2
         local bool b1|
         local string s1|

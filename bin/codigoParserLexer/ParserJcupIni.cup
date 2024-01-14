@@ -52,16 +52,16 @@ terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA;
 /* No terminales */
 non terminal            poloNorte, t_navidad, t_santas, literales_navidenios, literal_no_nums, literal_nums, bolsanavidenia, pNocheBuena, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
-non terminal            elfos, elfos_g, elfos_nums, comp_elfosN, comp_elfosG, regaloprin, declPapaNoel, declSanNicolas, declSantaClaus, declSantaClausula, declColacho, inicioNav;
+non terminal            elfos, elfos_g, elfos_nums, comp_elfosN, comp_elfosG, regaloprin, declPapaNoel, declSanNicolas, declSantaClaus, declSantaClausula, declColacho, creaRegalo, creaRegaloAux;
 non terminal            opciones, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, compN, compG, doWhileStmt, envia, elfoStm, hadaStm, duendeStm, renos;
-non terminal            decl_G, llamadaNavidenia, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
+non terminal            decl_G, llamadaNavidenia, llamadaNavideniaAux, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
 
 //Precedence
 precedence left RODOLFO,COMETA;
 precedence left BAILARIN,CUPIDO;
 precedence left DONNER,DASHER;
 precedence left ABRECUENTO, ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6, GRINCH, QUIEN, MELCHOR, GASPAR, BALTASAR;
-precedence right   FINREGALO, CIERRACUENTO;
+precedence left  FINREGALO, CIERRACUENTO;
 
 
 /* Inicio */
@@ -96,7 +96,8 @@ t_santas ::= SANTACLAUS:tst {:RESULT = tst;:}
             | SANNICOLAS:tst {:RESULT = tst;:}
             | SINTERKLASS:tst {:RESULT = tst;:} 
             | VIEJITOPASCUERO:tst {:RESULT = tst;:} 
-            | COLACHO:tst {:RESULT = tst;:};
+            | COLACHO:tst {:RESULT = tst;:}
+            | SANTACLAUSULA:tst {:RESULT = tst;:};
 
 //public o private
 t_navidad ::= FESTIVAL | FIESTA;
@@ -143,6 +144,7 @@ regaloprin ::= COMETA regaloprin
        | regaloprin elfos_g regaloprin
        | regaloprin elfos_nums regaloprin
        | accesoArray
+       | llamadaNavideniaAux
        | llamadaNavidenia
        | PERSONA;
 
@@ -154,30 +156,16 @@ regaloprin ::= COMETA regaloprin
 decl_G ::= PERSONA ENTREGA regaloprin FINREGALO;
 
 
-//int
-declPapaNoel ::= POLO PAPANOEL PERSONA FINREGALO
-                | POLO PAPANOEL PERSONA ENTREGA regaloprin FINREGALO;
+//declaracion de variables simplificado
+//local int x <= 6
+creaRegaloAux ::= POLO t_santas:tsc PERSONA:per
+                {:
+                //tabla de simbolos
+                :}
+                | POLO t_santas:tsc PERSONA:per ENTREGA regaloprin
+                ;
 
-//float
-declSanNicolas ::= POLO SANNICOLAS PERSONA FINREGALO
-                | POLO SANNICOLAS PERSONA ENTREGA regaloprin FINREGALO;
-
-//bool
-declSantaClausula ::= POLO SANTACLAUSULA PERSONA FINREGALO
-                    | POLO SANTACLAUSULA PERSONA ENTREGA regaloprin FINREGALO;
-
-//string
-declSantaClaus ::= POLO SANTACLAUS PERSONA FINREGALO
-                | POLO SANTACLAUS PERSONA ENTREGA l_PAPANOEL FINREGALO
-                | POLO SANTACLAUS PERSONA ENTREGA PERSONA FINREGALO;
-
-//char (necesita cambiarse actualmente usa el literal de string)
-declColacho ::= POLO COLACHO PERSONA FINREGALO
-                | POLO COLACHO PERSONA ENTREGA l_COLACHO FINREGALO
-                | POLO COLACHO PERSONA ENTREGA PERSONA FINREGALO;
-
-//este se coloca para que la linea de dregalo sea más corta
-inicioNav ::= declPapaNoel | declSanNicolas | declSantaClaus | declSantaClausula | declColacho;
+creaRegalo ::= creaRegaloAux FINREGALO;
 
 cuerpo ::= ABREREGALO regalo CIERRAREGALO;
 
@@ -249,10 +237,10 @@ ayudaDefFunNav ::= ayudanteDeSanta
 //error al poner funcion al final de una expresioncon final de linea ocupa doble final de linea para funcionar
 ids ::= regaloprin
     | ids MUERDAGO regaloprin;
-llamadaNavidenia ::= PERSONA ABRECUENTO CIERRACUENTO
-                  |  PERSONA ABRECUENTO CIERRACUENTO FINREGALO
-                  |  PERSONA ABRECUENTO ids CIERRACUENTO
-                  |  PERSONA ABRECUENTO ids CIERRACUENTO FINREGALO;
+llamadaNavideniaAux ::= PERSONA ABRECUENTO CIERRACUENTO
+                  |  PERSONA ABRECUENTO ids CIERRACUENTO;
+
+llamadaNavidenia ::= llamadaNavideniaAux FINREGALO;
 
 
 // Se asigna el token seleccionado a su respectiva tabla de símbolos
@@ -308,7 +296,7 @@ entregaRegalos ::= {:
                     :};
 
 //Encapsula todas las regaloprinesiones para que se puedan colocar dentro de las funciones
-poloNorte  ::= narraNavidad | corta | envia | regaloprin | inicioNav | whileStmt | forStmt | doWhileStmt | elfoStm | hadaStm | duendeStm | decl_G | escuchaNavidad;
+poloNorte  ::= narraNavidad | corta | envia | regaloprin | creaRegalo | whileStmt | forStmt | doWhileStmt | elfoStm | hadaStm | duendeStm | decl_G | escuchaNavidad;
 
 //Produccion de expresiones
 regalo ::= poloNorte
