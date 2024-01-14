@@ -1,33 +1,8 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-
-    // Manejo de errores en modo pánico
-    /*public void modoPanico(int[] tokenDeSincronizacion) {
-        boolean encontrado = false;
-        while (!encontrado) {
-            try {
-                Symbol sym = next_token();
-                for (int tokenDeSincronizacion : tokensDeSincronizacion) {
-                    if (sym.sym == tokenDeSincronizacion) {
-                        encontrado = true;
-                        break;
-                    }
-                }
-            } catch (Exception e) {
-                // Manejo de la excepción, por ejemplo, fin de archivo
-                System.err.println("Error al recuperarse del error: " + e.getMessage());
-                return;
-            }
-        }
-
-        // Falta de implementar en las producciones necesarias, 99% seguro que es funcional
-        /*| error {:
-                   System.err.println("Error de sintactico en la línea " + (yyline + 1));
-                   modoPanico(new int[]{sym.CIERRAREGALO, sym.FINREGALO});
-               :};
-    }*/
-
+import java.io.FileReader;
+import ParserLexer.LexerJflex;
+import ParserLexer.parser;
 
 public class App {
     public static void generarLexerParser() throws Exception {
@@ -66,6 +41,7 @@ public class App {
         Files.move(Paths.get(basePath + "\\src\\" + jlexerCarpeta + "\\" + jlexer),Paths.get(basePath + "\\src\\ParserLexer\\" + jlexer));
 
     }
+    
     //Funcion que prepara los archivos para ser probados por el LexerParser
     public static void pruebasLexerParser() throws Exception {
         String basePath, fullPathScanner, fullPathParser, fullPathError, fullPathSyntax, fullPathSyntax2;
@@ -94,18 +70,19 @@ public class App {
         mjfc.ejercicioParser(fullPathError);*/
 
         //Archivos de prueba sintax Proyecto 2(se debe realizar un analisis lexico primero para que se genere de manera correcta)
-        System.out.println("\nPrueba 1 (analisis lexico):");
+        /*System.out.println("\nPrueba 1 (analisis lexico):");
         mjfc.ejercicioParser(fullPathSyntax);
 
         System.out.println("\nPrueba 1 (analisis sintactico):");
-        mjfc.ejercicioParserSintax(fullPathSyntax);
+        mjfc.ejercicioParserSintax(fullPathSyntax);*/
 
 
-        /*System.out.println("\nPrueba 2 (analisis lexico):");
+        System.out.println("\nPrueba 2 (analisis lexico):");
         mjfc.ejercicioParser(fullPathSyntax2);
 
         System.out.println("\nPrueba 2 (analisis sintactico):");
-        mjfc.ejercicioParserSintax(fullPathSyntax2);*/
+        mjfc.ejercicioParserSintax(fullPathSyntax2);
+
     }
     
     public static void main(String[] args) throws Exception {

@@ -1,3 +1,8 @@
  function void main(){
-    print("Hola Mundo!!!")|
+    function string func3(string b1{ @semantico string
+	    return b1| 
+    }
+    function string func3(string b1){ @semantico string
+	    return b1| 
+    }
 }

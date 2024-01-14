@@ -20,6 +20,7 @@ import java_cup.runtime.*;
   }
 %}
 
+
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 WhiteSpace     = {LineTerminator} | [ \t\f]
@@ -122,22 +123,22 @@ char = "'" {InputCharacter} "'"
   "**"                           { return symbol(sym.DASHER, yytext()); }
 
   /* Paréntesis*/
-  "("                            { return symbol(sym.ABRECUENTO);}
-  ")"                            { return symbol(sym.CIERRACUENTO);}
+  "("                            { return symbol(sym.ABRECUENTO, yytext());}
+  ")"                            { return symbol(sym.CIERRACUENTO, yytext());}
 
   /* Paréntesis cuadrados*/
   "["                            { return symbol(sym.ABREEMPAQUE);}
-  "]"                            { return symbol(sym.CIERRAEMPAQUE);}
+  "]"                            { return symbol(sym.CIERRAEMPAQUE, yytext());}
 
   /* Llaves*/
-  "{"                            { return symbol(sym.ABREREGALO);}
-  "}"                            { return symbol(sym.CIERRAREGALO);}
+  "{"                            { return symbol(sym.ABREREGALO, yytext());}
+  "}"                            { return symbol(sym.CIERRAREGALO, yytext());}
  
   /* operador asignación */
   "<="                            { return symbol(sym.ENTREGA, yytext());}
 
   /* Fin de expresión */
-  "|"                            { return symbol(sym.FINREGALO); }
+  "|"                            { return symbol(sym.FINREGALO, yytext());}
 
   /* Separador */
   ","                            { return symbol(sym.MUERDAGO); }

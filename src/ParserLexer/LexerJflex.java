@@ -1088,12 +1088,12 @@ public class LexerJflex implements java_cup.runtime.Scanner {
           // fall through
           case 71: break;
           case 7:
-            { return symbol(sym.ABRECUENTO);
+            { return symbol(sym.ABRECUENTO, yytext());
             }
           // fall through
           case 72: break;
           case 8:
-            { return symbol(sym.CIERRACUENTO);
+            { return symbol(sym.CIERRACUENTO, yytext());
             }
           // fall through
           case 73: break;
@@ -1143,7 +1143,7 @@ public class LexerJflex implements java_cup.runtime.Scanner {
           // fall through
           case 82: break;
           case 18:
-            { return symbol(sym.CIERRAEMPAQUE);
+            { return symbol(sym.CIERRAEMPAQUE, yytext());
             }
           // fall through
           case 83: break;
@@ -1153,17 +1153,17 @@ public class LexerJflex implements java_cup.runtime.Scanner {
           // fall through
           case 84: break;
           case 20:
-            { return symbol(sym.ABREREGALO);
+            { return symbol(sym.ABREREGALO, yytext());
             }
           // fall through
           case 85: break;
           case 21:
-            { return symbol(sym.FINREGALO);
+            { return symbol(sym.FINREGALO, yytext());
             }
           // fall through
           case 86: break;
           case 22:
-            { return symbol(sym.CIERRAREGALO);
+            { return symbol(sym.CIERRAREGALO, yytext());
             }
           // fall through
           case 87: break;
