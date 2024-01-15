@@ -42,7 +42,8 @@
             print("do While")|
         }until (true)|
     }
-    local char x22 <= 'a'|
+
+    local char x22 <= 'a'
 	local char miChar<='b'|
 	local char miChar2<='!'| @sintactico
 	local string str1<="Hola $%&/#$&) mundo"|

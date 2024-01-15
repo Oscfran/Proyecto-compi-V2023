@@ -70,18 +70,18 @@ public class App {
         mjfc.ejercicioParser(fullPathError);*/
 
         //Archivos de prueba sintax Proyecto 2(se debe realizar un analisis lexico primero para que se genere de manera correcta)
-        /*System.out.println("\nPrueba 1 (analisis lexico):");
+        System.out.println("\nPrueba 1 (analisis lexico):");
         mjfc.ejercicioParser(fullPathSyntax);
 
         System.out.println("\nPrueba 1 (analisis sintactico):");
-        mjfc.ejercicioParserSintax(fullPathSyntax);*/
+        mjfc.ejercicioParserSintax(fullPathSyntax);
 
 
-        System.out.println("\nPrueba 2 (analisis lexico):");
+        /*System.out.println("\nPrueba 2 (analisis lexico):");
         mjfc.ejercicioParser(fullPathSyntax2);
 
         System.out.println("\nPrueba 2 (analisis sintactico):");
-        mjfc.ejercicioParserSintax(fullPathSyntax2);
+        mjfc.ejercicioParserSintax(fullPathSyntax2);*/
 
     }
     

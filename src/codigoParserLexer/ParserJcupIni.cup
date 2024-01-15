@@ -37,8 +37,8 @@ parser code {:
 
     //Manejo de errores
     public void syntax_error(Symbol cur_token) {
-    System.err.println("Error de sintaxis en la línea " + (cur_token.left + 1) + 
-                       ", columna " + (cur_token.right + 1));
+    System.err.println("Error de sintaxis en la línea " + (cur_token.left) + 
+                       ", columna " + (cur_token.right));
     }
     
     //Errores no recuperables
@@ -161,14 +161,16 @@ regaloprin ::= COMETA regaloprin
        | accesoArray
        | llamadaNavideniaAux
        | llamadaNavidenia
-       | PERSONA;
+       | PERSONA
+       ;
 
 
 //Declaracion de variables
 
 //redeclaracion de datos ejemplo:
 //num = 0|
-decl_G ::= PERSONA ENTREGA regaloprin FINREGALO;
+decl_G ::= PERSONA ENTREGA regaloprin FINREGALO
+            ;
 
 
 //declaracion de variables simplificado
@@ -186,7 +188,9 @@ creaRegaloAux ::= POLO t_santas:tst PERSONA:per
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
                 listaTablaSimbolos.get(currentHash).add("tipo:Local: " + per.toString()+": "+ tst.toString());
-                :};
+                :}
+                | error EMPEZONAVIDAD
+                ;
 
 creaRegalo ::= creaRegaloAux FINREGALO;
 
@@ -195,11 +199,16 @@ cuerpo ::= ABREREGALO regalo CIERRAREGALO;
 
 //arrays
 //local int arr[3]|
-arrayDeclaration ::= POLO t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE FINREGALO;
+arrayDeclaration ::= POLO t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE FINREGALO
+                    | error FINREGALO
+                    ;
 
 // Regla de inicialización de arrays
 //int arr[3] <= {a,b,3}|
-arrayInitialization ::= t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO;
+arrayInitialization ::= t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO 
+                    | error FINREGALO
+                    ;
+
 
 listaExpresiones ::= regaloprin
                  | listaExpresiones MUERDAGO regaloprin;
@@ -274,10 +283,12 @@ ayudaDefFunNav ::= ayudanteDeSanta
 //error al poner funcion al final de una expresioncon final de linea ocupa doble final de linea para funcionar
 ids ::= regaloprin
     | ids MUERDAGO regaloprin;
+    
 llamadaNavideniaAux ::= PERSONA ABRECUENTO CIERRACUENTO
                   |  PERSONA ABRECUENTO ids CIERRACUENTO;
 
-llamadaNavidenia ::= llamadaNavideniaAux FINREGALO;
+llamadaNavidenia ::= llamadaNavideniaAux FINREGALO
+                  ;
 
 
 // Se asigna el token seleccionado a su respectiva tabla de símbolos
@@ -308,20 +319,9 @@ definirFunNav ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO CIERRACUENTO
                 funcionMain.add(tipoTabla);
                 listaTablaSimbolos.put(currentHash, funcionMain);
                 :} 
-                 | error FINREGALO {:
-                    Symbol curToken = parser.cur_token;
-                    int errorLine = curToken.left;
-                    int errorColumn = curToken.right;
-                    System.err.println("Error sintáctico en la línea " + errorLine + ", columna " + errorColumn);
-                :}
-                | error CIERRAREGALO {:
-                    Symbol curToken = parser.cur_token;
-                    int errorLine = curToken.left;
-                    int errorColumn = curToken.right;
-                    System.err.println("Error sintáctico en la línea " + errorLine + ", columna " + errorColumn);
-                :}
+                | error FINREGALO 
+                | error CIERRAREGALO
                 | error ABREREGALO
-
                 ;
 
 bolsanavidenia ::= definirFunNav
