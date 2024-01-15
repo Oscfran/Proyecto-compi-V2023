@@ -66,7 +66,7 @@
         read(s1)| @semantico
         print(b1)| @semantico
         print(true)| @semantico
-        hola()
+        hola()|
         adios('a',b)|
         print(-6.7)|
         miFunc(miFunc(),'a')| @semantico miFunc, hola

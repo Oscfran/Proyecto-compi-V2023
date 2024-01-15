@@ -12,7 +12,7 @@ action code {:
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
      
-    // Función para imprimir la tabla de símbolor
+    // Función para imprimir la tabla de símbolos
     public void imprimirTablaSimbolos(){
         for (String key: listaTablaSimbolos.keySet()){
             System.out.println("Tabla de simbolo: " + key);
@@ -22,6 +22,19 @@ action code {:
             }
             System.out.println("");
         }
+    }
+
+    // Agarra el tipo del token en la tabla de símbolos
+    public String getTipo(ArrayList<String> tablasSimbolos, String id){
+        String tipo = "null";
+        for(String token : tablasSimbolos){
+            String[] partesToken = token.split(":");
+            if(id.equals(partesToken[0])){
+                tipo = partesToken[1];
+            }
+        }
+        System.out.println("tipo: "+tipo);
+        return tipo;
     }
 :}
 
