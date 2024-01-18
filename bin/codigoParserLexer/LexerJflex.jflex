@@ -65,6 +65,7 @@ char = "'" {InputCharacter} "'"
   /* literales booleanos */
   {Bool}                         { return symbol(sym.l_SANTA_CLAUS, yytext()); }
 
+  /*Literal Char*/
   {char}                         { return symbol(sym.l_COLACHO, yytext()); }
 
 
@@ -80,15 +81,15 @@ char = "'" {InputCharacter} "'"
   "break"                        { return symbol(sym.CORTA);     }
   "local"                        { return symbol(sym.POLO);      }
 
- 
   /* literales */
   {DecIntegerLiteral}            { return symbol(sym.l_SANTA, yytext());  }
   \"                             { string.setLength(0); yybegin(CADENA); }
+  
   /* Número literal flotante */
   {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
-  "0" "." {Digits}?                      { return symbol(sym.l_PASCUERO, yytext()); }
+  "0" "." {Digits}
 
- /* Tipos*/
+  /* Tipos*/
   "char"                         { return symbol(sym.COLACHO, yytext());}
   "string"                       { return symbol(sym.SANTACLAUS, yytext());}
   "bool"                         { return symbol(sym.SANTACLAUSULA, yytext());}

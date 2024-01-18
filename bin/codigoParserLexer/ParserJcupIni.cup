@@ -96,11 +96,17 @@ precedence left  FINREGALO, CIERRACUENTO;
 start with entregaRegalos;
 
 //Grupos de literales
-literales_navidenios ::= l_SANTA:lst {:RESULT = lst;:} | l_SANTA_CLAUS:lst {:RESULT = lst;:} | l_PAPANOEL:lst {:RESULT = lst;:} | l_PASCUERO:lst {:RESULT = lst;:} | l_COLACHO:lst {:RESULT = lst;:};
+literales_navidenios ::= l_SANTA:lst {:RESULT = lst + "int";:} 
+                    | l_SANTA_CLAUS:lst {:RESULT = lst + "bool";:} 
+                    | l_PAPANOEL:lst {:RESULT = lst + "cadena";:} 
+                    | l_PASCUERO:lst {:RESULT = lst + "float";:} 
+                    | l_COLACHO:lst {:RESULT = lst + "char";:};
 
-literal_nums ::= l_SANTA:lst {:RESULT = lst;:} | l_PASCUERO:lst {:RESULT = lst;:};
+literal_nums ::= l_SANTA:lst {:RESULT = lst + "int";:} 
+            | l_PASCUERO:lst {:RESULT = lst + "float";:};
 
-literal_no_nums ::= l_SANTA_CLAUS:lst {:RESULT = lst;:} | l_PAPANOEL:lst {:RESULT = lst;:};
+literal_no_nums ::= l_SANTA_CLAUS:lst {:RESULT = lst + "bool";:} 
+                | l_PAPANOEL:lst {:RESULT = lst + "cadena";:};
 
 //Operadores unarios
 unidadNavidenia ::= GRINCH | QUIEN;
@@ -130,7 +136,8 @@ t_santas ::= SANTACLAUS:tst {:RESULT = tst;:}
 //public o private
 t_navidad ::= FESTIVAL | FIESTA;
 
-//Estructuras de control
+
+/**Estructuras de control*/
 
 //return
 envia ::= ENVIA regaloprin FINREGALO;
@@ -161,7 +168,6 @@ renos ::= COMETA:rn {:RESULT = rn;:}
 
 
 //operaciones aritmeticas
-
 regaloprin ::= COMETA regaloprin
        | BALTASAR regaloprin
        | regaloprin renos:rn regaloprin
@@ -359,7 +365,19 @@ entregaRegalos ::= {:
                     :};
 
 //Encapsula todas las regaloprinesiones para que se puedan colocar dentro de las funciones
-poloNorte  ::= narraNavidad | corta | envia | regaloprin | creaRegalo | whileStmt | forStmt | doWhileStmt | elfoStm | hadaStm | duendeStm | decl_G | escuchaNavidad;
+poloNorte  ::= narraNavidad 
+                | corta 
+                | envia 
+                | regaloprin 
+                | creaRegalo 
+                | whileStmt 
+                | forStmt 
+                | doWhileStmt 
+                | elfoStm 
+                | hadaStm 
+                | duendeStm 
+                | decl_G 
+                | escuchaNavidad;
 
 //Produccion de expresiones
 regalo ::= poloNorte
