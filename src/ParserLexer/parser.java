@@ -861,7 +861,7 @@ public class parser extends java_cup.runtime.lr_parser {
 
     //Manejo de errores
     public void syntax_error(Symbol cur_token) {
-    System.err.println("Error de sintaxis en la línea " + (cur_token.left) + 
+    System.err.println("Error sintáctico en la línea " + (cur_token.left+1) + 
                        ", columna " + (cur_token.right));
     }
     
@@ -903,8 +903,8 @@ class CUP$parser$actions {
         String tipo = "null";
         for(String token : tablasSimbolos){
             String[] partesToken = token.split(":");
-            if(id.equals(partesToken[0])){
-                tipo = partesToken[1];
+            if(id.equals(partesToken[2])){
+                tipo = partesToken[3];
             }
         }
         System.out.println("tipo: "+tipo);
@@ -1088,6 +1088,9 @@ class CUP$parser$actions {
           case 13: // opciones ::= PERSONA 
             {
               Object RESULT =null;
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("opciones",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1346,6 +1349,9 @@ class CUP$parser$actions {
           case 39: // compN ::= PERSONA 
             {
               Object RESULT =null;
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("compN",41, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1355,7 +1361,10 @@ class CUP$parser$actions {
           case 40: // compN ::= l_SANTA_CLAUS 
             {
               Object RESULT =null;
-
+		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = lst + "bool";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("compN",41, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1385,6 +1394,9 @@ class CUP$parser$actions {
           case 43: // compG ::= PERSONA 
             {
               Object RESULT =null;
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("compG",42, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1514,7 +1526,19 @@ class CUP$parser$actions {
           case 55: // regaloprin ::= literales_navidenios 
             {
               Object RESULT =null;
-
+		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+       String [] partesOperando = lst.toString().split(":");
+       if (partesOperando[1].equals("int") || partesOperando[1].equals("float")){
+        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer. 
+       }else{
+        RESULT = "dir: null";
+        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                       ", columna " + (cur_token.right) + "tipo no permitido del literal " + partesOperando[0]);
+       }
+       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("regaloprin",27, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1586,7 +1610,21 @@ class CUP$parser$actions {
           case 63: // regaloprin ::= PERSONA 
             {
               Object RESULT =null;
-
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+       ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
+       String tipoId = getTipo(ts,per.toString());
+       if (tipoId.equals("int") || tipoId.equals("float")){
+        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
+        System.out.println("Acá entró") 
+       }else{
+        RESULT = "dir: null";
+        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                       ", columna " + (cur_token.right) + "tipo no permitido del id " + pe);
+       }
+       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("regaloprin",27, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1614,7 +1652,7 @@ class CUP$parser$actions {
                 if (!listaTablaSimbolos.containsKey(currentHash)) {
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
-                listaTablaSimbolos.get(currentHash).add("tipo:Local: " + per.toString()+": "+ tst.toString());
+                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("creaRegaloAux",34, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1634,7 +1672,7 @@ class CUP$parser$actions {
                 if (!listaTablaSimbolos.containsKey(currentHash)) {
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
-                listaTablaSimbolos.get(currentHash).add("tipo:Local: " + per.toString()+": "+ tst.toString());
+                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("creaRegaloAux",34, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1671,6 +1709,9 @@ class CUP$parser$actions {
           case 70: // arrayDeclaration ::= POLO t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE FINREGALO 
             {
               Object RESULT =null;
+		int tstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
+		int tstright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
+		Object tst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayDeclaration",54, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1689,6 +1730,9 @@ class CUP$parser$actions {
           case 72: // arrayInitialization ::= t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO 
             {
               Object RESULT =null;
+		int tstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).left;
+		int tstright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)).right;
+		Object tst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-9)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayInitialization",55, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1761,6 +1805,9 @@ class CUP$parser$actions {
           case 80: // whileStmt ::= ENVOLTURA ABRECUENTO l_SANTA_CLAUS CIERRACUENTO cuerpo 
             {
               Object RESULT =null;
+		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("whileStmt",36, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1788,6 +1835,9 @@ class CUP$parser$actions {
           case 83: // doWhileStmt ::= HACE cuerpo REVISA ABRECUENTO l_SANTA_CLAUS CIERRACUENTO FINREGALO 
             {
               Object RESULT =null;
+		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("doWhileStmt",43, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1933,7 +1983,7 @@ class CUP$parser$actions {
                 if (!listaTablaSimbolos.containsKey(currentHash)) {
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
-                listaTablaSimbolos.get(currentHash).add("tipo: parámetro: " + per.toString()+": "+ tst.toString());
+                listaTablaSimbolos.get(currentHash).add("tipo:param:" + per.toString()+":"+ tst.toString());
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ayudanteDeSanta",18, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1950,7 +2000,7 @@ class CUP$parser$actions {
                 if (!listaTablaSimbolos.containsKey(currentHash)) {
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
-                listaTablaSimbolos.get(currentHash).add("tipo: parámetro: " + per.toString());
+                listaTablaSimbolos.get(currentHash).add("tipo:param:" + per.toString());
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ayudanteDeSanta",18, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

@@ -81,10 +81,10 @@ char = "'" {InputCharacter} "'"
   "break"                        { return symbol(sym.CORTA);     }
   "local"                        { return symbol(sym.POLO);      }
 
-  /* literales */
+  /* literales enteros*/
   {DecIntegerLiteral}            { return symbol(sym.l_SANTA, yytext());  }
   \"                             { string.setLength(0); yybegin(CADENA); }
-  
+
   /* Número literal flotante */
   {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
   "0" "." {Digits}

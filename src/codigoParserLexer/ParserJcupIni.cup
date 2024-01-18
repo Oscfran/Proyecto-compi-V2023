@@ -29,8 +29,8 @@ action code {:
         String tipo = "null";
         for(String token : tablasSimbolos){
             String[] partesToken = token.split(":");
-            if(id.equals(partesToken[0])){
-                tipo = partesToken[1];
+            if(id.equals(partesToken[2])){
+                tipo = partesToken[3];
             }
         }
         System.out.println("tipo: "+tipo);
@@ -50,7 +50,7 @@ parser code {:
 
     //Manejo de errores
     public void syntax_error(Symbol cur_token) {
-    System.err.println("Error de sintaxis en la línea " + (cur_token.left) + 
+    System.err.println("Error sintáctico en la línea " + (cur_token.left+1) + 
                        ", columna " + (cur_token.right));
     }
     
@@ -110,7 +110,7 @@ literal_no_nums ::= l_SANTA_CLAUS:lst {:RESULT = lst + "bool";:}
 
 //Operadores unarios
 unidadNavidenia ::= GRINCH | QUIEN;
-opciones ::= literales_navidenios:lst | PERSONA;
+opciones ::= literales_navidenios:lst | PERSONA:per;
 grinchYQuien ::= unidadNavidenia opciones;
 
 //Operadores logicos
@@ -150,11 +150,11 @@ elfos_g ::= ELFO1 | ELFO2;
 elfos_nums ::= ELFO3 | ELFO4 | ELFO5 | ELFO6;
 
 //comparaciones que requieren numeros(>, <, >= <_)
-compN ::= literal_nums:lst | PERSONA | l_SANTA_CLAUS;
+compN ::= literal_nums:lst | PERSONA:per | l_SANTA_CLAUS:lst {:RESULT = lst + "bool";:};
 comp_elfosN ::= compN elfos_nums compN;
 
 //comparaciones generales(==, !=)
-compG ::= literales_navidenios:tl | PERSONA;
+compG ::= literales_navidenios:tl | PERSONA:per;
 comp_elfosG ::= compG elfos_g compG;
 
 
@@ -172,7 +172,17 @@ regaloprin ::= COMETA regaloprin
        | BALTASAR regaloprin
        | regaloprin renos:rn regaloprin
        | ABRECUENTO regaloprin CIERRACUENTO
-       | literales_navidenios
+       | literales_navidenios:lst 
+       {:
+       String [] partesOperando = lst.toString().split(":");
+       if (partesOperando[1].equals("int") || partesOperando[1].equals("float")){
+        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer. 
+       }else{
+        RESULT = "dir: null";
+        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                       ", columna " + (cur_token.right) + "tipo no permitido del literal " + partesOperando[0]);
+       }
+       :}
        | regaloprin logisticadeNavidad regaloprin
        | regaloprin unidadNavidenia regaloprin
        | regaloprin elfos_g regaloprin
@@ -180,7 +190,19 @@ regaloprin ::= COMETA regaloprin
        | accesoArray
        | llamadaNavideniaAux
        | llamadaNavidenia
-       | PERSONA
+       | PERSONA:per
+       {:
+       ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
+       String tipoId = getTipo(ts,per.toString());
+       if (tipoId.equals("int") || tipoId.equals("float")){
+        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
+        System.out.println("Acá entró") 
+       }else{
+        RESULT = "dir: null";
+        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                       ", columna " + (cur_token.right) + "tipo no permitido del id " + pe);
+       }
+       :}
        ;
 
 
@@ -189,7 +211,7 @@ regaloprin ::= COMETA regaloprin
 //redeclaracion de datos ejemplo:
 //num = 0|
 decl_G ::= PERSONA ENTREGA regaloprin FINREGALO
-            ;
+        ;
 
 
 //declaracion de variables simplificado
@@ -199,14 +221,14 @@ creaRegaloAux ::= POLO t_santas:tst PERSONA:per
                 if (!listaTablaSimbolos.containsKey(currentHash)) {
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
-                listaTablaSimbolos.get(currentHash).add("tipo:Local: " + per.toString()+": "+ tst.toString());
+                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                 :}
                 | POLO t_santas:tst PERSONA:per ENTREGA regaloprin
                 {:
                 if (!listaTablaSimbolos.containsKey(currentHash)) {
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
-                listaTablaSimbolos.get(currentHash).add("tipo:Local: " + per.toString()+": "+ tst.toString());
+                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                 :}
                 | error EMPEZONAVIDAD
                 ;
@@ -218,19 +240,20 @@ cuerpo ::= ABREREGALO regalo CIERRAREGALO;
 
 //arrays
 //local int arr[3]|
-arrayDeclaration ::= POLO t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE FINREGALO
+arrayDeclaration ::= POLO t_santas:tst PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE FINREGALO
                     | error FINREGALO
                     ;
 
 // Regla de inicialización de arrays
 //int arr[3] <= {a,b,3}|
-arrayInitialization ::= t_santas PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO 
+arrayInitialization ::= t_santas:tst PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO 
                     | error FINREGALO
                     ;
 
 
 listaExpresiones ::= regaloprin
                  | listaExpresiones MUERDAGO regaloprin;
+
 //Acceso y asignacion array
 //arr[1] ó  arr[3] <= 4|
 accesoArray ::= PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE
@@ -242,13 +265,13 @@ accesoArray ::= PERSONA ABREEMPAQUE regaloprin CIERRAEMPAQUE
 //while ( i <_ 5 ){}
 whileStmt ::= ENVOLTURA ABRECUENTO comp_elfosN CIERRACUENTO cuerpo
             | ENVOLTURA ABRECUENTO comp_elfosG CIERRACUENTO cuerpo
-            | ENVOLTURA ABRECUENTO l_SANTA_CLAUS CIERRACUENTO cuerpo;
+            | ENVOLTURA ABRECUENTO l_SANTA_CLAUS:lst CIERRACUENTO cuerpo;
 
 //do until (do while)
 //do{ cuerpo }until ( i <_ 5 )|
 doWhileStmt ::= HACE cuerpo REVISA ABRECUENTO comp_elfosN CIERRACUENTO FINREGALO
                 | HACE cuerpo REVISA ABRECUENTO comp_elfosG CIERRACUENTO FINREGALO
-                | HACE cuerpo REVISA ABRECUENTO l_SANTA_CLAUS CIERRACUENTO FINREGALO;
+                | HACE cuerpo REVISA ABRECUENTO l_SANTA_CLAUS:lst CIERRACUENTO FINREGALO;
 
 //For 
 //for(x=2,x<20,++x)
@@ -282,14 +305,14 @@ ayudanteDeSanta ::= t_santas:tst PERSONA:per
                 if (!listaTablaSimbolos.containsKey(currentHash)) {
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
-                listaTablaSimbolos.get(currentHash).add("tipo: parámetro: " + per.toString()+": "+ tst.toString());
+                listaTablaSimbolos.get(currentHash).add("tipo:param:" + per.toString()+":"+ tst.toString());
                 :}
                 | PERSONA:per
                 {:
                 if (!listaTablaSimbolos.containsKey(currentHash)) {
                 listaTablaSimbolos.put(currentHash, new ArrayList<String>());
                 }
-                listaTablaSimbolos.get(currentHash).add("tipo: parámetro: " + per.toString());
+                listaTablaSimbolos.get(currentHash).add("tipo:param:" + per.toString());
                 :};
 
 
