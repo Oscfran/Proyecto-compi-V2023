@@ -61,11 +61,19 @@ char = "'" {InputCharacter} "'"
   "function"                     { return symbol(sym.EMPEZONAVIDAD, yytext()); }
   "main"                         { return symbol(sym.ENTREGAREGALOS, yytext()); }
 
-  /* literales booleanos */
+  /* Literales booleanos */
   {Bool}                         { return symbol(sym.l_SANTA_CLAUS, yytext()); }
 
-  /*Literal Char*/
+  /* Literal Char*/
   {char}                         { return symbol(sym.l_COLACHO, yytext()); }
+
+  /* Literales enteros*/
+  {DecIntegerLiteral}            { return symbol(sym.l_SANTA, yytext());  }
+  \"                             { string.setLength(0); yybegin(CADENA); }
+
+  /* Literales flotante */
+  {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
+  "0" "." {Digits}
 
 
   /* Estructuras de control */
@@ -80,14 +88,6 @@ char = "'" {InputCharacter} "'"
   "break"                        { return symbol(sym.CORTA);     }
   "local"                        { return symbol(sym.POLO);      }
 
-  /* literales enteros*/
-  {DecIntegerLiteral}            { return symbol(sym.l_SANTA, yytext());  }
-  \"                             { string.setLength(0); yybegin(CADENA); }
-
-  /* Número literal flotante */
-  {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
-  "0" "." {Digits}
-
   /* Tipos*/
   "char"                         { return symbol(sym.COLACHO, yytext());}
   "string"                       { return symbol(sym.SANTACLAUS, yytext());}
@@ -98,12 +98,12 @@ char = "'" {InputCharacter} "'"
   "void"                         { return symbol(sym.VIEJITOPASCUERO, yytext());}
   
   /* operadores comparación*/
-  "=="                           { return symbol(sym.ELFO1); }
-  "!="                           { return symbol(sym.ELFO2); }
-  ">"                            { return symbol(sym.ELFO3); }
-  "<"                            { return symbol(sym.ELFO4); }
-  "=>"                           { return symbol(sym.ELFO5);}
-  "=<"                           { return symbol(sym.ELFO6);}
+  "=="                           { return symbol(sym.ELFO1, yytext()); }
+  "!="                           { return symbol(sym.ELFO2, yytext()); }
+  ">"                            { return symbol(sym.ELFO3, yytext()); }
+  "<"                            { return symbol(sym.ELFO4, yytext()); }
+  "=>"                           { return symbol(sym.ELFO5, yytext());}
+  "=<"                           { return symbol(sym.ELFO6, yytext());}
 
   /* operadores lógicos */
   "#"                            { return symbol(sym.MELCHOR); }
@@ -158,8 +158,6 @@ char = "'" {InputCharacter} "'"
   /* identificadores (se coloca al final para eviotar ambiguedades)*/ 
   {Identifier}                   { return symbol(sym.PERSONA, yytext());  }
 }
-
-
 
 <CADENA> {
   \"                             { yybegin(YYINITIAL); 

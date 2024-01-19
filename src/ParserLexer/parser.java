@@ -1277,6 +1277,9 @@ class CUP$parser$actions {
           case 32: // elfos_g ::= ELFO1 
             {
               Object RESULT =null;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos_g",22, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1286,6 +1289,9 @@ class CUP$parser$actions {
           case 33: // elfos_g ::= ELFO2 
             {
               Object RESULT =null;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos_g",22, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1295,6 +1301,9 @@ class CUP$parser$actions {
           case 34: // elfos_nums ::= ELFO3 
             {
               Object RESULT =null;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos_nums",23, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1304,6 +1313,9 @@ class CUP$parser$actions {
           case 35: // elfos_nums ::= ELFO4 
             {
               Object RESULT =null;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos_nums",23, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1313,6 +1325,9 @@ class CUP$parser$actions {
           case 36: // elfos_nums ::= ELFO5 
             {
               Object RESULT =null;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos_nums",23, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1322,6 +1337,9 @@ class CUP$parser$actions {
           case 37: // elfos_nums ::= ELFO6 
             {
               Object RESULT =null;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos_nums",23, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1334,16 +1352,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-        String [] partesOperando = lst.toString().split(":");
-        if (partesOperando[1].equals("int") || partesOperando[1].equals("float")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer. 
-        }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
-                       ", columna " + (cur_token.right) + "tipo no permitido del literal " + partesOperando[0]);
-        }
-        
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("compN",35, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1364,6 +1373,15 @@ class CUP$parser$actions {
           case 40: // comp_elfosN ::= compN elfos_nums compN 
             {
               Object RESULT =null;
+		int operR1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int operR1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object operR1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int operR2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int operR2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object operR2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("comp_elfosN",24, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1377,13 +1395,14 @@ class CUP$parser$actions {
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        String [] partesOperando = lst.toString().split(":");
+        String[] partesOperando = lst.toString().split(":");
         if (partesOperando[1].equals("int") || partesOperando[1].equals("float")  || partesOperando[1].equals("bool")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer. 
+            RESULT = "dir:" + partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
+            System.out.println("Acá entró y funcionó la validación general 1111"); 
         }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
-                       ", columna " + (cur_token.right) + "tipo no permitido del literal " + partesOperando[0]);
+            RESULT = "dir:null";
+            System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                       ", columna " + (cur_token.right) + " tipo no permitido del literal " + partesOperando[1]);
        }
        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("compG",36, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1401,11 +1420,11 @@ class CUP$parser$actions {
         ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
         String tipoId = getTipo(ts,per.toString());
         if (tipoId.equals("int") || tipoId.equals("float")|| tipoId.equals("bool")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
-        System.out.println("Acá entró");
+            RESULT = "dir:"+tipoId; //Esto es para la generación de código destino (Mips) que se ocupa la dirección, no sé qué más hacer.
+            System.out.println("Acá entró y funcionó la validación general 222");
         }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+            RESULT = "dir:null";
+            System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
                        ", columna " + (cur_token.right) + "tipo no permitido del id " + per);
        }
        
@@ -1417,7 +1436,29 @@ class CUP$parser$actions {
           case 43: // comp_elfosG ::= compG elfos_g compG 
             {
               Object RESULT =null;
+		int opcomg1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int opcomg1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object opcomg1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int opcomg2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int opcomg2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object opcomg2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+        String[] partesOperando_comp_elfosG = opcomg1.toString().split(":");
+        String[] partesOperando_comp_elfosG1 = opcomg2.toString().split(":");
 
+        if(partesOperando_comp_elfosG[1].equals(partesOperando_comp_elfosG1[1]) && !(partesOperando_comp_elfosG[1].equals("null") || partesOperando_comp_elfosG1[1].equals("null"))){
+            // Generación código Mips
+            RESULT = "dir:"+ partesOperando_comp_elfosG[1];
+        }
+        else
+        {
+            System.out.println("Los tipos de los operandos: " + partesOperando_comp_elfosG[0] + "y" + partesOperando_comp_elfosG1[0] + "no son iguales");
+        }   
+        RESULT = "dir:null";
+       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("comp_elfosG",25, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1540,16 +1581,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-       String [] partesOperando = lst.toString().split(":");
-       if (partesOperando[1].equals("int") || partesOperando[1].equals("float")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer. 
-       }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
-                       ", columna " + (cur_token.right) + "tipo no permitido del literal " + partesOperando[0]);
-       }
-       
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("regaloprin",26, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1624,18 +1656,7 @@ class CUP$parser$actions {
 		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		
-       ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
-       String tipoId = getTipo(ts,per.toString());
-       if (tipoId.equals("int") || tipoId.equals("float")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
-        System.out.println("Acá entró"); 
-       }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
-                       ", columna " + (cur_token.right) + "tipo no permitido del id " + per);
-       }
-       
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("regaloprin",26, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2091,13 +2112,13 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
+                currentHash = per.toString();
                 String tipoTabla = "main";
                 if (per.toString().equals("main"))
-                        tipoTabla = "tipo:main: "+tsc.toString();
+                        tipoTabla = "tipo:main:"+tsc.toString();
                 else
-                        tipoTabla = "tipo:function: "+tsc.toString();
+                        tipoTabla = "tipo:function:"+tsc.toString();
                 ArrayList<String> funcionMain = new ArrayList<String>();
-                currentHash = per.toString();
                 funcionMain.add(tipoTabla);
                 listaTablaSimbolos.put(currentHash, funcionMain);
                 
@@ -2117,13 +2138,13 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 		
+                currentHash = per.toString();
                 String tipoTabla = "main";
                 if (per.toString().equals("main"))
-                        tipoTabla = "tipo:main: "+tsc.toString();
+                        tipoTabla = "tipo:main:"+tsc.toString();
                 else
-                        tipoTabla = "tipo:function: "+tsc.toString();
-                ArrayList<String> funcionMain = new ArrayList<String>();
-                currentHash = per.toString();
+                        tipoTabla = "tipo:function:"+tsc.toString();
+                ArrayList<String> funcionMain = new ArrayList<String>();;
                 funcionMain.add(tipoTabla);
                 listaTablaSimbolos.put(currentHash, funcionMain);
                 

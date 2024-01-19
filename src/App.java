@@ -70,8 +70,8 @@ public class App {
         mjfc.ejercicioParser(fullPathError);*/
 
         //Archivos de prueba sintax Proyecto 2(se debe realizar un analisis lexico primero para que se genere de manera correcta)
-        /*System.out.println("\nPrueba 1 (analisis lexico):");
-        mjfc.ejercicioParser(fullPathSyntax);*/
+        System.out.println("\nPrueba 1 (analisis lexico):");
+        mjfc.ejercicioParser(fullPathSyntax);
         System.out.println("\nPrueba 1 (analisis sintactico):");
         mjfc.ejercicioParserSintax(fullPathSyntax);
 
@@ -90,7 +90,7 @@ public class App {
         pero en la segunda ejecución ya no estarán dichos errores)*/
 
         //generarLexerParser();
-        //pruebasLexerParser();
+        pruebasLexerParser();
 
         /*Debido al package ParserLexer no se puede ejecutar si no hay archivos en dicha, carpeta mismos que se generan
         automaticamente al ejecutarse la funcion: generarLexerParser() (en la actual version deberia poder ejecutarse sin problemas)*/

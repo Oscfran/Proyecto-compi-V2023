@@ -133,9 +133,6 @@ t_santas ::= SANTACLAUS:tst {:RESULT = tst;:}
 //public o private
 t_navidad ::= FESTIVAL | FIESTA;
 
-
-/**Estructuras de control*/
-
 //return
 envia ::= ENVIA regaloprin FINREGALO;
 
@@ -143,50 +140,33 @@ envia ::= ENVIA regaloprin FINREGALO;
 corta ::= CORTA FINREGALO;
 
 // Operadores generales: ==, !=
-elfos_g ::= ELFO1 | ELFO2;
+elfos_g ::= ELFO1:elf | ELFO2:elf;
 
 // Operadores relacionales: >, <, =>, =<
-elfos_nums ::= ELFO3 | ELFO4 | ELFO5 | ELFO6;
+elfos_nums ::= ELFO3:elf | ELFO4:elf | ELFO5:elf | ELFO6:elf;
 
 // Regla que ayuda a las operaciones relacionales
 compN ::= literal_nums:lst
-        {:
-        String [] partesOperando = lst.toString().split(":");
-        if (partesOperando[1].equals("int") || partesOperando[1].equals("float")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer. 
-        }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
-                       ", columna " + (cur_token.right) + "tipo no permitido del literal " + partesOperando[0]);
-        }
-        :}
-         | PERSONA:per 
-         {:
-        ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
-        String tipoId = getTipo(ts,per.toString());
-        if (tipoId.equals("int") || tipoId.equals("float")|| tipoId.equals("bool")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
-        System.out.println("Acá entró");
-        }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
-                       ", columna " + (cur_token.right) + "tipo no permitido del id " + per);
-       }
-       :};
+        | PERSONA:per 
+        ;
 
 // Operaciones relacionales que sólo permiten enteros o flotantes(>, <, >= <_)  
-comp_elfosN ::= compN elfos_nums compN;
+comp_elfosN ::= compN:operR1 elfos_nums:elf compN:operR2;
+
+
+
 
 // Regla que ayuda a las operaciones generales 
 compG ::= literales_navidenios:lst
         {:
-        String [] partesOperando = lst.toString().split(":");
+        String[] partesOperando = lst.toString().split(":");
         if (partesOperando[1].equals("int") || partesOperando[1].equals("float")  || partesOperando[1].equals("bool")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer. 
+            RESULT = "dir:" + partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
+            System.out.println("Acá entró y funcionó la validación general 1111"); 
         }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
-                       ", columna " + (cur_token.right) + "tipo no permitido del literal " + partesOperando[0]);
+            RESULT = "dir:null";
+            System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                       ", columna " + (cur_token.right) + " tipo no permitido del literal " + partesOperando[1]);
        }
        :}
         | PERSONA:per 
@@ -194,27 +174,41 @@ compG ::= literales_navidenios:lst
         ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
         String tipoId = getTipo(ts,per.toString());
         if (tipoId.equals("int") || tipoId.equals("float")|| tipoId.equals("bool")){
-        RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
-        System.out.println("Acá entró");
+            RESULT = "dir:"+tipoId; //Esto es para la generación de código destino (Mips) que se ocupa la dirección, no sé qué más hacer.
+            System.out.println("Acá entró y funcionó la validación general 222");
         }else{
-        RESULT = "dir:null";
-        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+            RESULT = "dir:null";
+            System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
                        ", columna " + (cur_token.right) + "tipo no permitido del id " + per);
        }
        :}
         ;
 
 //Comparaciones generales(==, !=) y sólo permiten enteros, flotantes y booleanos
-comp_elfosG ::= compG elfos_g compG;
+comp_elfosG ::= compG:opcomg1 elfos_g:elf compG:opcomg2{:
+        String[] partesOperando_comp_elfosG = opcomg1.toString().split(":");
+        String[] partesOperando_comp_elfosG1 = opcomg2.toString().split(":");
+
+        if(partesOperando_comp_elfosG[1].equals(partesOperando_comp_elfosG1[1]) && !(partesOperando_comp_elfosG[1].equals("null") || partesOperando_comp_elfosG1[1].equals("null"))){
+            // Generación código Mips
+            RESULT = "dir:"+ partesOperando_comp_elfosG[1];
+        }
+        else
+        {
+            System.out.println("Los tipos de los operandos: " + partesOperando_comp_elfosG[0] + "y" + partesOperando_comp_elfosG1[0] + "no son iguales");
+        }   
+        RESULT = "dir:null";
+       :}
+       ;
 
 
 // Operadores aritméticos -, +, *, /, ~, **
-renos ::= COMETA:rn {:RESULT = rn;:}
-         | RODOLFO:rn {:RESULT = rn;:} 
+renos ::= COMETA:rn    {:RESULT = rn;:}
+         | RODOLFO:rn  {:RESULT = rn;:} 
          | BAILARIN:rn {:RESULT = rn;:} 
-         | CUPIDO:rn {:RESULT = rn;:} 
-         | DONNER:rn {:RESULT = rn;:} 
-         | DASHER:rn {:RESULT = rn;:};
+         | CUPIDO:rn   {:RESULT = rn;:} 
+         | DONNER:rn   {:RESULT = rn;:} 
+         | DASHER:rn   {:RESULT = rn;:};
 
 
 // Operaciones aritméticas
@@ -222,9 +216,8 @@ regaloprin ::= COMETA regaloprin
        | BALTASAR regaloprin
        | regaloprin renos:rn regaloprin
        | ABRECUENTO regaloprin CIERRACUENTO
-
        | literales_navidenios:lst 
-       {:
+       /*{:
        String [] partesOperando = lst.toString().split(":");
        if (partesOperando[1].equals("int") || partesOperando[1].equals("float")){
         RESULT = "dir:"+partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer. 
@@ -233,7 +226,7 @@ regaloprin ::= COMETA regaloprin
         System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
                        ", columna " + (cur_token.right) + "tipo no permitido del literal " + partesOperando[0]);
        }
-       :}
+       :}*/
 
        | regaloprin logisticadeNavidad regaloprin
        | regaloprin unidadNavidenia regaloprin
@@ -242,10 +235,8 @@ regaloprin ::= COMETA regaloprin
        | accesoArray
        | llamadaNavideniaAux
        | llamadaNavidenia
-
-
        | PERSONA:per
-       {:
+       /*{:
        ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
        String tipoId = getTipo(ts,per.toString());
        if (tipoId.equals("int") || tipoId.equals("float")){
@@ -256,7 +247,7 @@ regaloprin ::= COMETA regaloprin
         System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
                        ", columna " + (cur_token.right) + "tipo no permitido del id " + per);
        }
-       :}
+       :}*/
        ;
 
 
@@ -388,17 +379,18 @@ llamadaNavidenia ::= llamadaNavideniaAux FINREGALO
                   ;
 
 
-// Se asigna el token seleccionado a su respectiva tabla de símbolos
-// En este caso el valor de retorno, el nombre de la función y si es una función main o no
+//Definición de funciones
 definirFunNav ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO CIERRACUENTO 
+                /*Se asigna el token seleccionado a su respectiva tabla de símbolos
+                En este caso el valor de retorno, el nombre de la función y si es una función main o no*/
                 {:
+                currentHash = per.toString();
                 String tipoTabla = "main";
                 if (per.toString().equals("main"))
-                        tipoTabla = "tipo:main: "+tsc.toString();
+                        tipoTabla = "tipo:main:"+tsc.toString();
                 else
-                        tipoTabla = "tipo:function: "+tsc.toString();
+                        tipoTabla = "tipo:function:"+tsc.toString();
                 ArrayList<String> funcionMain = new ArrayList<String>();
-                currentHash = per.toString();
                 funcionMain.add(tipoTabla);
                 listaTablaSimbolos.put(currentHash, funcionMain);
                 
@@ -406,13 +398,13 @@ definirFunNav ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO CIERRACUENTO
                
                 | EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO ayudaDefFunNav CIERRACUENTO 
                 {:
+                currentHash = per.toString();
                 String tipoTabla = "main";
                 if (per.toString().equals("main"))
-                        tipoTabla = "tipo:main: "+tsc.toString();
+                        tipoTabla = "tipo:main:"+tsc.toString();
                 else
-                        tipoTabla = "tipo:function: "+tsc.toString();
-                ArrayList<String> funcionMain = new ArrayList<String>();
-                currentHash = per.toString();
+                        tipoTabla = "tipo:function:"+tsc.toString();
+                ArrayList<String> funcionMain = new ArrayList<String>();;
                 funcionMain.add(tipoTabla);
                 listaTablaSimbolos.put(currentHash, funcionMain);
                 :} 
