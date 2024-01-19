@@ -78,7 +78,7 @@ terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA;
 non terminal            poloNorte, t_navidad, t_santas, literales_navidenios, literal_no_nums, literal_nums, bolsanavidenia, pNocheBuena, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
 non terminal            elfos_g, elfos_nums, comp_elfosN, comp_elfosG, regaloprin, creaRegalo, creaRegaloAux;
-non terminal            opciones, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, compN, compG, doWhileStmt, envia, elfoStm, hadaStm, duendeStm, renos;
+non terminal            opciones, creaRegaloaAuxAux, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, compN, compG, doWhileStmt, envia, elfoStm, hadaStm, duendeStm, renos;
 non terminal            decl_G, ayudaDefinirFuncionNavi, llamadaNavidenia, llamadaNavideniaAux, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
 
 //Precedence
@@ -140,10 +140,10 @@ envia ::= ENVIA regaloprin FINREGALO;
 corta ::= CORTA FINREGALO;
 
 // Operadores generales: ==, !=
-elfos_g ::= ELFO1:elf | ELFO2:elf;
+elfos_g ::= ELFO1:elfg | ELFO2:elfg;
 
 // Operadores relacionales: >, <, =>, =<
-elfos_nums ::= ELFO3:elf | ELFO4:elf | ELFO5:elf | ELFO6:elf;
+elfos_nums ::= ELFO3:elfn | ELFO4:elfn | ELFO5:elfn | ELFO6:elfn;
 
 // Regla que ayuda a las operaciones relacionales
 compN ::= literal_nums:lst
@@ -151,9 +151,7 @@ compN ::= literal_nums:lst
         ;
 
 // Operaciones relacionales que sólo permiten enteros o flotantes(>, <, >= <_)  
-comp_elfosN ::= compN:operR1 elfos_nums:elf compN:operR2;
-
-
+comp_elfosN ::= compN:operR1 elfos_nums:elfn compN:operR2;
 
 
 // Regla que ayuda a las operaciones generales 
@@ -184,20 +182,61 @@ compG ::= literales_navidenios:lst
        :}
         ;
 
-//Comparaciones generales(==, !=) y sólo permiten enteros, flotantes y booleanos
-comp_elfosG ::= compG:opcomg1 elfos_g:elf compG:opcomg2{:
-        String[] partesOperando_comp_elfosG = opcomg1.toString().split(":");
-        String[] partesOperando_comp_elfosG1 = opcomg2.toString().split(":");
+// Operaciones generales(==, !=) y sólo permiten enteros, flotantes y booleanos
+comp_elfosG ::= compG:opcomg1 elfos_g:elfg literales_navidenios:lst 
+        {:
+                // Segundo operando
+                String[] partesOperando2 = lst.toString().split(":");
+                String tOp2 = "null";
+                if (!(partesOperando2[1].equals("int") || partesOperando2[1].equals("float")  || partesOperando2[1].equals("bool"))){
+                    RESULT = "dir:null";
+                    System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                            ", columna " + (cur_token.right) + " tipo no permitido del literal " + partesOperando2[0]);
+                }else{
+                    tOp2 = partesOperando2[1];
+                    RESULT = "dir:" + tOp2; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
+                    System.out.println("Acá entró y funcionó la validación general 1111");
+            }
 
-        if(partesOperando_comp_elfosG[1].equals(partesOperando_comp_elfosG1[1]) && !(partesOperando_comp_elfosG[1].equals("null") || partesOperando_comp_elfosG1[1].equals("null"))){
-            // Generación código Mips
-            RESULT = "dir:"+ partesOperando_comp_elfosG[1];
-        }
-        else
-        {
-            System.out.println("Los tipos de los operandos: " + partesOperando_comp_elfosG[0] + "y" + partesOperando_comp_elfosG1[0] + "no son iguales");
-        }   
-        RESULT = "dir:null";
+            // Primer Operando
+            String[] partesOperando1 = opcomg1.toString().split("!");
+            if(partesOperando1[1].equals(tOp2) && !(tOp2.equals("null"))){
+                //Genero código de la operación comparación MIPS
+                RESULT = "dir:" + tOp2;
+            }else{
+                    if(!(partesOperando1[1].equals("null")) && !(tOp2.equals("null"))){
+                        System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                            ", columna " + (cur_token.right) + "Los tipos de los operandos"  + partesOperando1[1] +  "y" + partesOperando1[1] + "no son iguales ");
+                    }
+                RESULT = "dir:null";
+            }
+       :}
+        | compG:opcomg1 elfos_g:elf PERSONA:per
+
+        {:
+            ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
+            String tOp2 = getTipo(ts,per.toString());
+                if (tOp2.equals("int") || tOp2.equals("float")|| tOp2.equals("bool")){
+                    //Esto es para la generación de código destino (Mips) que se ocupa la dirección, no sé qué más hacer.
+                    System.out.println("Acá entró y funcionó la validación general 222");
+                }else{
+                    RESULT = "dir:null";
+                    System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                       ", columna " + (cur_token.right) + "tipo no permitido del id " + per);
+                }       
+
+            // Primer Operando
+            String[] partesOperando1 = opcomg1.toString().split("!");
+            if(partesOperando1[1].equals(tOp2) && !(tOp2.equals("null"))){
+                //Genero código de la operación comparación MIPS
+                RESULT = "dir:" + tOp2;
+            }else{
+                if(!(partesOperando1[1].equals("null")) && !(tOp2.equals("null"))){
+                    System.out.println("Error semántico en la línea "+ (cur_token.left+1) + 
+                        ", columna " + (cur_token.right) + "Los tipos de los operandos"  + partesOperando1[1] +  "y" + partesOperando1[1] + "no son iguales ");
+                }
+                RESULT = "dir:null";
+            }
        :}
        ;
 
@@ -254,25 +293,23 @@ regaloprin ::= COMETA regaloprin
 //Declaracion de variables
 
 //redeclaracion de datos ejemplo:
-//num = 0|
+//num <= 0|
 decl_G ::= PERSONA ENTREGA regaloprin FINREGALO
         ;
 
 
 //declaracion de variables simplificado
 //local int x <= 6
-creaRegaloAux ::= POLO t_santas:tst PERSONA:per
-                {:
+creaRegaloaAuxAux ::= POLO t_santas:tst PERSONA:per {:
                 listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                 :}
-                | POLO t_santas:tst PERSONA:per ENTREGA regaloprin
-                {:
-                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                :}
-                | error EMPEZONAVIDAD
                 ;
 
-creaRegalo ::= creaRegaloAux FINREGALO;
+creaRegalo ::= creaRegaloaAuxAux | FINREGALO
+                | creaRegaloaAuxAux ENTREGA regaloprin FINREGALO
+                | error FINREGALO
+                ;
+
 
 cuerpo ::= ABREREGALO regalo CIERRAREGALO;
 
@@ -310,13 +347,13 @@ whileStmt ::= ENVOLTURA ABRECUENTO comp_elfosN CIERRACUENTO cuerpo
 //do{ cuerpo }until ( i <_ 5 )|
 doWhileStmt ::= HACE cuerpo REVISA ABRECUENTO comp_elfosN CIERRACUENTO FINREGALO
                 | HACE cuerpo REVISA ABRECUENTO comp_elfosG CIERRACUENTO FINREGALO
-                | HACE cuerpo REVISA ABRECUENTO l_SANTA_CLAUS:lst CIERRACUENTO FINREGALO;
+                | HACE cuerpo REVISA ABRECUENTO l_SANTA_CLAUS:lst  CIERRACUENTO FINREGALO;
 
 //For 
 //for(x=2,x<20,++x)
-forStmt ::= ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA MUERDAGO comp_elfosN MUERDAGO grinchYQuien CIERRACUENTO cuerpo
+forStmt ::= ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA:lst  MUERDAGO comp_elfosN MUERDAGO grinchYQuien CIERRACUENTO cuerpo
             | ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA MUERDAGO comp_elfosG MUERDAGO grinchYQuien CIERRACUENTO cuerpo
-            | ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA MUERDAGO l_SANTA_CLAUS MUERDAGO grinchYQuien CIERRACUENTO cuerpo
+            | ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA MUERDAGO l_SANTA_CLAUS:lst MUERDAGO grinchYQuien CIERRACUENTO cuerpo
             | ENVUELVE ABRECUENTO PAPANOEL PERSONA ENTREGA l_SANTA MUERDAGO comp_elfosN MUERDAGO grinchYQuien CIERRACUENTO cuerpo
             | ENVUELVE ABRECUENTO PAPANOEL PERSONA ENTREGA l_SANTA MUERDAGO comp_elfosG MUERDAGO grinchYQuien CIERRACUENTO cuerpo
             | ENVUELVE ABRECUENTO PAPANOEL PERSONA ENTREGA l_SANTA MUERDAGO l_SANTA_CLAUS MUERDAGO grinchYQuien CIERRACUENTO cuerpo
@@ -373,10 +410,10 @@ ayudaDefFunNav ::= ayudanteDeSanta
                     | ayudaDefFunNav MUERDAGO ayudanteDeSanta;
 
 
-//Definición de funciones
+
+// Ayuda para la definición de funciones
 ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per
                         {:
-                        System.out.println("Inicio de la función");
                         currentHash = per.toString();
                         String tipoTabla = "main";
                         if (per.toString().equals("main"))
@@ -389,6 +426,7 @@ ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per
                         :}
                         ;
 
+//Definición de funciones
 definirFunNav ::=  ayudaDefinirFuncionNavi ABRECUENTO CIERRACUENTO 
                 | ayudaDefinirFuncionNavi ABRECUENTO ayudaDefFunNav CIERRACUENTO 
                 | error FINREGALO 
