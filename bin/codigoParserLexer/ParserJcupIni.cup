@@ -60,7 +60,7 @@ parser code {:
             System.err.println("Se alcanzó el final del archivo.");
         } else {
             System.err.println("Error de sintaxis irrecuperable en la línea " + (cur_token.left + 1) + 
-                            ", columna " + (cur_token.right + 1) + ". Análisis abortado.");
+                            ", columna " + (cur_token.right + 1) + ". Se terminó el archivo.");
         }
     }
 :}
@@ -79,7 +79,7 @@ non terminal            poloNorte, t_navidad, t_santas, literales_navidenios, li
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
 non terminal            elfos_g, elfos_nums, comp_elfosN, comp_elfosG, regaloprin, creaRegalo, creaRegaloAux;
 non terminal            opciones, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, compN, compG, doWhileStmt, envia, elfoStm, hadaStm, duendeStm, renos;
-non terminal            decl_G, llamadaNavidenia, llamadaNavideniaAux, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
+non terminal            decl_G, ayudaDefinirFuncionNavi, llamadaNavidenia, llamadaNavideniaAux, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
 
 //Precedence
 precedence left RODOLFO,COMETA;
@@ -263,16 +263,10 @@ decl_G ::= PERSONA ENTREGA regaloprin FINREGALO
 //local int x <= 6
 creaRegaloAux ::= POLO t_santas:tst PERSONA:per
                 {:
-                if (!listaTablaSimbolos.containsKey(currentHash)) {
-                listaTablaSimbolos.put(currentHash, new ArrayList<String>());
-                }
                 listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                 :}
                 | POLO t_santas:tst PERSONA:per ENTREGA regaloprin
                 {:
-                if (!listaTablaSimbolos.containsKey(currentHash)) {
-                listaTablaSimbolos.put(currentHash, new ArrayList<String>());
-                }
                 listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                 :}
                 | error EMPEZONAVIDAD
@@ -345,6 +339,19 @@ duendeStm ::= DUENDE cuerpo;
 
 //Funciones 
 
+//Llamada de funciones
+//hola|()
+//adios|(intx, in)
+//error al poner funcion al final de una expresioncon final de linea ocupa doble final de linea para funcionar
+ids ::= regaloprin
+    | ids MUERDAGO regaloprin;
+    
+llamadaNavideniaAux ::= PERSONA ABRECUENTO CIERRACUENTO
+                  |  PERSONA ABRECUENTO ids CIERRACUENTO;
+
+llamadaNavidenia ::= llamadaNavideniaAux FINREGALO
+                  ;
+
 // Parámetro 
 ayudanteDeSanta ::= t_santas:tst PERSONA:per
                 {:
@@ -365,49 +372,25 @@ ayudanteDeSanta ::= t_santas:tst PERSONA:per
 ayudaDefFunNav ::= ayudanteDeSanta
                     | ayudaDefFunNav MUERDAGO ayudanteDeSanta;
 
-//Llamada de funciones
-//hola|()
-//adios|(intx, in)
-//error al poner funcion al final de una expresioncon final de linea ocupa doble final de linea para funcionar
-ids ::= regaloprin
-    | ids MUERDAGO regaloprin;
-    
-llamadaNavideniaAux ::= PERSONA ABRECUENTO CIERRACUENTO
-                  |  PERSONA ABRECUENTO ids CIERRACUENTO;
-
-llamadaNavidenia ::= llamadaNavideniaAux FINREGALO
-                  ;
-
 
 //Definición de funciones
-definirFunNav ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO CIERRACUENTO 
-                /*Se asigna el token seleccionado a su respectiva tabla de símbolos
-                En este caso el valor de retorno, el nombre de la función y si es una función main o no*/
-                {:
-                currentHash = per.toString();
-                String tipoTabla = "main";
-                if (per.toString().equals("main"))
-                        tipoTabla = "tipo:main:"+tsc.toString();
-                else
-                        tipoTabla = "tipo:function:"+tsc.toString();
-                ArrayList<String> funcionMain = new ArrayList<String>();
-                funcionMain.add(tipoTabla);
-                listaTablaSimbolos.put(currentHash, funcionMain);
-                
-                :}
-               
-                | EMPEZONAVIDAD t_santas:tsc PERSONA:per ABRECUENTO ayudaDefFunNav CIERRACUENTO 
-                {:
-                currentHash = per.toString();
-                String tipoTabla = "main";
-                if (per.toString().equals("main"))
-                        tipoTabla = "tipo:main:"+tsc.toString();
-                else
-                        tipoTabla = "tipo:function:"+tsc.toString();
-                ArrayList<String> funcionMain = new ArrayList<String>();;
-                funcionMain.add(tipoTabla);
-                listaTablaSimbolos.put(currentHash, funcionMain);
-                :} 
+ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tsc PERSONA:per
+                        {:
+                        System.out.println("Inicio de la función");
+                        currentHash = per.toString();
+                        String tipoTabla = "main";
+                        if (per.toString().equals("main"))
+                            tipoTabla = "tipo:main:"+tsc.toString();
+                        else
+                            tipoTabla = "tipo:function:"+tsc.toString();
+                        ArrayList<String> funcionMain = new ArrayList<String>();
+                        funcionMain.add(tipoTabla);
+                        listaTablaSimbolos.put(currentHash, funcionMain);
+                        :}
+                        ;
+
+definirFunNav ::=  ayudaDefinirFuncionNavi ABRECUENTO CIERRACUENTO 
+                | ayudaDefinirFuncionNavi ABRECUENTO ayudaDefFunNav CIERRACUENTO 
                 | error FINREGALO 
                 | error CIERRAREGALO
                 | error ABREREGALO
