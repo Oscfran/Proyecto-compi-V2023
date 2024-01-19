@@ -90,7 +90,7 @@ precedence left FINREGALO, CIERRACUENTO;
 
 
 /* Inicio */
-start with entregaRegalos;
+start with pNocheBuena;
 
 //Grupos de literales
 literales_navidenios ::= l_SANTA:lst {:RESULT = lst + "int";:} 
@@ -419,11 +419,18 @@ bolsanavidenia ::= definirFunNav
 pbolsanavideniaAux ::=  bolsanavidenia
                     | pbolsanavideniaAux bolsanavidenia;
 
-pNocheBuena ::= pbolsanavideniaAux;
+pNocheBuena ::= {:
+                System.out.println("Empieza el asunto");
+                :} 
+                pbolsanavideniaAux
+                {:
+                imprimirTablaSimbolos();
+                System.out.println("Termina el asunto");
+                :};
 
 
 //funcion main
-cuerpoMain ::= ABREREGALO regaloExtn CIERRAREGALO;
+/*cuerpoMain ::= ABREREGALO regaloExtn CIERRAREGALO;
 
 entregaRegalos ::= {:
                     System.out.println("Empieza el asunto");
@@ -433,6 +440,7 @@ entregaRegalos ::= {:
                     imprimirTablaSimbolos();
                     System.out.println("Termina el asunto");
                     :};
+*/
 
 //Encapsula todas las regaloprinesiones para que se puedan colocar dentro de las funciones
 poloNorte  ::= narraNavidad 
