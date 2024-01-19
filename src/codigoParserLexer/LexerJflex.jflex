@@ -52,7 +52,6 @@ char = "'" {InputCharacter} "'"
 %%
 
 /* keywords */
-<YYINITIAL> "abstract"           { return symbol(sym.NAVIDAD);  }
 <YYINITIAL> "public"             { return symbol(sym.FESTIVAL); }
 <YYINITIAL> "private"            { return symbol(sym.FIESTA);   }
 
