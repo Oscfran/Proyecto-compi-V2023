@@ -32,8 +32,8 @@ action code {:
             if(id.equals(partesToken[2])){
                 tipo = partesToken[3];
             }
+             System.out.println("Nombre variable:" + partesToken[2]  + " tipo: " + tipo);
         }
-        System.out.println("tipo: "+tipo);
         return tipo;
     }
 :}
@@ -102,19 +102,19 @@ precedence left BALTASAR;
 start with NAVIDAD;
 
 //Grupos de literales
-literales_navidenios ::= l_SANTA:lst {:RESULT = lst + "int";:} 
-                    | l_SANTA_CLAUS:lst {:RESULT = lst + "bool";:} 
-                    | l_PAPANOEL:lst {:RESULT = lst + "string";:} 
-                    | l_PASCUERO:lst {:RESULT = lst + "float";:} 
-                    | l_COLACHO:lst {:RESULT = lst + "char";:};
+literales_navidenios ::= l_SANTA:lst {:RESULT = lst + ":int";:} 
+                    | l_SANTA_CLAUS:lst {:RESULT = lst + ":bool";:} 
+                    | l_PAPANOEL:lst {:RESULT = lst + ":string";:} 
+                    | l_PASCUERO:lst {:RESULT = lst + ":float";:} 
+                    | l_COLACHO:lst {:RESULT = lst + ":char";:};
 
 // Sólo literales numéricos
-literal_nums ::= l_SANTA:lst {:RESULT = lst + "int";:} 
-            | l_PASCUERO:lst {:RESULT = lst + "float";:};
+literal_nums ::= l_SANTA:lst {:RESULT = lst + ":int";:} 
+            | l_PASCUERO:lst {:RESULT = lst + ":float";:};
 
 //Bool y string
-literal_no_nums ::= l_SANTA_CLAUS:lst {:RESULT = lst + "bool";:} 
-                | l_PAPANOEL:lst {:RESULT = lst + "string";:};
+literal_no_nums ::= l_SANTA_CLAUS:lst {:RESULT = lst + ":bool";:} 
+                | l_PAPANOEL:lst {:RESULT = lst + ":string";:};
 
 //print: print(operando);
 narraNavidad ::= NARRA ABRECUENTO operando CIERRACUENTO FINREGALO;
@@ -162,59 +162,109 @@ exprUni ::= exprP FINREGALO;
 exprP ::= regaloprin | exprRelLog;
 
 regaloprin ::= COMETA operando
-            | operando renos operando;
+            | operando:oper1 renos:rn operando:oper2            
+            /**{:
+                if(oper1.equals(oper2)){
+                    System.out.println("Los operandos de esta operación son" +rn+ " del mismo tipo");
+                }else{
+                    System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                        ", columna " + (cur_token.right) +":"  + "Los tipos de los operando no son iguales: " + oper1 + oper2);
+                        RESULT = "dir:null";
+                }
+            :}*/
+            ;
 
 //Operadores unarios
 unidadNavidenia ::= GRINCH | QUIEN;
 
 grinchYQuien ::= unidadNavidenia operando;
 
+//Expreisones relacionales
 exprRelAux ::= operando elfos operando;
 
 exprRelLog ::= exprRelAux | exprLogAux;
 
-//Operadores logicos    # | ^
+//Operadores logicos      # | ^
 logisticadeNavidad ::= MELCHOR | GASPAR;
 
-//                 !
-exprLogAux ::= BALTASAR operando
+// ! operando | operando # | ^ operando
+exprLogAux ::= BALTASAR operando 
             | operando logisticadeNavidad operando;
 
 // Lo que sea que se vaya a operar más carga del tipo per y literal 
 operando ::= PERSONA:per
         {:
-        ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
-        String tipoId = getTipo(ts,per.toString());
-        RESULT = "dir:"+tipoId; //Esto es para la generación de código destino (Mips) que se ocupa la dirección, no sé qué más hacer.
-        System.out.println("Acá entró y funcionó la validación general del tipo per: " + tipoId);
+            ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
+            String tipoId = getTipo(ts,per.toString());
+            if(tipoId != "null"){
+                RESULT = "dir:"+tipoId;
+                System.out.println("Acá entró y funcionó subir el tipo del per: " + tipoId);
+            }else{
+                RESULT = "dir:null";
+                System.out.println("per tiene dirección nula:" + per);
+            }
         :}
         | literales_navidenios:lst 
         {:
-        String[] partesOperando = lst.toString().split(":");
-        RESULT = "dir:" + partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
-        System.out.println("Acá entró y funcionó la validación general del literal: " + lst); 
+            String[] partesOperando = lst.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1]; 
+                System.out.println("Acá entró y funcionó subir el tipo del literal: " + lst); 
+            }else{
+                RESULT = "dir:null";
+            }
        :}
         | llamadaNavidenia 
         | accesoArray 
         | exprP 
         | grinchYQuien 
-        | ABRECUENTO operando CIERRACUENTO
+        | ABRECUENTO operando:ope CIERRACUENTO
         ;
 
-//Declaracion de variables
-//local int x <= 6|
-creaRegalo ::= POLO t_santas:tst PERSONA:per FINREGALO{:
-                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+//Declaracion de variable sin asignación
+creaRegalo ::= POLO t_santas:tst PERSONA:per FINREGALO
+                {:
+                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                        if(!(tst.equals("null"))){
+                            System.out.println("Declarada la variable sin asignación bien");
+                            RESULT = "dir:"+ tst;
+                        }else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                            ", columna " + (cur_token.right) + " Declaración sin variable." );
+                            RESULT = "dir:null";
+                        }
                 :}
                 ;
 
-creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:ope FINREGALO{:
-                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+// Declaración con asignación
+creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREGALO
+                {:
+                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                    String[] partesOperando = oper1.toString().split(":");
+
+                    // Se verifica si tipo de la variable
+                        if(!(tst.equals("null"))){
+                            System.out.println("tipo de la variable permitido");
+                            if(tst.equals(partesOperando[1])){
+                                System.out.println("La variable coincide con su asignación");
+                                RESULT = "dir:"+ tst;
+                            }
+                            else{
+                                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo de la variable no coincide con su asignación");
+                                RESULT = "dir:null";
+                            }
+                        }else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                            ", columna " + (cur_token.right) +": "  + "Tipo de la variable vacía");
+                            RESULT = "dir:null";
+                        }
                 :}
+
                 | error FINREGALO
                 ;
                 
-//asignacion de variables simplificado
+//Redeclaración de variables
 decl_G ::= PERSONA ENTREGA operando FINREGALO;
 
 cuerpo ::= ABREREGALO regalo CIERRAREGALO;
@@ -228,7 +278,17 @@ arrayDeclaration ::= POLO t_santas:tst PERSONA ABREEMPAQUE operando CIERRAEMPAQU
 
 // Regla de inicialización de arrays
 //int arr[3] <= {a,b,3}|
-arrayInitialization ::= t_santas:tst PERSONA ABREEMPAQUE operando CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO 
+arrayInitialization ::= t_santas:tst 
+                        /*{: 
+                        String[] partesOperando = tst.toString().split(":"); 
+                        if(tst.equals("int")){
+                            System.out.println("tipo de iniciación de array permitido");
+                        }else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                             ", columna " + (cur_token.right) +":"  + "Tipo de iniciacióm de array no permitido:");
+                        }
+                        :}*/
+                    PERSONA ABREEMPAQUE operando CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO 
                     | error FINREGALO
                     ;
 
@@ -238,8 +298,9 @@ listaExpresiones ::= operando
 
 //Acceso y asignacion array
 //arr[1] ó  arr[3] <= 4|
-accesoArray ::= PERSONA ABREEMPAQUE operando CIERRAEMPAQUE
-            | PERSONA ABREEMPAQUE operando CIERRAEMPAQUE ENTREGA operando FINREGALO;
+accesoArray ::= PERSONA:per ABREEMPAQUE operando CIERRAEMPAQUE
+            | PERSONA:per ABREEMPAQUE operando CIERRAEMPAQUE ENTREGA operando FINREGALO
+            ;
 
 //Ciclos
 
@@ -284,8 +345,9 @@ estructura ::= whileStmt
 ids ::= operando
     | ids MUERDAGO operando;
     
-llamadaNavidenia ::= PERSONA ABRECUENTO CIERRACUENTO
-                  |  PERSONA ABRECUENTO ids CIERRACUENTO;
+llamadaNavidenia ::= PERSONA:per ABRECUENTO CIERRACUENTO
+                  |  PERSONA:per  ABRECUENTO ids CIERRACUENTO
+                  ;
 
 llamadaNavideniaAux ::= llamadaNavidenia FINREGALO;
 
@@ -307,21 +369,22 @@ ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per
                         {:
                         currentHash = per.toString();
                         String tipoTabla = "main";
-                        if (per.toString().equals("main"))
+                        if (per.toString().equals("main")){
                             tipoTabla = "tipo:main:"+tst.toString();
-                        else
+                        }else{
                             tipoTabla = "tipo:function:"+tst.toString();
-                        ArrayList<String> funcionMain = new ArrayList<String>();
-                        funcionMain.add(tipoTabla);
-                        listaTablaSimbolos.put(currentHash, funcionMain);
-                        
+                            ArrayList<String> funcionMain = new ArrayList<String>();
+                            funcionMain.add(tipoTabla);
+                            listaTablaSimbolos.put(currentHash, funcionMain);
+                        }
+
                         // Se verifica si el valor de retorno es apropiado
-                        String[] partesOperando = tst.toString().split(":");
                         if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
                             System.out.println("tipo de la función permitida");
+                            RESULT = "dir:"+ tst;
                         }else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                             ", columna " + (cur_token.right) +":"  + "Tipo de la función no permitida:");
+                             ", columna " + (cur_token.right) +": "  + "Tipo de la función no permitida");
                         }
                         :}
                         ;

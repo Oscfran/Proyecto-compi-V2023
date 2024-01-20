@@ -739,8 +739,8 @@ class CUP$parser$actions {
             if(id.equals(partesToken[2])){
                 tipo = partesToken[3];
             }
+             System.out.println("Nombre variable:" + partesToken[2]  + " tipo: " + tipo);
         }
-        System.out.println("tipo: "+tipo);
         return tipo;
     }
 
@@ -786,7 +786,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "int";
+		RESULT = lst + ":int";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literales_navidenios",3, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -798,7 +798,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "bool";
+		RESULT = lst + ":bool";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literales_navidenios",3, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -810,7 +810,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "string";
+		RESULT = lst + ":string";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literales_navidenios",3, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -822,7 +822,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "float";
+		RESULT = lst + ":float";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literales_navidenios",3, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -834,7 +834,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "char";
+		RESULT = lst + ":char";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literales_navidenios",3, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -846,7 +846,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "int";
+		RESULT = lst + ":int";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literal_nums",5, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -858,7 +858,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "float";
+		RESULT = lst + ":float";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literal_nums",5, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -870,7 +870,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "bool";
+		RESULT = lst + ":bool";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literal_no_nums",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -882,7 +882,7 @@ class CUP$parser$actions {
 		int lstleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		RESULT = lst + "string";
+		RESULT = lst + ":string";
               CUP$parser$result = parser.getSymbolFactory().newSymbol("literal_no_nums",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1191,6 +1191,15 @@ class CUP$parser$actions {
           case 37: // regaloprin ::= operando renos operando 
             {
               Object RESULT =null;
+		int oper1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int rnleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int rnright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object rn = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int oper2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int oper2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object oper2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("regaloprin",26, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1294,10 +1303,15 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
-        String tipoId = getTipo(ts,per.toString());
-        RESULT = "dir:"+tipoId; //Esto es para la generación de código destino (Mips) que se ocupa la dirección, no sé qué más hacer.
-        System.out.println("Acá entró y funcionó la validación general del tipo per: " + tipoId);
+            ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
+            String tipoId = getTipo(ts,per.toString());
+            if(tipoId != "null"){
+                RESULT = "dir:"+tipoId;
+                System.out.println("Acá entró y funcionó subir el tipo del per: " + tipoId);
+            }else{
+                RESULT = "dir:null";
+                System.out.println("per tiene dirección nula:" + per);
+            }
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("operando",30, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1311,9 +1325,13 @@ class CUP$parser$actions {
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-        String[] partesOperando = lst.toString().split(":");
-        RESULT = "dir:" + partesOperando[1]; //Esto es para la generación de código destino que se ocupa la dirección, no sé qué más hacer.
-        System.out.println("Acá entró y funcionó la validación general del literal: " + lst); 
+            String[] partesOperando = lst.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1]; 
+                System.out.println("Acá entró y funcionó subir el tipo del literal: " + lst); 
+            }else{
+                RESULT = "dir:null";
+            }
        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("operando",30, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1359,6 +1377,9 @@ class CUP$parser$actions {
           case 54: // operando ::= ABRECUENTO operando CIERRACUENTO 
             {
               Object RESULT =null;
+		int opeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int operight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object ope = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("operando",30, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1375,7 +1396,15 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                        if(!(tst.equals("null"))){
+                            System.out.println("Declarada la variable sin asignación bien");
+                            RESULT = "dir:"+ tst;
+                        }else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                            ", columna " + (cur_token.right) + " Declaración sin variable." );
+                            RESULT = "dir:null";
+                        }
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("creaRegalo",22, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1391,11 +1420,30 @@ class CUP$parser$actions {
 		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
-		int opeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
-		int operight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
-		Object ope = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int oper1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                    String[] partesOperando = oper1.toString().split(":");
+
+                    // Se verifica si tipo de la variable
+                        if(!(tst.equals("null"))){
+                            System.out.println("tipo de la variable permitido");
+                            if(tst.equals(partesOperando[1])){
+                                System.out.println("La variable coincide con su asignación");
+                                RESULT = "dir:"+ tst;
+                            }
+                            else{
+                                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo de la variable no coincide con su asignación");
+                                RESULT = "dir:null";
+                            }
+                        }else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                            ", columna " + (cur_token.right) +": "  + "Tipo de la variable vacía");
+                            RESULT = "dir:null";
+                        }
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("creaRegaloAssign",34, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1492,6 +1540,9 @@ class CUP$parser$actions {
           case 66: // accesoArray ::= PERSONA ABREEMPAQUE operando CIERRAEMPAQUE 
             {
               Object RESULT =null;
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("accesoArray",51, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1501,6 +1552,9 @@ class CUP$parser$actions {
           case 67: // accesoArray ::= PERSONA ABREEMPAQUE operando CIERRAEMPAQUE ENTREGA operando FINREGALO 
             {
               Object RESULT =null;
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-6)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("accesoArray",51, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1657,6 +1711,9 @@ class CUP$parser$actions {
           case 84: // llamadaNavidenia ::= PERSONA ABRECUENTO CIERRACUENTO 
             {
               Object RESULT =null;
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("llamadaNavidenia",48, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1666,6 +1723,9 @@ class CUP$parser$actions {
           case 85: // llamadaNavidenia ::= PERSONA ABRECUENTO ids CIERRACUENTO 
             {
               Object RESULT =null;
+		int perleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("llamadaNavidenia",48, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1729,21 +1789,22 @@ class CUP$parser$actions {
 		
                         currentHash = per.toString();
                         String tipoTabla = "main";
-                        if (per.toString().equals("main"))
+                        if (per.toString().equals("main")){
                             tipoTabla = "tipo:main:"+tst.toString();
-                        else
+                        }else{
                             tipoTabla = "tipo:function:"+tst.toString();
-                        ArrayList<String> funcionMain = new ArrayList<String>();
-                        funcionMain.add(tipoTabla);
-                        listaTablaSimbolos.put(currentHash, funcionMain);
-                        
+                            ArrayList<String> funcionMain = new ArrayList<String>();
+                            funcionMain.add(tipoTabla);
+                            listaTablaSimbolos.put(currentHash, funcionMain);
+                        }
+
                         // Se verifica si el valor de retorno es apropiado
-                        String[] partesOperando = tst.toString().split(":");
                         if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
                             System.out.println("tipo de la función permitida");
+                            RESULT = "dir:"+ tst;
                         }else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                             ", columna " + (cur_token.right) +":"  + "Tipo de la función no permitida:");
+                             ", columna " + (cur_token.right) +": "  + "Tipo de la función no permitida");
                         }
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ayudaDefinirFuncionNavi",47, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
