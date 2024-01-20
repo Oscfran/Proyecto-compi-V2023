@@ -79,7 +79,7 @@ terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA;
 non terminal            poloNorte, NAVIDAD,t_santas, literales_navidenios, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
 non terminal            elfos, creaRegalo, estructura, exprUni, exprP, regaloprin, exprRelLog, exprRelAux, exprLogAux, operando, operandoRel, operandoLog;
-non terminal            opciones, creaRegaloAssign, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, doWhileStmt, envia, elfoStm, hadaStm, duendeStm, renos;
+non terminal            opciones, creaRegaloAssign, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, doWhileStmt, envia, elfoStm, hadaStm, hadaMulti, duendeStm, renos;
 non terminal            decl_G, ayudaDefinirFuncionNavi, llamadaNavidenia, llamadaNavideniaAux, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
 
 //Precedence
@@ -273,7 +273,8 @@ creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREG
 //Redeclaración de variables
 decl_G ::= PERSONA ENTREGA operando FINREGALO;
 
-cuerpo ::= ABREREGALO regalo CIERRAREGALO;
+cuerpo ::= ABREREGALO CIERRAREGALO
+        | ABREREGALO regalo CIERRAREGALO;
 
 
 //arrays
@@ -326,10 +327,17 @@ forStmt ::= ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA:lst  MUERDAGO exprRelLog
 
 //if - elif - else
 //if
-elfoStm::= ELFO ABRECUENTO operando CIERRACUENTO cuerpo;
+elfoStm::= ELFO ABRECUENTO operando CIERRACUENTO cuerpo
+            | ELFO ABRECUENTO operando CIERRACUENTO cuerpo duendeStm //if y else
+            | ELFO ABRECUENTO operando CIERRACUENTO cuerpo hadaMulti //if n elifs
+            | ELFO ABRECUENTO operando CIERRACUENTO cuerpo hadaMulti duendeStm; //if n elifs y else
 
 //elif
-hadaStm::= HADA ABRECUENTO operando CIERRACUENTO cuerpo;
+hadaStm ::= HADA ABRECUENTO operando CIERRACUENTO cuerpo;
+
+//n elifs
+hadaMulti ::= hadaStm
+            | hadaMulti hadaStm;
 
 //else
 duendeStm ::= DUENDE cuerpo;
@@ -337,10 +345,8 @@ duendeStm ::= DUENDE cuerpo;
 estructura ::= whileStmt 
                 | forStmt 
                 | doWhileStmt 
-                | elfoStm 
-                | hadaStm 
-                | duendeStm
-                ;
+                | elfoStm;
+
 
 //Funciones 
 
