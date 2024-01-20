@@ -50,11 +50,6 @@ char = "'" {InputCharacter} "'"
 %state INICIAL 
 
 %%
-
-/* keywords */
-<YYINITIAL> "public"             { return symbol(sym.FESTIVAL); }
-<YYINITIAL> "private"            { return symbol(sym.FIESTA);   }
-
 <YYINITIAL> {
 
   /* Main */

@@ -1,5 +1,4 @@
-function string func3(string b1){ @semantico string
-    local int in45 <= 45|
+ function int func3(string b1){ @semantico string
     local int bl1 <= 10|
     return bl1| @semantico
  }
