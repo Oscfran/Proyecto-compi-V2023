@@ -1,13 +1,5 @@
 function string func3(string b1){ @semantico string
-    print(-6.7)|
-    @miFunc(miFunc(),'a')| @semantico miFunc, hola
-    @local bool bl0 <= 6.7 != 8.9| @ok
-    @local bool bl1 <= true|@ error necesita doble pipe para funcionar
-    local int in1 <= 1| 
-    local int prueba|
-    local int in2 <= 2|
-    local int inerrorbool <= "comida"|
-    @local int in3 <= in1 + in2|
-    @local bool bl2 <= in1 # fl1 * false + 23 < 56 - 3 * (func2(a,b)) - !func3()| error necesita doble pipe para funcionar
+    local int in45 <= 45|
+    local int bl1 <= 10|
     return bl1| @semantico
  }

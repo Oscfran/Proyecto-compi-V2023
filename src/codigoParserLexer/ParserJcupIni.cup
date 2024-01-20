@@ -30,9 +30,10 @@ action code {:
         for(String token : tablasSimbolos){
             String[] partesToken = token.split(":");
             if(id.equals(partesToken[2])){
+                System.out.println("Nombre variable:" + partesToken[2]  + " tipo: " + tipo);
                 tipo = partesToken[3];
+                
             }
-             System.out.println("Nombre variable:" + partesToken[2]  + " tipo: " + tipo);
         }
         return tipo;
     }
@@ -75,7 +76,7 @@ terminal            ABRECUENTO, CIERRACUENTO, ABREEMPAQUE, CIERRAEMPAQUE, ABRERE
 terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA;
 
 /* No terminales */
-non terminal            poloNorte, NAVIDAD,t_santas, literales_navidenios, literal_no_nums, literal_nums, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
+non terminal            poloNorte, NAVIDAD,t_santas, literales_navidenios, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
 non terminal            elfos, creaRegalo, estructura, exprUni, exprP, regaloprin, exprRelLog, exprRelAux, exprLogAux, operando, operandoRel, operandoLog;
 non terminal            opciones, creaRegaloAssign, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, doWhileStmt, envia, elfoStm, hadaStm, duendeStm, renos;
@@ -108,14 +109,6 @@ literales_navidenios ::= l_SANTA:lst {:RESULT = lst + ":int";:}
                     | l_PASCUERO:lst {:RESULT = lst + ":float";:} 
                     | l_COLACHO:lst {:RESULT = lst + ":char";:};
 
-// Sólo literales numéricos
-literal_nums ::= l_SANTA:lst {:RESULT = lst + ":int";:} 
-            | l_PASCUERO:lst {:RESULT = lst + ":float";:};
-
-//Bool y string
-literal_no_nums ::= l_SANTA_CLAUS:lst {:RESULT = lst + ":bool";:} 
-                | l_PAPANOEL:lst {:RESULT = lst + ":string";:};
-
 //print: print(operando);
 narraNavidad ::= NARRA ABRECUENTO operando CIERRACUENTO FINREGALO;
 
@@ -133,7 +126,20 @@ t_santas ::= SANTACLAUS:tst {:RESULT = tst;:}       //string,
 
 
 //Return (Return operando;)
-envia ::= ENVIA operando FINREGALO;
+envia ::= ENVIA operando:oper FINREGALO
+        {:
+            String[] partesOperando = oper.toString().split(":");
+                    // Se verifica si tipo de la variable
+                        if(!(partesOperando[1].equals("null"))){
+                            RESULT = "dir:"+ partesOperando[1];
+                            System.out.println("El tipo de retorno es: " + partesOperando[1]);
+                        }else{
+                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo de retorno de la función es nulo, revise si esa variable existe");
+                                RESULT = "dir:null";
+                         }
+        :}
+        ;
 
 //Break (Break;)
 corta ::= CORTA FINREGALO;
@@ -250,12 +256,12 @@ creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREG
                                 RESULT = "dir:"+ tst;
                             }
                             else{
-                                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                                ", columna " + (cur_token.right) +": "  + "Tipo de la variable no coincide con su asignación");
+                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo de la variable no coincide con su tipo de asignación");
                                 RESULT = "dir:null";
                             }
                         }else{
-                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
                             ", columna " + (cur_token.right) +": "  + "Tipo de la variable vacía");
                             RESULT = "dir:null";
                         }
