@@ -68,7 +68,8 @@ char = "'" {InputCharacter} "'"
   {char}                         { return symbol(sym.l_COLACHO, yytext()); }
 
   /* Literales enteros*/
-  {DecIntegerLiteral}            { return symbol(sym.l_SANTA, yytext());  }
+  {DecIntegerLiteral}            { return symbol(sym.l_SANTA, yytext());}
+
   \"                             { string.setLength(0); yybegin(CADENA); }
 
   /* Literales flotante */
