@@ -10,7 +10,7 @@
         x > y
         hasta == aqui
         local int x <= 5|
-        local int vary <= 5+3-(3+4)*8|
+        local int vary <= 5+3-(-3+4)*8|
         -(5+4)-2*4**(2-1)*(3+1)+x/2.0**vary
         local int x <= 1000|
         break|

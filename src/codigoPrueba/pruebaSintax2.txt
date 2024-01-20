@@ -1,4 +1,5 @@
- function int func3(float b1){ @semantico string
+ function string func3(string b1){ @semantico string
 	    return b1| 
-}
+    }
 
+ 
