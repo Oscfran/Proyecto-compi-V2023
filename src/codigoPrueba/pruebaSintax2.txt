@@ -4,10 +4,12 @@
     local string comida1 <= "arroz"|
     local string comida2 <= "pollo"|
     local int bl1 <= prueba1 + prueba2|
+    local int bl1 <= comida1 + comida2|
     local bool aguacate <= true|
     local bool sinchona <= true|
     local bool palmares <= aguacate # sinchona|
 
+   read(true)|
    return bl1| @semantico
  }
 

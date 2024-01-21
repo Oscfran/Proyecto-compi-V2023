@@ -51,6 +51,7 @@ public class sym {
   public static final int CUPIDO = 23;
   public static final int ENVIA = 33;
   public static final int COLACHO = 51;
+  public static final int CUPIENTERO = 57;
   public static final int BAILARIN = 22;
   public static final int FIESTA = 4;
   public static final int MUERDAGO = 53;
@@ -122,7 +123,8 @@ public class sym {
   "MUERDAGO",
   "NARRA",
   "ESCUCHA",
-  "SANTACLAUSULA"
+  "SANTACLAUSULA",
+  "CUPIENTERO"
   };
 }
 

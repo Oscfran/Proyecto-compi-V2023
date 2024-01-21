@@ -115,6 +115,7 @@ char = "'" {InputCharacter} "'"
   "-"                            { return symbol(sym.COMETA, yytext()); }
   "*"                            { return symbol(sym.BAILARIN, yytext());}
   "/"                            { return symbol(sym.CUPIDO, yytext()); }
+  "?"                            { return symbol(sym.CUPIENTERO, yytext());} // PARA DIVISIÓN ENTERA
   "~"                            { return symbol(sym.DONNER, yytext()); }
   "**"                           { return symbol(sym.DASHER, yytext()); }
 
