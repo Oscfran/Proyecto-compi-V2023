@@ -1378,7 +1378,6 @@ class CUP$parser$actions {
 		
             String[] partesOperando = oper1.toString().split(":");
             if(partesOperando[1].equals("int")){
-                System.out.println("funcóoooooooooooooooo");
                 RESULT = "dir:"+partesOperando[1];  
             }else{
                 RESULT = "dir:null";
@@ -1670,7 +1669,15 @@ class CUP$parser$actions {
 		int opeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int operight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object ope = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-
+		
+            //System.out.println("pr es:" +pr);
+            String[] partesOperando = ope.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1];  
+            }else{
+                RESULT = "dir:null";
+            }
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("operando",27, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

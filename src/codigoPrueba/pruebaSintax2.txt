@@ -1,11 +1,11 @@
  function int func3(string b1){ @semantico string
 
   local char dafsd[1]|
-  local int prueba2 <= 102|
+  local int prueba2 <= (102)+(104)|
   --prueba2|
   local int prueba3 <= 102|
   local int prueba4 <= 102|
-  
+
    @print(sisirve)|
    @read(true)|
    return bl1| @semantico

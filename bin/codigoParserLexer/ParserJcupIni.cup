@@ -263,7 +263,6 @@ grinchYQuien ::= unidadNavidenia operando:oper1
             {:
             String[] partesOperando = oper1.toString().split(":");
             if(partesOperando[1].equals("int")){
-                System.out.println("funcóoooooooooooooooo");
                 RESULT = "dir:"+partesOperando[1];  
             }else{
                 RESULT = "dir:null";
@@ -419,6 +418,15 @@ operando ::= PERSONA:per
             }
         :}
         | ABRECUENTO operando:ope CIERRACUENTO
+        {:
+            //System.out.println("pr es:" +pr);
+            String[] partesOperando = ope.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1];  
+            }else{
+                RESULT = "dir:null";
+            }
+        :}
         ;
 
 //Declaracion de variable sin asignación
