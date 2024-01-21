@@ -852,6 +852,9 @@ class CUP$parser$actions {
           case 6: // narraNavidad ::= NARRA ABRECUENTO operando CIERRACUENTO FINREGALO 
             {
               Object RESULT =null;
+		int operleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int operright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object oper = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("narraNavidad",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -861,6 +864,9 @@ class CUP$parser$actions {
           case 7: // escuchaNavidad ::= ESCUCHA ABRECUENTO operando CIERRACUENTO FINREGALO 
             {
               Object RESULT =null;
+		int operleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int operright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object oper = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("escuchaNavidad",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1303,7 +1309,14 @@ class CUP$parser$actions {
 		int oper3left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int oper3right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object oper3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		
+                String[] partesOperando = oper3.toString().split(":");
+                if(partesOperando[1] != "null"){
+                    RESULT = "dir:"+partesOperando[1];  
+                }else{
+                    RESULT = "dir:null";
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("regaloprin",24, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1342,7 +1355,10 @@ class CUP$parser$actions {
           case 44: // unidadNavidenia ::= GRINCH 
             {
               Object RESULT =null;
-
+		int grleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int grright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object gr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = gr;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("unidadNavidenia",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1351,7 +1367,10 @@ class CUP$parser$actions {
           case 45: // unidadNavidenia ::= QUIEN 
             {
               Object RESULT =null;
-
+		int qnleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int qnright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object qn = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = qn;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("unidadNavidenia",10, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1360,7 +1379,17 @@ class CUP$parser$actions {
           case 46: // grinchYQuien ::= unidadNavidenia operando 
             {
               Object RESULT =null;
-
+		int oper1left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            String[] partesOperando = oper1.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1];  
+            }else{
+                RESULT = "dir:null";
+            }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("grinchYQuien",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1452,7 +1481,18 @@ class CUP$parser$actions {
           case 49: // exprRelLog ::= exprLogAux 
             {
               Object RESULT =null;
-
+		int logauxleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int logauxright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object logaux = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            //System.out.println("logaux es:" +logaux);
+            if(logaux != null){
+                RESULT = logaux;
+            }
+            else{
+                RESULT = "dir:null";
+            }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("exprRelLog",25, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1461,7 +1501,10 @@ class CUP$parser$actions {
           case 50: // logisticadeNavidad ::= MELCHOR 
             {
               Object RESULT =null;
-
+		int melleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int melright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object mel = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = mel;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logisticadeNavidad",11, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1470,7 +1513,10 @@ class CUP$parser$actions {
           case 51: // logisticadeNavidad ::= GASPAR 
             {
               Object RESULT =null;
-
+		int galleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int galright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object gal = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = gal;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("logisticadeNavidad",11, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1479,7 +1525,18 @@ class CUP$parser$actions {
           case 52: // exprLogAux ::= BALTASAR operando 
             {
               Object RESULT =null;
-
+		int oper1left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            String[] partesOperando = oper1.toString().split(":");
+            if(oper1 != null || !(partesOperando[1].equals("null"))){
+                RESULT = "dir:"+partesOperando[1];
+            }
+            else{
+                RESULT = "dir:null";
+            }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("exprLogAux",27, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1491,10 +1548,25 @@ class CUP$parser$actions {
 		int oper1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
 		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int logisleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int logisright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object logis = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		int oper2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int oper2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object oper2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		
+            String[] partesOperando1 = oper1.toString().split(":");
+            String[] partesOperando2 = oper2.toString().split(":");
+                if(partesOperando1[1].equals(partesOperando2[1])){
+                    /*System.out.println("Los operandos de esta operación en la línea" + (cur_token.left+1) + 
+                     ", columna " + (cur_token.right) +":"+"son del mismo tipo logico");*/
+                    RESULT = "dir:"+partesOperando1[1];
+                }else{
+                    System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                        ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos lógicos no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                        RESULT = "dir:null";
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("exprLogAux",27, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1580,7 +1652,18 @@ class CUP$parser$actions {
           case 59: // operando ::= grinchYQuien 
             {
               Object RESULT =null;
-
+		int gqleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int gqright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object gq = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            //System.out.println("pr es:" +pr);
+            String[] partesOperando = gq.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1];  
+            }else{
+                RESULT = "dir:null";
+            }
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("operando",28, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

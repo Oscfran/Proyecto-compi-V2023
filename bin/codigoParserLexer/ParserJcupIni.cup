@@ -110,10 +110,10 @@ literales_navidenios ::= l_SANTA:lst {:RESULT = lst + ":int";:}
                     | l_COLACHO:lst {:RESULT = lst + ":char";:};
 
 //print: print(operando);
-narraNavidad ::= NARRA ABRECUENTO operando CIERRACUENTO FINREGALO;
+narraNavidad ::= NARRA ABRECUENTO operando:oper CIERRACUENTO FINREGALO;
 
 //read:  read(operando);
-escuchaNavidad ::= ESCUCHA ABRECUENTO operando CIERRACUENTO FINREGALO;
+escuchaNavidad ::= ESCUCHA ABRECUENTO operando:oper CIERRACUENTO FINREGALO;
 
 //Tipos
 t_santas ::= SANTACLAUS:tst {:RESULT = tst;:}       //string,
@@ -191,7 +191,7 @@ poloNorte  ::=  decl_G
                 | corta
                 | llamadaNavideniaAux;
 
-// Permite expresiones sin declaración
+// Permite expresiones sin declaración (siempre dentro de la función)
 exprUni ::= exprP:pr FINREGALO
             {:
             String[] partesOperando = pr.toString().split(":");
@@ -227,6 +227,14 @@ exprP ::= regaloprin:prin
 
 // Operación aritmética
 regaloprin ::= COMETA operando:oper3 
+            {:
+                String[] partesOperando = oper3.toString().split(":");
+                if(partesOperando[1] != "null"){
+                    RESULT = "dir:"+partesOperando[1];  
+                }else{
+                    RESULT = "dir:null";
+                }
+            :}
             | operando:oper1 renos:rn operando:oper2        
             {:
             String[] partesOperando1 = oper1.toString().split(":");
@@ -243,10 +251,20 @@ regaloprin ::= COMETA operando:oper3
             :}
             ;
 
-//Operadores unarios
-unidadNavidenia ::= GRINCH | QUIEN;
+//Operadores unarios ++, --
+unidadNavidenia ::= GRINCH:gr {:RESULT = gr;:}
+                 | QUIEN:qn {:RESULT = qn;:};
 
-grinchYQuien ::= unidadNavidenia operando;
+grinchYQuien ::= unidadNavidenia operando:oper1
+            {:
+            String[] partesOperando = oper1.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1];  
+            }else{
+                RESULT = "dir:null";
+            }
+            :}
+            ;
 
 
 
@@ -309,18 +327,50 @@ exprRelLog ::= exprRelAux:relaux
             else{
                 RESULT = "dir:null";
             }
-            :}| exprLogAux;
-
-
+            :}
+            | exprLogAux:logaux
+            {:
+            //System.out.println("logaux es:" +logaux);
+            if(logaux != null){
+                RESULT = logaux;
+            }
+            else{
+                RESULT = "dir:null";
+            }
+            :}
+            ;
 
 
 
 //Operadores logicos      # | ^
-logisticadeNavidad ::= MELCHOR | GASPAR;
+logisticadeNavidad ::= MELCHOR:mel {:RESULT = mel;:} 
+                    | GASPAR:gal {:RESULT = gal;:};
 
 // ! operando | operando # | ^ operando
-exprLogAux ::= BALTASAR operando 
-            | operando:oper1 logisticadeNavidad operando:oper2;
+exprLogAux ::= BALTASAR operando:oper1
+            {:
+            String[] partesOperando = oper1.toString().split(":");
+            if(oper1 != null || !(partesOperando[1].equals("null"))){
+                RESULT = "dir:"+partesOperando[1];
+            }
+            else{
+                RESULT = "dir:null";
+            }
+            :}
+            | operando:oper1 logisticadeNavidad:logis operando:oper2
+            {:
+            String[] partesOperando1 = oper1.toString().split(":");
+            String[] partesOperando2 = oper2.toString().split(":");
+                if(partesOperando1[1].equals(partesOperando2[1])){
+                    /*System.out.println("Los operandos de esta operación en la línea" + (cur_token.left+1) + 
+                     ", columna " + (cur_token.right) +":"+"son del mismo tipo logico");*/
+                    RESULT = "dir:"+partesOperando1[1];
+                }else{
+                    System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                        ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos lógicos no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                        RESULT = "dir:null";
+                }
+            :};
 
 
 // Lo que sea que se vaya a operar más carga del tipo per y literal 
@@ -355,7 +405,16 @@ operando ::= PERSONA:per
                 RESULT = "dir:null";
             }
         :}
-        | grinchYQuien 
+        | grinchYQuien:gq
+        {:
+            //System.out.println("pr es:" +pr);
+            String[] partesOperando = gq.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1];  
+            }else{
+                RESULT = "dir:null";
+            }
+        :}
         | ABRECUENTO operando:ope CIERRACUENTO
         ;
 
@@ -621,7 +680,6 @@ regalo ::= poloNorte:poli1
                 //System.out.println("esto es poli2:" + poli2);
                 RESULT = poli2;
             :} 
-            
             ;
 
 antartica ::= bolsanavidenia | poloNorte;

@@ -102,13 +102,13 @@ char = "'" {InputCharacter} "'"
   "=<"                           { return symbol(sym.ELFO6, yytext());}
 
   /* operadores lógicos */
-  "#"                            { return symbol(sym.MELCHOR); }
-  "^"                            { return symbol(sym.GASPAR); }
-  "!"                            { return symbol(sym.BALTASAR); }
+  "#"                            { return symbol(sym.MELCHOR, yytext()); }
+  "^"                            { return symbol(sym.GASPAR, yytext()); }
+  "!"                            { return symbol(sym.BALTASAR, yytext()); }
 
   /* operadores unarios */
-  "++"                           { return symbol(sym.GRINCH);}
-  "--"                           { return symbol(sym.QUIEN); }
+  "++"                           { return symbol(sym.GRINCH, yytext());}
+  "--"                           { return symbol(sym.QUIEN, yytext()); }
 
   /* operadores aritméticos*/
   "+"                            { return symbol(sym.RODOLFO, yytext());}
@@ -123,7 +123,7 @@ char = "'" {InputCharacter} "'"
   ")"                            { return symbol(sym.CIERRACUENTO, yytext());}
 
   /* Paréntesis cuadrados*/
-  "["                            { return symbol(sym.ABREEMPAQUE);}
+  "["                            { return symbol(sym.ABREEMPAQUE, yytext());}
   "]"                            { return symbol(sym.CIERRAEMPAQUE, yytext());}
 
   /* Llaves*/
