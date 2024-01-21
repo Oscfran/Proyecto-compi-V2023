@@ -986,10 +986,10 @@ class CUP$parser$actions {
           case 17: // elfos ::= ELFO1 
             {
               Object RESULT =null;
-		int elfgleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int elfgright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Object elfg = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = elf;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -998,10 +998,10 @@ class CUP$parser$actions {
           case 18: // elfos ::= ELFO2 
             {
               Object RESULT =null;
-		int elfgleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int elfgright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Object elfg = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = elf;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1010,10 +1010,10 @@ class CUP$parser$actions {
           case 19: // elfos ::= ELFO3 
             {
               Object RESULT =null;
-		int elfnleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int elfnright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Object elfn = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = elf;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1022,10 +1022,10 @@ class CUP$parser$actions {
           case 20: // elfos ::= ELFO4 
             {
               Object RESULT =null;
-		int elfnleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int elfnright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Object elfn = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = elf;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1034,10 +1034,10 @@ class CUP$parser$actions {
           case 21: // elfos ::= ELFO5 
             {
               Object RESULT =null;
-		int elfnleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int elfnright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Object elfn = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = elf;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1046,10 +1046,10 @@ class CUP$parser$actions {
           case 22: // elfos ::= ELFO6 
             {
               Object RESULT =null;
-		int elfnleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int elfnright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Object elfn = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = elf;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("elfos",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1197,7 +1197,14 @@ class CUP$parser$actions {
 		int prUnileft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int prUniright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object prUni = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-
+		
+                    String[] partesOperando = prUni.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("poloNorte",0, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1236,7 +1243,15 @@ class CUP$parser$actions {
 		int prleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int prright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object pr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-
+		
+            String[] partesOperando = pr.toString().split(":");
+                if(!(partesOperando[1].equals("null"))){
+                    RESULT = "dir:"+ partesOperando[1];
+                }
+                else{
+                    RESULT = "dir:null";
+                } 
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("exprUni",22, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1264,7 +1279,19 @@ class CUP$parser$actions {
           case 41: // exprP ::= exprRelLog 
             {
               Object RESULT =null;
-
+		int prlogleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int prlogright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object prlog = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		  
+            //System.out.println("prlog es: "+prlog);
+            String[] partesOperando = prlog.toString().split(":");
+            if(prlog != null || !(partesOperando[1].equals("null"))){
+                RESULT = "dir:"+partesOperando[1];
+            }
+            else{
+                RESULT = "dir:null";
+            }
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("exprP",23, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1303,7 +1330,7 @@ class CUP$parser$actions {
                     RESULT = "dir:"+partesOperando1[1];
                 }else{
                     System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                        ", columna " + (cur_token.right) +":"  + "Los tipos de los operando no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                        ", columna " + (cur_token.right) +": "  + "Los tipos de los operando no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
                         RESULT = "dir:null";
                 }
             
@@ -1342,7 +1369,61 @@ class CUP$parser$actions {
           case 47: // exprRelAux ::= operando elfos operando 
             {
               Object RESULT =null;
-
+		int oper1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int elfleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int elfright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		Object elf = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int oper2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int oper2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object oper2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            //System.out.println("Oper1 es:  "+ oper1);
+            //System.out.println("Oper2 es:  "+ oper2);
+            String[] partesOperando1 = oper1.toString().split(":");
+            String[] partesOperando2 = oper2.toString().split(":");
+                // Permite expresiones relacionales (==, !=) del mismo tipo, mientras que sean int, float y bool
+                if((elf.equals("==") || elf.equals("!="))){
+                    if (partesOperando1[1].equals(partesOperando2[1])){
+                        System.out.println("Los tipos de los operadores == y != son los mismos");
+                        if ((partesOperando1[1].equals("int")|| partesOperando1[1].equals("float")|| partesOperando1[1].equals("bool"))){
+                            System.out.println("Los tipos int, float y bool son permitidos");
+                            RESULT = "dir:"+partesOperando1[1];
+                        }
+                        else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                ", columna " + (cur_token.right) +": "  + "Los tipos de los operando no son permitidos i-f-b: ");
+                                 RESULT = "dir:null";
+                        }
+                    }
+                    else{
+                        System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                        ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos relacionales no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                        RESULT = "dir:null";
+                    }
+                }
+                // Permite expresiones relacionales (<, >, =>, =<) del mismo tipo, mientras que sean int y float
+                else{
+                    if (partesOperando1[1].equals(partesOperando2[1])){
+                        System.out.println("Los tipos del resto de operadores relacionales son los mismos");
+                        if (partesOperando1[1].equals("int") || partesOperando1[1].equals("float")){
+                            System.out.println("Los tipos int, float son permitidos");
+                            RESULT = "dir:"+partesOperando1[1];
+                        }
+                        else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                ", columna " + (cur_token.right) +": "  + "Los tipos de los operando no son permitidos i-f: ");
+                                 RESULT = "dir:null";
+                        }
+                    }
+                    else{
+                        System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                        ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos relacionales no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                        RESULT = "dir:null";
+                    }
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("exprRelAux",26, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1351,7 +1432,18 @@ class CUP$parser$actions {
           case 48: // exprRelLog ::= exprRelAux 
             {
               Object RESULT =null;
-
+		int relauxleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int relauxright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object relaux = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+            //System.out.println("relaux es:" +relaux);
+            if(relaux != null){
+                RESULT = relaux;
+            }
+            else{
+                RESULT = "dir:null";
+            }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("exprRelLog",25, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1396,6 +1488,12 @@ class CUP$parser$actions {
           case 53: // exprLogAux ::= operando logisticadeNavidad operando 
             {
               Object RESULT =null;
+		int oper1left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int oper2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int oper2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object oper2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("exprLogAux",27, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1466,6 +1564,7 @@ class CUP$parser$actions {
 		int prright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object pr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
+            //System.out.println("pr es:" +pr);
             String[] partesOperando = pr.toString().split(":");
             if(partesOperando[1] != "null"){
                 RESULT = "dir:"+partesOperando[1];  
@@ -1549,7 +1648,7 @@ class CUP$parser$actions {
                             }
                             else{
                                 System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                ", columna " + (cur_token.right) +":"  + "Tipo de la variable no coincide con su tipo de asignación");
+                                ", columna " + (cur_token.right) +":"  + " Tipo de la variable no coincide con su tipo de asignación");
                                 RESULT = "dir:null";
                             }
                         }else{
@@ -2056,7 +2155,7 @@ class CUP$parser$actions {
                 String[] partesOperando1 = defin.toString().split(":");
                 String[] partesOperando2 = cuer.toString().split(":");
                 if(!(partesOperando1[1].equals(partesOperando2[1]))){
-                    System.out.println("El retorno de la función no cumple con su tipo esperado de salida");
+                    System.out.println("Error Semántico: El retorno de la función no cumple con su tipo esperado de salida");
                 }else{
                     System.out.println("La función y su retorno son del mismo tipo.");
                 }

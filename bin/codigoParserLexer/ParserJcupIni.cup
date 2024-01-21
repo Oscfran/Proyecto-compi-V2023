@@ -145,12 +145,12 @@ envia ::= ENVIA operando:oper FINREGALO
 corta ::= CORTA FINREGALO;
 
 // Operadores de comparación
-elfos ::= ELFO1:elfg // ==
-        | ELFO2:elfg // !=
-        | ELFO3:elfn // >
-        | ELFO4:elfn // <
-        | ELFO5:elfn // =>
-        | ELFO6:elfn // =<
+elfos ::= ELFO1:elf {:RESULT = elf;:}// ==
+        | ELFO2:elf {:RESULT = elf;:}// !=
+        | ELFO3:elf {:RESULT = elf;:}// >
+        | ELFO4:elf {:RESULT = elf;:}// <
+        | ELFO5:elf {:RESULT = elf;:}// =>
+        | ELFO6:elf {:RESULT = elf;:}// =<
         ;
 
 // Operadores aritméticos
@@ -178,21 +178,30 @@ poloNorte  ::=  decl_G
                     }
                 :}
                 | exprUni:prUni
-                /*{:
-                    String[] partesOperando = exprUni.toString().split(":");
+                {:
+                    String[] partesOperando = prUni.toString().split(":");
                     if(!(partesOperando[1].equals("null"))){
                         RESULT = "dir:"+ partesOperando[1];
                     }else{
                         RESULT = "dir:null";
                     }
-                :}*/
+                :}
+
                 | escuchaNavidad
                 | corta
                 | llamadaNavideniaAux;
 
-// Operaciones aritméticas
-exprUni ::= exprP:pr FINREGALO;
-
+// Permite expresiones sin declaración
+exprUni ::= exprP:pr FINREGALO
+            {:
+            String[] partesOperando = pr.toString().split(":");
+                if(!(partesOperando[1].equals("null"))){
+                    RESULT = "dir:"+ partesOperando[1];
+                }
+                else{
+                    RESULT = "dir:null";
+                } 
+            :};
 
 exprP ::= regaloprin:prin
         {:
@@ -203,8 +212,20 @@ exprP ::= regaloprin:prin
                 RESULT = "dir:null";
             }
         :} 
-        | exprRelLog;
+        | exprRelLog:prlog
+        {:  
+            //System.out.println("prlog es: "+prlog);
+            String[] partesOperando = prlog.toString().split(":");
+            if(prlog != null || !(partesOperando[1].equals("null"))){
+                RESULT = "dir:"+partesOperando[1];
+            }
+            else{
+                RESULT = "dir:null";
+            }
+        :} 
+        ;
 
+// Operación aritmética
 regaloprin ::= COMETA operando:oper3 
             | operando:oper1 renos:rn operando:oper2        
             {:
@@ -216,7 +237,7 @@ regaloprin ::= COMETA operando:oper3
                     RESULT = "dir:"+partesOperando1[1];
                 }else{
                     System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                        ", columna " + (cur_token.right) +":"  + "Los tipos de los operando no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                        ", columna " + (cur_token.right) +": "  + "Los tipos de los operando no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
                         RESULT = "dir:null";
                 }
             :}
@@ -227,17 +248,80 @@ unidadNavidenia ::= GRINCH | QUIEN;
 
 grinchYQuien ::= unidadNavidenia operando;
 
-//Expreisones relacionales
-exprRelAux ::= operando elfos operando;
 
-exprRelLog ::= exprRelAux | exprLogAux;
+
+//Expresiones relacionales
+exprRelAux ::= operando:oper1 elfos:elf operando:oper2
+            {:
+            //System.out.println("Oper1 es:  "+ oper1);
+            //System.out.println("Oper2 es:  "+ oper2);
+            String[] partesOperando1 = oper1.toString().split(":");
+            String[] partesOperando2 = oper2.toString().split(":");
+                // Permite expresiones relacionales (==, !=) del mismo tipo, mientras que sean int, float y bool
+                if((elf.equals("==") || elf.equals("!="))){
+                    if (partesOperando1[1].equals(partesOperando2[1])){
+                        System.out.println("Los tipos de los operadores == y != son los mismos");
+                        if ((partesOperando1[1].equals("int")|| partesOperando1[1].equals("float")|| partesOperando1[1].equals("bool"))){
+                            System.out.println("Los tipos int, float y bool son permitidos");
+                            RESULT = "dir:"+partesOperando1[1];
+                        }
+                        else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                ", columna " + (cur_token.right) +": "  + "Los tipos de los operando no son permitidos i-f-b: ");
+                                 RESULT = "dir:null";
+                        }
+                    }
+                    else{
+                        System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                        ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos relacionales no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                        RESULT = "dir:null";
+                    }
+                }
+                // Permite expresiones relacionales (<, >, =>, =<) del mismo tipo, mientras que sean int y float
+                else{
+                    if (partesOperando1[1].equals(partesOperando2[1])){
+                        System.out.println("Los tipos del resto de operadores relacionales son los mismos");
+                        if (partesOperando1[1].equals("int") || partesOperando1[1].equals("float")){
+                            System.out.println("Los tipos int, float son permitidos");
+                            RESULT = "dir:"+partesOperando1[1];
+                        }
+                        else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                ", columna " + (cur_token.right) +": "  + "Los tipos de los operando no son permitidos i-f: ");
+                                 RESULT = "dir:null";
+                        }
+                    }
+                    else{
+                        System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                        ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos relacionales no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                        RESULT = "dir:null";
+                    }
+                }
+            :}
+            ;
+
+exprRelLog ::= exprRelAux:relaux 
+            {:
+            //System.out.println("relaux es:" +relaux);
+            if(relaux != null){
+                RESULT = relaux;
+            }
+            else{
+                RESULT = "dir:null";
+            }
+            :}| exprLogAux;
+
+
+
+
 
 //Operadores logicos      # | ^
 logisticadeNavidad ::= MELCHOR | GASPAR;
 
 // ! operando | operando # | ^ operando
 exprLogAux ::= BALTASAR operando 
-            | operando logisticadeNavidad operando;
+            | operando:oper1 logisticadeNavidad operando:oper2;
+
 
 // Lo que sea que se vaya a operar más carga del tipo per y literal 
 operando ::= PERSONA:per
@@ -263,6 +347,7 @@ operando ::= PERSONA:per
         | accesoArray 
         | exprP:pr 
         {:
+            //System.out.println("pr es:" +pr);
             String[] partesOperando = pr.toString().split(":");
             if(partesOperando[1] != "null"){
                 RESULT = "dir:"+partesOperando[1];  
@@ -304,7 +389,7 @@ creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREG
                             }
                             else{
                                 System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                ", columna " + (cur_token.right) +":"  + "Tipo de la variable no coincide con su tipo de asignación");
+                                ", columna " + (cur_token.right) +":"  + " Tipo de la variable no coincide con su tipo de asignación");
                                 RESULT = "dir:null";
                             }
                         }else{
@@ -458,7 +543,7 @@ ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per
                     :}
                     ;
 
-//Definición de funciones
+//function int func3() | function int func3(string b1)
 definirFunNav ::=  ayudaDefinirFuncionNavi:defin ABRECUENTO CIERRACUENTO 
                 {:
                 String[] partesOperando = defin.toString().split(":");
@@ -474,6 +559,7 @@ definirFunNav ::=  ayudaDefinirFuncionNavi:defin ABRECUENTO CIERRACUENTO
                 | error ABREREGALO
                 ;
 
+// Definición completa de la función
 bolsanavidenia ::= definirFunNav:defin
                 //{:System.out.println("es ayudafed: "+defin);:}
                 | definirFunNav:defin cuerpo:cuer
@@ -484,7 +570,7 @@ bolsanavidenia ::= definirFunNav:defin
                 String[] partesOperando1 = defin.toString().split(":");
                 String[] partesOperando2 = cuer.toString().split(":");
                 if(!(partesOperando1[1].equals(partesOperando2[1]))){
-                    System.out.println("El retorno de la función no cumple con su tipo esperado de salida");
+                    System.out.println("Error Semántico: El retorno de la función no cumple con su tipo esperado de salida");
                 }else{
                     System.out.println("La función y su retorno son del mismo tipo.");
                 }
@@ -493,6 +579,8 @@ bolsanavidenia ::= definirFunNav:defin
 pbolsanavideniaAux ::=  bolsanavidenia
                     | pbolsanavideniaAux bolsanavidenia;
 
+
+// Símbolo inicial con el que empieza la gramática
 NAVIDAD ::= {:
                 System.out.println("Empieza el asunto");
                 :} 
