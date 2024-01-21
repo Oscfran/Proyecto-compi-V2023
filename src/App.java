@@ -89,8 +89,8 @@ public class App {
         ejecutar las pruebas en la primera pasada los cambio no se han guardado y dirá que tiene errores o directamente no se mostraran los cambios, 
         pero en la segunda ejecución ya no estarán dichos errores)*/
 
-        generarLexerParser();
-        //pruebasLexerParser();
+        //generarLexerParser();
+        pruebasLexerParser();
 
         /*Debido al package ParserLexer no se puede ejecutar si no hay archivos en dicha, carpeta mismos que se generan
         automaticamente al ejecutarse la funcion: generarLexerParser() (en la actual version deberia poder ejecutarse sin problemas)*/

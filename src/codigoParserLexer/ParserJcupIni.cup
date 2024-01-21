@@ -70,15 +70,15 @@ init with {: :};
 scan with {: return lex.next_token(); :};
 
 /* Lexer navideño */
-terminal            EMPEZONAVIDAD, FESTIVAL, FIESTA, PERSONA, l_SANTA , l_SANTA_CLAUS, l_PAPANOEL, l_PASCUERO, l_COLACHO, ENTREGA, ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6;
+terminal            EMPEZONAVIDAD, PERSONA, l_SANTA , l_SANTA_CLAUS, l_PAPANOEL, l_PASCUERO, l_COLACHO, ENTREGA, ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6;
 terminal            GRINCH, QUIEN, RODOLFO, COMETA, BAILARIN, CUPIDO, DONNER, DASHER, ELFO, HADA, DUENDE, ENVUELVE, ENVOLTURA, HACE, REVISA, ENVIA, CORTA, MELCHOR, GASPAR, BALTASAR, POLO;
 terminal            ABRECUENTO, CIERRACUENTO, ABREEMPAQUE, CIERRAEMPAQUE, ABREREGALO, CIERRAREGALO, FINREGALO, SANTACLAUS, PAPANOEL, SANNICOLAS, SINTERKLASS, VIEJITOPASCUERO, COLACHO;
 terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA, CUPIENTERO, GALLETAQUIETA;
 
 /* No terminales */
 non terminal            poloNorte, navidad,t_santas, literales_navidenios, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
-non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
-non terminal            elfos, creaRegalo, estructura, exprUni, exprP, regaloprin, exprRelLog, exprRelAux, exprLogAux, operando, operandoRel, operandoLog;
+non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
+non terminal            elfos, creaRegalo, estructura, exprUni, exprP, regaloprin, regaloCompradoLogRel, regaloCompradoAux, regaloManualAux, operando, operandoLog;
 non terminal            opciones,creaRegaloAssign, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, doWhileStmt, envia, elfoStm, hadaStm, hadaMulti, duendeStm, renos;
 non terminal            decl_G, ayudaDefinirFuncionNavi, llamadaNavidenia, llamadaNavideniaAux, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
 
@@ -124,8 +124,7 @@ elfos ::= ELFO1:elf {:RESULT = elf;:}// ==
         | ELFO3:elf {:RESULT = elf;:}// >
         | ELFO4:elf {:RESULT = elf;:}// <
         | ELFO5:elf {:RESULT = elf;:}// =>
-        | ELFO6:elf {:RESULT = elf;:}// =<
-        ;
+        | ELFO6:elf {:RESULT = elf;:};// =<
 
 // Operadores aritméticos
 renos ::= COMETA:rn    {:RESULT = rn;:} // -
@@ -134,8 +133,11 @@ renos ::= COMETA:rn    {:RESULT = rn;:} // -
          | BAILARIN:rn {:RESULT = rn;:} // *
          | CUPIDO:rn   {:RESULT = rn;:} // /
          | DONNER:rn   {:RESULT = rn;:} // ~
-         | DASHER:rn   {:RESULT = rn;:} // **
-         ;
+         | DASHER:rn   {:RESULT = rn;:}; // **
+
+//Operadores unarios
+unidadNavidenia ::= GRINCH:gr {:RESULT = gr;:} //++
+                 | QUIEN:qn {:RESULT = qn;:}; //--
 
 // Permite expresiones sin declaración (siempre dentro de la función)
 exprUni ::= exprP:pr FINREGALO
@@ -147,8 +149,20 @@ exprUni ::= exprP:pr FINREGALO
                 else{
                     RESULT = "dir:null";
                 } 
-            :};
+            :}
+            | grinchYQuien:gr FINREGALO
+            {:
+            String[] partesOperando = gr.toString().split(":");
+                if(!(partesOperando[1].equals("null"))){
+                    RESULT = "dir:"+ partesOperando[1];
+                }
+                else{
+                    RESULT = "dir:null";
+                } 
+            :}
+            ;
 
+// Expresión que junta operaciones aritméticas, las relaciones
 exprP ::= regaloprin:prin
         {:
             String[] partesOperando = prin.toString().split(":");
@@ -158,7 +172,7 @@ exprP ::= regaloprin:prin
                 RESULT = "dir:null";
             }
         :} 
-        | exprRelLog:prlog
+        | regaloCompradoLogRel:prlog
         {:  
             //System.out.println("prlog es: "+prlog);
             String[] partesOperando = prlog.toString().split(":");
@@ -168,7 +182,7 @@ exprP ::= regaloprin:prin
             else{
                 RESULT = "dir:null";
             }
-        :} 
+        :}
         ;
 
 // Operación aritmética
@@ -242,15 +256,14 @@ regaloprin ::= COMETA operando:oper3
             :}  
               ;
 
-//Operadores unarios ++, --
-unidadNavidenia ::= GRINCH:gr {:RESULT = gr;:}
-                 | QUIEN:qn {:RESULT = qn;:};
+
 
 // ++i, ++persona, --persona
 grinchYQuien ::= unidadNavidenia operando:oper1
             {:
             String[] partesOperando = oper1.toString().split(":");
             if(partesOperando[1].equals("int")){
+                System.out.println("funcóoooooooooooooooo");
                 RESULT = "dir:"+partesOperando[1];  
             }else{
                 RESULT = "dir:null";
@@ -263,7 +276,7 @@ grinchYQuien ::= unidadNavidenia operando:oper1
 
 
 //Expresiones relacionales
-exprRelAux ::= operando:oper1 elfos:elf operando:oper2
+regaloCompradoAux ::= operando:oper1 elfos:elf operando:oper2
             {:
             String[] partesOperando1 = oper1.toString().split(":");
             String[] partesOperando2 = oper2.toString().split(":");
@@ -310,7 +323,7 @@ exprRelAux ::= operando:oper1 elfos:elf operando:oper2
             :}
             ;
 
-exprRelLog ::= exprRelAux:relaux 
+regaloCompradoLogRel ::= regaloCompradoAux:relaux 
             {:
             //System.out.println("relaux es:" +relaux);
             if(relaux != null){
@@ -320,7 +333,7 @@ exprRelLog ::= exprRelAux:relaux
                 RESULT = "dir:null";
             }
             :}
-            | exprLogAux:logaux
+            | regaloManualAux:logaux
             {:
             //System.out.println("logaux es:" +logaux);
             if(logaux != null){
@@ -336,8 +349,8 @@ exprRelLog ::= exprRelAux:relaux
 logisticadeNavidad ::= MELCHOR:mel {:RESULT = mel;:} 
                     | GASPAR:gal {:RESULT = gal;:};
 
-// ! operando | operando # | ^ operando
-exprLogAux ::= BALTASAR operando:oper1
+// ! operando y operando # | ^ operando
+regaloManualAux ::= BALTASAR operando:oper1
             {:
             String[] partesOperando = oper1.toString().split(":");
             if(oper1 != null || !(partesOperando[1].equals("null"))){
@@ -358,7 +371,7 @@ exprLogAux ::= BALTASAR operando:oper1
                 }else{
                     System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
                         ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos lógicos no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
-                        RESULT = "dir:null";
+                    RESULT = "dir:null";
                 }
             :};
 
@@ -449,8 +462,6 @@ creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREG
                             RESULT = "dir:null";
                         }
                 :}
-
-                | error FINREGALO
                 ;
                 
 //Redeclaración de variables
@@ -633,9 +644,9 @@ doWhileStmt ::= HACE cuerpo REVISA ABRECUENTO operando CIERRACUENTO FINREGALO;
 
 //For 
 //for(x=2,x<20,++x)
-forStmt ::= ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA:lst  MUERDAGO exprRelLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo
-            | ENVUELVE ABRECUENTO PAPANOEL PERSONA ENTREGA l_SANTA MUERDAGO exprRelLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo
-            | ENVUELVE ABRECUENTO POLO PAPANOEL PERSONA ENTREGA operando MUERDAGO exprRelLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo;
+forStmt ::= ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA:lst  MUERDAGO regaloCompradoLogRel MUERDAGO grinchYQuien CIERRACUENTO cuerpo
+            | ENVUELVE ABRECUENTO PAPANOEL PERSONA ENTREGA l_SANTA MUERDAGO regaloCompradoLogRel MUERDAGO grinchYQuien CIERRACUENTO cuerpo
+            | ENVUELVE ABRECUENTO POLO PAPANOEL PERSONA ENTREGA operando MUERDAGO regaloCompradoLogRel MUERDAGO grinchYQuien CIERRACUENTO cuerpo;
 
 //if - elif - else
 //if
@@ -851,7 +862,9 @@ poloNorte  ::=  decl_G
                     }
                 :}
                 | corta
-                | llamadaNavideniaAux;
+                | llamadaNavideniaAux
+                | error FINREGALO
+                ;
 
 // Varias expresiones
 regalo ::= poloNorte:poli1 
