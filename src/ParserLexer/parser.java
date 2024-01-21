@@ -1311,7 +1311,7 @@ class CUP$parser$actions {
 		Object oper3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
                 String[] partesOperando = oper3.toString().split(":");
-                if(partesOperando[1] != "null"){
+                if(partesOperando[1].equals("int") || partesOperando[1].equals("float") ){
                     RESULT = "dir:"+partesOperando[1];  
                 }else{
                     RESULT = "dir:null";

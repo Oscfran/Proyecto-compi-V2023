@@ -229,7 +229,7 @@ exprP ::= regaloprin:prin
 regaloprin ::= COMETA operando:oper3 
             {:
                 String[] partesOperando = oper3.toString().split(":");
-                if(partesOperando[1] != "null"){
+                if(partesOperando[1].equals("int") || partesOperando[1].equals("float") ){
                     RESULT = "dir:"+partesOperando[1];  
                 }else{
                     RESULT = "dir:null";
