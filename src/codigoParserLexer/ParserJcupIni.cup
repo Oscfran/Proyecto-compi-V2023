@@ -79,7 +79,7 @@ terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA, CUP
 non terminal            poloNorte, navidad,t_santas, literales_navidenios, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
 non terminal            elfos, creaRegalo, estructura, exprUni, exprP, regaloprin, regaloCompradoLogRel, regaloCompradoAux, regaloManualAux, operando, operandoLog;
-non terminal            opciones,creaRegaloAssign, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, doWhileStmt, envia, elfoStm, hadaStm, hadaMulti, duendeStm, renos;
+non terminal            opciones,creaRegaloAssign, forStmt, cuerpoMain, regaloExtn, antartica, doUntilStmt, envia, elfoStm, hadaStm, hadaMulti, duendeStm, renos;
 non terminal            decl_G, ayudaDefinirFuncionNavi, llamadaNavidenia, llamadaNavideniaAux, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
 
 //Precedence
@@ -282,14 +282,14 @@ regaloCompradoAux ::= operando:oper1 elfos:elf operando:oper2
                 // Permite expresiones relacionales (==, !=) del mismo tipo, mientras que sean int, float y bool
                 if((elf.equals("==") || elf.equals("!="))){
                     if (partesOperando1[1].equals(partesOperando2[1])){
-                        System.out.println("Los tipos de los operadores == y != son los mismos");
+                        //System.out.println("Los tipos de los operadores == y != son los mismos");
                         if ((partesOperando1[1].equals("int")|| partesOperando1[1].equals("float")|| partesOperando1[1].equals("bool"))){
-                            System.out.println("Los tipos int, float y bool son permitidos");
+                            //System.out.println("Los tipos int, float y bool son permitidos");
                             RESULT = "dir:"+partesOperando1[1];
                         }
                         else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                                ", columna " + (cur_token.right) +": "  + "Los tipos de los operando no son permitidos i-f-b: ");
+                                ", columna " + (cur_token.right) +": "  + "Los tipos de los operando no son permitidos, sólo int-float-bool: ");
                                  RESULT = "dir:null";
                         }
                     }
@@ -302,9 +302,9 @@ regaloCompradoAux ::= operando:oper1 elfos:elf operando:oper2
                 // Permite expresiones relacionales (<, >, =>, =<) del mismo tipo, mientras que sean int y float
                 else{
                     if (partesOperando1[1].equals(partesOperando2[1])){
-                        System.out.println("Los tipos del resto de operadores relacionales son los mismos");
+                        //System.out.println("Los tipos del resto de operadores relacionales son los mismos");
                         if (partesOperando1[1].equals("int") || partesOperando1[1].equals("float")){
-                            System.out.println("Los tipos int, float son permitidos");
+                            //System.out.println("Los tipos int, float son permitidos");
                             RESULT = "dir:"+partesOperando1[1];
                         }
                         else{
@@ -321,7 +321,7 @@ regaloCompradoAux ::= operando:oper1 elfos:elf operando:oper2
                 }
             :}
             ;
-
+// Combinación de expresiones lógicas y relacionales
 regaloCompradoLogRel ::= regaloCompradoAux:relaux 
             {:
             //System.out.println("relaux es:" +relaux);
@@ -452,7 +452,7 @@ creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREG
                     listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                     String[] partesOperando = oper1.toString().split(":");
 
-                    // Se verifica si tipo de la variable
+                    // Se verifica su tipo de la variable
                         if(!(tst.equals("null"))){
                             //System.out.println("tipo de la variable permitido");
                             if(tst.equals(partesOperando[1])){
@@ -470,6 +470,7 @@ creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREG
                             RESULT = "dir:null";
                         }
                 :}
+
                 ;
                 
 //Redeclaración de variables
@@ -642,13 +643,10 @@ accesoArray ::= PERSONA:per ABREEMPAQUE operando:oper1 CIERRAEMPAQUE
 
 //Ciclos
 
-//While
-//while ( i <_ 5 ){}
-whileStmt ::= ENVOLTURA ABRECUENTO operando CIERRACUENTO cuerpo;
-
-//do until (do while)
+//do until (do)
 //do{ cuerpo }until ( i <_ 5 )|
-doWhileStmt ::= HACE cuerpo REVISA ABRECUENTO operando CIERRACUENTO FINREGALO;
+doUntilStmt ::= HACE cuerpo REVISA ABRECUENTO operando CIERRACUENTO FINREGALO
+;
 
 //For 
 //for(x=2,x<20,++x)
@@ -658,13 +656,15 @@ forStmt ::= ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA:lst  MUERDAGO regaloComp
 
 //if - elif - else
 //if
-elfoStm::= ELFO ABRECUENTO operando CIERRACUENTO cuerpo
-            | ELFO ABRECUENTO operando CIERRACUENTO cuerpo duendeStm //if y else
-            | ELFO ABRECUENTO operando CIERRACUENTO cuerpo hadaMulti //if n elifs
-            | ELFO ABRECUENTO operando CIERRACUENTO cuerpo hadaMulti duendeStm; //if n elifs y else
+elfoStm::= ELFO ABRECUENTO operando:oper1 CIERRACUENTO cuerpo:cuer1
+            | ELFO ABRECUENTO operando:oper2 CIERRACUENTO cuerpo:cuer2 duendeStm //if y else
+            | ELFO ABRECUENTO operando:oper3 CIERRACUENTO cuerpo:cuer3 hadaMulti //if n elifs
+            | ELFO ABRECUENTO operando:oper4 CIERRACUENTO cuerpo:cuer4 hadaMulti duendeStm
+            | error CIERRAREGALO
+            ; //if n elifs y else
 
 //elif
-hadaStm ::= HADA ABRECUENTO operando CIERRACUENTO cuerpo;
+hadaStm ::= HADA ABRECUENTO operando:oper CIERRACUENTO cuerpo ;
 
 //n elifs
 hadaMulti ::= hadaStm
@@ -673,9 +673,8 @@ hadaMulti ::= hadaStm
 //else
 duendeStm ::= DUENDE cuerpo;
 
-estructura ::= whileStmt 
-                | forStmt 
-                | doWhileStmt 
+estructura ::= forStmt 
+                | doUntilStmt 
                 | elfoStm;
 
 
@@ -710,7 +709,7 @@ ayudaDefFunNav ::= ayudanteDeSanta
 
 // Ayuda para la definición de funciones
 // function int func3
-ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per
+ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per 
                     {:
                         currentHash = per.toString();
                         String tipoTabla = "main";
@@ -766,7 +765,8 @@ bolsanavidenia ::= definirFunNav:defin
                     System.out.println("Error Semántico: El retorno de la función no cumple con su tipo esperado de salida");
                     RESULT = "dir:" + partesOperando1[1];
                 }
-                :};
+                :}
+                ;
 
 // Producción del return 
 //Return (Return operando;)
@@ -871,7 +871,6 @@ poloNorte  ::=  decl_G
                 :}
                 | corta
                 | llamadaNavideniaAux
-                | error FINREGALO
                 ;
 
 // Varias expresiones
@@ -903,6 +902,7 @@ regalo ::= poloNorte:poli1
                     RESULT = "dir:null";
                 }
             :}
+            | error FINREGALO
             ;
 
 // Varias funciones juntas
@@ -919,21 +919,6 @@ navidad ::= {:
                 imprimirTablaSimbolos();
                 System.out.println("Termina el asunto");
                 :};
-
-
-//funcion main
-/*cuerpoMain ::= ABREREGALO regaloExtn CIERRAREGALO;
-
-entregaRegalos ::= {:
-                    System.out.println("Empieza el asunto");
-                    :} 
-                    EMPEZONAVIDAD VIEJITOPASCUERO ENTREGAREGALOS ABRECUENTO CIERRACUENTO cuerpoMain 
-                    {:
-                    imprimirTablaSimbolos();
-                    System.out.println("Termina el asunto");
-                    :};
-*/
-
 
 antartica ::= bolsanavidenia | poloNorte;
 

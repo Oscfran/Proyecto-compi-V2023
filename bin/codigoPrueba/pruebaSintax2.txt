@@ -8,5 +8,19 @@
 
    @print(sisirve)|
    @read(true)|
+
+   local int i|
+   do {i+1000|} until(i < 10 + 20)|
+
+  local int SIRVAPORDIOS <= 20|
+
+    if(i + SIRVAPORDIOS){
+      local int acomodarselapinga <= 3484|
+    }
+
    return bl1| @semantico
  }
+
+
+
+ 
