@@ -14,9 +14,9 @@ action code {:
      
     // Función para imprimir la tabla de símbolos
     public void imprimirTablaSimbolos(){
-        for (String key: listaTablaSimbolos.keySet()){
+        for (String key: listaTablaSimbolos.keySet()){  
+            System.out.println("\nLa tabla contiene estos valores: ");
             System.out.println("Tabla de simbolo: " + key);
-            System.out.println("La tabla contiene estos valores: ");
             for(String item: listaTablaSimbolos.get(key)){
                 System.out.println(item);
             }
@@ -30,7 +30,7 @@ action code {:
         for(String token : tablasSimbolos){
             String[] partesToken = token.split(":");
             if(id.equals(partesToken[2])){
-                System.out.println("Nombre variable:" + partesToken[2]  + " tipo: " + tipo);
+                //System.out.println("Nombre variable:" + partesToken[2]  + " tipo: " + tipo);
                 tipo = partesToken[3];
                 
             }
@@ -136,7 +136,7 @@ envia ::= ENVIA operando:oper FINREGALO
                                 RESULT = "dir:null"; 
                         }else{ 
                             RESULT = "dir:"+ partesOperando[1];
-                            System.out.println("El tipo de retorno es: " + partesOperando[1]);
+                            //System.out.println("El tipo de retorno es: " + partesOperando[1]);
                          }
         :}
         ;
@@ -162,22 +162,64 @@ renos ::= COMETA:rn    {:RESULT = rn;:} // -
          | DASHER:rn   {:RESULT = rn;:} // **
          ;
 
+//Encapsula todas las expresiones para que se puedan colocar dentro de las funciones
+poloNorte  ::=  decl_G 
+                | creaRegalo
+                | creaRegaloAssign
+                | narraNavidad 
+                | estructura
+                | envia:env
+                {:
+                    String[] partesOperando = env.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                :}
+                | exprUni:prUni
+                /*{:
+                    String[] partesOperando = exprUni.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                :}*/
+                | escuchaNavidad
+                | corta
+                | llamadaNavideniaAux;
+
 // Operaciones aritméticas
-exprUni ::= exprP FINREGALO;
+exprUni ::= exprP:pr FINREGALO;
 
-exprP ::= regaloprin | exprRelLog;
 
-regaloprin ::= COMETA operando
-            | operando:oper1 renos:rn operando:oper2            
-            /**{:
-                if(oper1.equals(oper2)){
-                    System.out.println("Los operandos de esta operación son" +rn+ " del mismo tipo");
+exprP ::= regaloprin:prin
+        {:
+            String[] partesOperando = prin.toString().split(":");
+            if(!(partesOperando[1].equals("null"))){
+                RESULT = "dir:"+ partesOperando[1];
+            }else{
+                RESULT = "dir:null";
+            }
+        :} 
+        | exprRelLog;
+
+regaloprin ::= COMETA operando 
+            | operando:oper1 renos:rn operando:oper2        
+            {:
+            String[] partesOperando1 = oper1.toString().split(":");
+            String[] partesOperando2 = oper2.toString().split(":");
+                if(partesOperando1[1].equals(partesOperando2[1])){
+                    //System.out.println("Los operandos de esta operación en la línea" + (cur_token.left+1) + 
+                      //  ", columna " + (cur_token.right) +":"+"son del mismo tipo");
+                    RESULT = "dir:"+partesOperando1[1];
                 }else{
                     System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                        ", columna " + (cur_token.right) +":"  + "Los tipos de los operando no son iguales: " + oper1 + oper2);
+                        ", columna " + (cur_token.right) +":"  + "Los tipos de los operando no son iguales: " + partesOperando1[1] + ", " + partesOperando2[1]);
                         RESULT = "dir:null";
                 }
-            :}*/
+            :}
             ;
 
 //Operadores unarios
@@ -204,10 +246,8 @@ operando ::= PERSONA:per
             String tipoId = getTipo(ts,per.toString());
             if(tipoId != "null"){
                 RESULT = "dir:"+tipoId;
-                System.out.println("Subir el tipo del per: " + tipoId);
             }else{
                 RESULT = "dir:null";
-                System.out.println("per tiene dirección nula:" + per);
             }
         :}
         | literales_navidenios:lst 
@@ -215,14 +255,21 @@ operando ::= PERSONA:per
             String[] partesOperando = lst.toString().split(":");
             if(partesOperando[1] != "null"){
                 RESULT = "dir:"+partesOperando[1]; 
-                System.out.println("Subir el tipo del literal: " + lst); 
             }else{
                 RESULT = "dir:null";
             }
        :}
         | llamadaNavidenia 
         | accesoArray 
-        | exprP 
+        | exprP:pr 
+        {:
+            String[] partesOperando = pr.toString().split(":");
+            if(partesOperando[1] != "null"){
+                RESULT = "dir:"+partesOperando[1];  
+            }else{
+                RESULT = "dir:null";
+            }
+        :}
         | grinchYQuien 
         | ABRECUENTO operando:ope CIERRACUENTO
         ;
@@ -232,11 +279,11 @@ creaRegalo ::= POLO t_santas:tst PERSONA:per FINREGALO
                 {:
                     listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                         if(!(tst.equals("null"))){
-                            System.out.println("Declarada la variable sin asignación bien");
+                            //System.out.println("Bien declarada la variable sin asignación");
                             RESULT = "dir:"+ tst;
                         }else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                            ", columna " + (cur_token.right) + " Declaración sin variable mal." );
+                            ", columna " + (cur_token.right) + " Mal declarada la variable sin asignación");
                             RESULT = "dir:null";
                         }
                 :}
@@ -250,9 +297,9 @@ creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREG
 
                     // Se verifica si tipo de la variable
                         if(!(tst.equals("null"))){
-                            System.out.println("tipo de la variable permitido");
+                            //System.out.println("tipo de la variable permitido");
                             if(tst.equals(partesOperando[1])){
-                                System.out.println("La variable coincide con su asignación");
+                                //System.out.println("La variable coincide con su asignación");
                                 RESULT = "dir:"+ tst;
                             }
                             else{
@@ -281,7 +328,6 @@ cuerpo ::= ABREREGALO CIERRAREGALO
                 RESULT = "dir:"+ partesOperando[1];
             }else{
                 RESULT = "dir:null";
-                System.out.println("regalo está llegando vacío");
             }
         :}
         ;
@@ -402,11 +448,11 @@ ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per
 
                         // Se verifica si el valor de retorno es apropiado
                         if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
-                            System.out.println("tipo de la función permitida");
+                            //System.out.println("tipo de la función permitida");
                             RESULT = "dir:"+ tst;
                         }else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                             ", columna " + (cur_token.right) +": "  + "Tipo de la función no permitida");
+                             ", columna " + (cur_token.right) +": "  + "Este tipo de función no es permitido: "+ tst);
                              RESULT = "dir:null";
                         }
                     :}
@@ -429,12 +475,12 @@ definirFunNav ::=  ayudaDefinirFuncionNavi:defin ABRECUENTO CIERRACUENTO
                 ;
 
 bolsanavidenia ::= definirFunNav:defin
-                {:System.out.println("es ayudafed: "+defin);:}
+                //{:System.out.println("es ayudafed: "+defin);:}
                 | definirFunNav:defin cuerpo:cuer
                 
                 {:
-                System.out.println("es ayudafed: "+defin);
-                System.out.println("es cuerpo: "+ cuer);
+                //System.out.println("es ayudafed: "+defin);
+                //System.out.println("es cuerpo: "+ cuer);
                 String[] partesOperando1 = defin.toString().split(":");
                 String[] partesOperando2 = cuer.toString().split(":");
                 if(!(partesOperando1[1].equals(partesOperando2[1]))){
@@ -470,41 +516,21 @@ entregaRegalos ::= {:
                     :};
 */
 
-//Encapsula todas las expresiones para que se puedan colocar dentro de las funciones
-poloNorte  ::=  decl_G 
-                | creaRegalo
-                | creaRegaloAssign
-                | narraNavidad 
-                | estructura
-                | envia:env
-                {:
-                    String[] partesOperando = env.toString().split(":");
-                    if(!(partesOperando[1].equals("null"))){
-                        RESULT = "dir:"+ partesOperando[1];
-                    }else{
-                        RESULT = "dir:null";
-                    }
-                :}
-                | exprUni
-                | escuchaNavidad
-                | corta
-                | llamadaNavideniaAux;
-
 //Produccion de expresiones
 regalo ::= poloNorte:poli1 
             {:
                 if (poli1 != null) {
-                    System.out.println("esto es poli1:" + poli1);
+                    //System.out.println("esto es poli1:" + poli1);
                     RESULT = poli1;
                 } else {
-                    System.out.println("poli1 es null");
+                    //System.out.println("poli1 es null");
                     RESULT = "dir:null";
                 }
             :}    
             | regalo:reg poloNorte:poli2
             {:
-                System.out.println("esto es regalo:" + reg);
-                System.out.println("esto es poli2:" + poli2);
+                //System.out.println("esto es regalo:" + reg);
+                //System.out.println("esto es poli2:" + poli2);
                 RESULT = poli2;
             :} 
             
