@@ -78,7 +78,7 @@ terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA, CUP
 /* No terminales */
 non terminal            poloNorte, navidad,t_santas, literales_navidenios, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, reyesMagos, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
-non terminal            elfos, creaRegalo, estructura, exprUni, exprP, regaloprin, exprRelLog, exprRelAux, exprLogAux, operando, operandoRel, operandoLog;
+non terminal            elfos, creaRegalo, estructura, exprUni, exprP, regaloprin, regaloCompradoLog, regaloCompradoAux, regaloManualAux, operando, operandoRel, operandoLog;
 non terminal            opciones,creaRegaloAssign, whileStmt, forStmt, cuerpoMain, regaloExtn, antartica, doWhileStmt, envia, elfoStm, hadaStm, hadaMulti, duendeStm, renos;
 non terminal            decl_G, ayudaDefinirFuncionNavi, llamadaNavidenia, llamadaNavideniaAux, ids, accesoArray, arrayDeclaration, arrayInitialization, listaExpresiones;
 
@@ -147,7 +147,18 @@ exprUni ::= exprP:pr FINREGALO
                 else{
                     RESULT = "dir:null";
                 } 
-            :};
+            :}
+            | grinchYQuien:gr FINREGALO
+            {:
+            String[] partesOperando = gr.toString().split(":");
+                if(!(partesOperando[1].equals("null"))){
+                    RESULT = "dir:"+ partesOperando[1];
+                }
+                else{
+                    RESULT = "dir:null";
+                } 
+            :}
+            ;
 
 exprP ::= regaloprin:prin
         {:
@@ -158,7 +169,7 @@ exprP ::= regaloprin:prin
                 RESULT = "dir:null";
             }
         :} 
-        | exprRelLog:prlog
+        | regaloCompradoLog:prlog
         {:  
             //System.out.println("prlog es: "+prlog);
             String[] partesOperando = prlog.toString().split(":");
@@ -168,7 +179,7 @@ exprP ::= regaloprin:prin
             else{
                 RESULT = "dir:null";
             }
-        :} 
+        :}
         ;
 
 // Operación aritmética
@@ -263,7 +274,7 @@ grinchYQuien ::= unidadNavidenia operando:oper1
 
 
 //Expresiones relacionales
-exprRelAux ::= operando:oper1 elfos:elf operando:oper2
+regaloCompradoAux ::= operando:oper1 elfos:elf operando:oper2
             {:
             String[] partesOperando1 = oper1.toString().split(":");
             String[] partesOperando2 = oper2.toString().split(":");
@@ -310,7 +321,7 @@ exprRelAux ::= operando:oper1 elfos:elf operando:oper2
             :}
             ;
 
-exprRelLog ::= exprRelAux:relaux 
+regaloCompradoLog ::= regaloCompradoAux:relaux 
             {:
             //System.out.println("relaux es:" +relaux);
             if(relaux != null){
@@ -320,7 +331,7 @@ exprRelLog ::= exprRelAux:relaux
                 RESULT = "dir:null";
             }
             :}
-            | exprLogAux:logaux
+            | regaloManualAux:logaux
             {:
             //System.out.println("logaux es:" +logaux);
             if(logaux != null){
@@ -337,7 +348,7 @@ logisticadeNavidad ::= MELCHOR:mel {:RESULT = mel;:}
                     | GASPAR:gal {:RESULT = gal;:};
 
 // ! operando | operando # | ^ operando
-exprLogAux ::= BALTASAR operando:oper1
+regaloManualAux ::= BALTASAR operando:oper1
             {:
             String[] partesOperando = oper1.toString().split(":");
             if(oper1 != null || !(partesOperando[1].equals("null"))){
@@ -633,9 +644,9 @@ doWhileStmt ::= HACE cuerpo REVISA ABRECUENTO operando CIERRACUENTO FINREGALO;
 
 //For 
 //for(x=2,x<20,++x)
-forStmt ::= ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA:lst  MUERDAGO exprRelLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo
-            | ENVUELVE ABRECUENTO PAPANOEL PERSONA ENTREGA l_SANTA MUERDAGO exprRelLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo
-            | ENVUELVE ABRECUENTO POLO PAPANOEL PERSONA ENTREGA operando MUERDAGO exprRelLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo;
+forStmt ::= ENVUELVE ABRECUENTO PERSONA ENTREGA l_SANTA:lst  MUERDAGO regaloCompradoLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo
+            | ENVUELVE ABRECUENTO PAPANOEL PERSONA ENTREGA l_SANTA MUERDAGO regaloCompradoLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo
+            | ENVUELVE ABRECUENTO POLO PAPANOEL PERSONA ENTREGA operando MUERDAGO regaloCompradoLog MUERDAGO grinchYQuien CIERRACUENTO cuerpo;
 
 //if - elif - else
 //if

@@ -2,7 +2,7 @@
 
    local char dafsd[1]|
 
-   @++prueba2|
+   ++prueba2|
    @print(sisirve)|
    @read(true)|
    return bl1| @semantico
