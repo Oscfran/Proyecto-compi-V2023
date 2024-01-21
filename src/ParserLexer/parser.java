@@ -1273,6 +1273,9 @@ class CUP$parser$actions {
           case 42: // regaloprin ::= COMETA operando 
             {
               Object RESULT =null;
+		int oper3left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int oper3right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object oper3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("regaloprin",24, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

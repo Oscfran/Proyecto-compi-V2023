@@ -205,7 +205,7 @@ exprP ::= regaloprin:prin
         :} 
         | exprRelLog;
 
-regaloprin ::= COMETA operando 
+regaloprin ::= COMETA operando:oper3 
             | operando:oper1 renos:rn operando:oper2        
             {:
             String[] partesOperando1 = oper1.toString().split(":");
