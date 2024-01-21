@@ -5,6 +5,7 @@
   --prueba2|
   local int prueba3 <= 102|
   local int prueba4 <= 102|
+  
    @print(sisirve)|
    @read(true)|
    return bl1| @semantico
