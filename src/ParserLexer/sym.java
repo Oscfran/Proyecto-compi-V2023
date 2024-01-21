@@ -24,6 +24,7 @@ public class sym {
   public static final int ENTREGA = 11;
   public static final int VIEJITOPASCUERO = 50;
   public static final int ABREEMPAQUE = 41;
+  public static final int GALLETAQUIETA = 58;
   public static final int RODOLFO = 20;
   public static final int CIERRAEMPAQUE = 42;
   public static final int ENTREGAREGALOS = 52;
@@ -124,7 +125,8 @@ public class sym {
   "NARRA",
   "ESCUCHA",
   "SANTACLAUSULA",
-  "CUPIENTERO"
+  "CUPIENTERO",
+  "GALLETAQUIETA"
   };
 }
 

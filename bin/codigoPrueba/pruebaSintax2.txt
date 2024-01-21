@@ -1,17 +1,10 @@
  function int func3(string b1){ @semantico string
-    local int prueba1 <= 56|
-    local int prueba2 <= 433|
-    local string comida1 <= "arroz"|
-    local string comida2 <= "pollo"|
-    local int bl1 <= prueba1 + prueba2|
-    local int bl4 <= comida1 + comida2|
-    local bool aguacate <= true|
-    local bool sinchona <= true|
-    local bool palmares <= aguacate # sinchona|
 
-   ++prueba2|
-   print(sisirve)|
-   read(true)|
+   local char dafsd[1]|
+
+   @++prueba2|
+   @print(sisirve)|
+   @read(true)|
    return bl1| @semantico
  }
 

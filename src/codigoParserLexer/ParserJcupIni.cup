@@ -73,7 +73,7 @@ scan with {: return lex.next_token(); :};
 terminal            EMPEZONAVIDAD, FESTIVAL, FIESTA, PERSONA, l_SANTA , l_SANTA_CLAUS, l_PAPANOEL, l_PASCUERO, l_COLACHO, ENTREGA, ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6;
 terminal            GRINCH, QUIEN, RODOLFO, COMETA, BAILARIN, CUPIDO, DONNER, DASHER, ELFO, HADA, DUENDE, ENVUELVE, ENVOLTURA, HACE, REVISA, ENVIA, CORTA, MELCHOR, GASPAR, BALTASAR, POLO;
 terminal            ABRECUENTO, CIERRACUENTO, ABREEMPAQUE, CIERRAEMPAQUE, ABREREGALO, CIERRAREGALO, FINREGALO, SANTACLAUS, PAPANOEL, SANNICOLAS, SINTERKLASS, VIEJITOPASCUERO, COLACHO;
-terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA, CUPIENTERO;
+terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA, CUPIENTERO, GALLETAQUIETA;
 
 /* No terminales */
 non terminal            poloNorte, navidad,t_santas, literales_navidenios, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
@@ -84,7 +84,7 @@ non terminal            decl_G, ayudaDefinirFuncionNavi, llamadaNavidenia, llama
 
 //Precedence
 precedence left RODOLFO, COMETA;
-precedence left BAILARIN, CUPIDO;
+precedence left BAILARIN, CUPIDO, CUPIENTERO;
 precedence left DONNER, DASHER;
 precedence left QUIEN, GRINCH;
 
@@ -109,38 +109,6 @@ literales_navidenios ::= l_SANTA:lst {:RESULT = lst + ":int";:}
                     | l_PASCUERO:lst {:RESULT = lst + ":float";:} 
                     | l_COLACHO:lst {:RESULT = lst + ":char";:};
 
-//print: print(operando);
-narraNavidad ::= NARRA ABRECUENTO operando:opernarra CIERRACUENTO FINREGALO
-                 {:
-                String[] partesOperando = opernarra.toString().split(":");
-                    if(partesOperando[1].equals("int")||partesOperando[1].equals("float") || partesOperando[1].equals("string")){
-                        RESULT = "dir:"+ partesOperando[1];
-                        System.out.println("tipo del read correcto");
-                    }else{
-                        RESULT = "dir:null";
-                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                ", columna " + (cur_token.right) +": "  + "Tipo del print erróneo, revise su tipo");
-                                RESULT = "dir:null"; 
-                    }
-                :}
-               ;
-                
-
-//read:  read(operando)|
-escuchaNavidad ::= ESCUCHA ABRECUENTO operando:operescucha CIERRACUENTO FINREGALO
-                {:
-                String[] partesOperando = operescucha.toString().split(":");
-                    if(partesOperando[1].equals("int")||(partesOperando[1].equals("float"))){
-                        RESULT = "dir:"+ partesOperando[1];
-                        System.out.println("tipo del read correcto");
-                    }else{
-                        RESULT = "dir:null";
-                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                ", columna " + (cur_token.right) +": "  + "Tipo del read erróneo");
-                                RESULT = "dir:null"; 
-                    }
-                :};
-
 //Tipos
 t_santas ::= SANTACLAUS:tst {:RESULT = tst;:}       //string,
             | PAPANOEL:tst {:RESULT = tst;:}        //int
@@ -149,26 +117,6 @@ t_santas ::= SANTACLAUS:tst {:RESULT = tst;:}       //string,
             | VIEJITOPASCUERO:tst {:RESULT = tst;:} //void
             | COLACHO:tst {:RESULT = tst;:}         //char
             | SANTACLAUSULA:tst {:RESULT = tst;:};  //bool
-
-
-//Return (Return operando;)
-envia ::= ENVIA operando:oper FINREGALO
-        {:
-            String[] partesOperando = oper.toString().split(":");
-                    // Se verifica si tipo de la variable
-                        if((partesOperando[1].equals("null") || partesOperando[1].equals("string"))){
-                           System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                ", columna " + (cur_token.right) +": "  + "Tipo de retorno de la función es nulo, revise si esa variable existe");
-                                RESULT = "dir:null"; 
-                        }else{ 
-                            RESULT = "dir:"+ partesOperando[1];
-                            //System.out.println("El tipo de retorno es: " + partesOperando[1]);
-                         }
-        :}
-        ;
-
-//Break (Break;)
-corta ::= CORTA FINREGALO;
 
 // Operadores de comparación
 elfos ::= ELFO1:elf {:RESULT = elf;:}// ==
@@ -181,58 +129,13 @@ elfos ::= ELFO1:elf {:RESULT = elf;:}// ==
 
 // Operadores aritméticos
 renos ::= COMETA:rn    {:RESULT = rn;:} // -
-         //| CUPIENTERO:rn {:RESULT = rn;:} // ? Esta es la que puse para la divisón entera
+         | CUPIENTERO:rn {:RESULT = rn;:} // // Esta es la que puse para la divisón entera/Así da shift reduce
          | RODOLFO:rn  {:RESULT = rn;:} // +
          | BAILARIN:rn {:RESULT = rn;:} // *
          | CUPIDO:rn   {:RESULT = rn;:} // /
          | DONNER:rn   {:RESULT = rn;:} // ~
          | DASHER:rn   {:RESULT = rn;:} // **
          ;
-
-//Encapsula todas las expresiones para que se puedan colocar dentro de las funciones
-poloNorte  ::=  decl_G 
-                | creaRegalo
-                | creaRegaloAssign
-                | narraNavidad:narra
-                {:
-                    String[] partesOperando = narra.toString().split(":");
-                    if(!(partesOperando[1].equals("null"))){
-                        RESULT = "dir:"+ partesOperando[1];
-                    }else{
-                        RESULT = "dir:null";
-                    }
-                :}
-                | estructura
-                | envia:env
-                {:
-                    String[] partesOperando = env.toString().split(":");
-                    if(!(partesOperando[1].equals("null"))){
-                        RESULT = "dir:"+ partesOperando[1];
-                    }else{
-                        RESULT = "dir:null";
-                    }
-                :}
-                | exprUni:prUni
-                {:
-                    String[] partesOperando = prUni.toString().split(":");
-                    if(!(partesOperando[1].equals("null"))){
-                        RESULT = "dir:"+ partesOperando[1];
-                    }else{
-                        RESULT = "dir:null";
-                    }
-                :}
-
-                | escuchaNavidad:escucha
-                {:
-                    String[] partesOperando = escucha.toString().split(":");
-                    if(!(partesOperando[1].equals("null"))){
-                        RESULT = "dir:"+ partesOperando[1];
-                    }else{
-                        RESULT = "dir:null";
-                    }
-                :}
-                | corta
-                | llamadaNavideniaAux;
 
 // Permite expresiones sin declaración (siempre dentro de la función)
 exprUni ::= exprP:pr FINREGALO
@@ -301,7 +204,7 @@ regaloprin ::= COMETA operando:oper3
                         RESULT = "dir:null";
                     }
                 }   
-                else if(rn.equals("?")){
+                else if(rn.equals("//")){
                     if(partesOperando1[1].equals(partesOperando2[1])){
                         if(partesOperando1[1].equals("int")){
                             System.out.println("Es división entera");
@@ -326,7 +229,7 @@ regaloprin ::= COMETA operando:oper3
                         }
                         else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                            ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos no son del tipo permitidos \n\t\t\t\t\t para las operaciones aritméticas: " + partesOperando1[1] + ", " + partesOperando2[1]);
+                            ", columna " + (cur_token.right) +": "  + "Los tipos de los operandos no son del tipo permitidos \n para las operaciones aritméticas: " + partesOperando1[1] + ", " + partesOperando2[1]);
                             RESULT = "dir:null";
                         }
                     }
@@ -336,7 +239,8 @@ regaloprin ::= COMETA operando:oper3
                         RESULT = "dir:null";
                         }
                     }     
-            :}            ;
+            :}  
+              ;
 
 //Operadores unarios ++, --
 unidadNavidenia ::= GRINCH:gr {:RESULT = gr;:}
@@ -358,12 +262,9 @@ grinchYQuien ::= unidadNavidenia operando:oper1
             ;
 
 
-
 //Expresiones relacionales
 exprRelAux ::= operando:oper1 elfos:elf operando:oper2
             {:
-            //System.out.println("Oper1 es:  "+ oper1);
-            //System.out.println("Oper2 es:  "+ oper2);
             String[] partesOperando1 = oper1.toString().split(":");
             String[] partesOperando2 = oper2.toString().split(":");
                 // Permite expresiones relacionales (==, !=) del mismo tipo, mientras que sean int, float y bool
@@ -430,8 +331,6 @@ exprRelLog ::= exprRelAux:relaux
             }
             :}
             ;
-
-
 
 //Operadores logicos      # | ^
 logisticadeNavidad ::= MELCHOR:mel {:RESULT = mel;:} 
@@ -510,6 +409,7 @@ operando ::= PERSONA:per
         ;
 
 //Declaracion de variable sin asignación
+//local tipo arroz|
 creaRegalo ::= POLO t_santas:tst PERSONA:per FINREGALO
                 {:
                     listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
@@ -524,7 +424,8 @@ creaRegalo ::= POLO t_santas:tst PERSONA:per FINREGALO
                 :}
                 ;
 
-// Declaración con asignación
+// Declaración de variable con asignación
+//local tipo arroz <= 14|
 creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREGALO
                 {:
                     listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
@@ -568,36 +469,156 @@ cuerpo ::= ABREREGALO CIERRAREGALO
         ;
 
 
-//arrays
+// Producción para la declaración inicial del array con |, pueden ser estáticas o no.
 //local int arr[3]|
-arrayDeclaration ::= POLO t_santas:tst PERSONA ABREEMPAQUE operando CIERRAEMPAQUE FINREGALO
-                    | error FINREGALO
+//local char arr[3]|
+//local static int array[2]|
+//local static char array[2]|
+arrayDeclaration ::= POLO t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE FINREGALO
+                    {:
+                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                        if(tst.equals("int")|| tst.equals("char")){  
+                            RESULT = "dir:"+tst;
+                        }
+                        else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de tipo char o int");
+                            RESULT = "dir:null";
+                        }
+                    :}
+                    | POLO GALLETAQUIETA:gaie t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE
+                    {:
+                     listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                        if(tst.equals("int")|| tst.equals("char")){  
+                            RESULT = "dir:"+tst;
+                        }
+                        else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de tipo char o int");
+                            RESULT = "dir:null";
+                        }
+                    :}
                     ;
 
 // Regla de inicialización de arrays
-//int arr[3] <= {a,b,3}|
-arrayInitialization ::= t_santas:tst 
-                        /*{: 
-                        String[] partesOperando = tst.toString().split(":"); 
-                        if(tst.equals("int")){
-                            System.out.println("tipo de iniciación de array permitido");
-                        }else{
-                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                             ", columna " + (cur_token.right) +":"  + "Tipo de iniciacióm de array no permitido:");
+//  local char arr[3] <= {a,b,3}|
+//  local int arr[3] <= {45,3,1}|
+//  static local char arr[3] <= {a,b,3}|
+//  static local int arr[3] <= {45,3,1}|
+arrayInitialization ::=  POLO t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones:lisexpr CIERRAREGALO FINREGALO
+                    {:
+                        listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                        String[] partesOperando = lisexpr.toString().split(":");
+                        if(tst.equals("int")){  
+                            if((partesOperando[1].equals("int"))){
+                                if(tst.equals(partesOperando[1])){
+                                    System.out.println("Tipo de array y contenido dentro de llaves parejo INT");
+                                    RESULT = "dir:"+ partesOperando[1];
+                                }else{
+                                    System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                    RESULT = "dir:null";
+                                }
+                            }else{
+                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
+                                RESULT = "dir:null";
+                            }
                         }
-                        :}*/
-                    PERSONA ABREEMPAQUE operando CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones CIERRAREGALO FINREGALO 
-                    | error FINREGALO
+                        else if(tst.equals("char")){
+                            if((partesOperando[1].equals("char"))){
+                                if(tst.equals(partesOperando[1])){
+                                    System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
+                                    RESULT = "dir:"+ partesOperando[1];
+                                }else{
+                                    System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                    RESULT = "dir:null";
+                                }
+                            }else{
+                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
+                                RESULT = "dir:null";
+                            }
+                        }
+                        else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de char o int");
+                            RESULT = "dir:null";
+                        }
+                    :} 
+                    | POLO GALLETAQUIETA:gaie t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones:lisexpr CIERRAREGALO FINREGALO
+                    {:
+                        listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
+                        String[] partesOperando = lisexpr.toString().split(":");
+                        if(tst.equals("int")){  
+                            if((partesOperando[1].equals("int"))){
+                                if(tst.equals(partesOperando[1])){
+                                    RESULT = "dir:"+ partesOperando[1];
+                                }else{
+                                    System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                    RESULT = "dir:null";
+                                }
+                            }else{
+                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
+                                RESULT = "dir:null";
+                            }
+                        }
+                        else if(tst.equals("char")){
+                            if((partesOperando[1].equals("char"))){
+                                if(tst.equals(partesOperando[1])){
+                                    System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
+                                    RESULT = "dir:"+ partesOperando[1];
+                                }else{
+                                    System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                    RESULT = "dir:null";
+                                }
+                            }else{
+                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
+                                RESULT = "dir:null";
+                            }
+                        }
+                        else{
+                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de char o int");
+                            RESULT = "dir:null";
+                        }
+                    :} 
                     ;
 
-
-listaExpresiones ::= operando
-                 | listaExpresiones MUERDAGO operando;
+// Regla para acompañar la asignación de arrays
+listaExpresiones ::= operando:oper1
+                {:
+                    String[] partesOperando = oper1.toString().split(":");
+                    if(partesOperando[1].equals("int")|| partesOperando[1].equals("char")){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":"  + "No llega cargado de ni de tipo int ni char");
+                        RESULT = "dir:null";
+                    }
+                :}
+                 | listaExpresiones:lsexpr MUERDAGO operando:oper2
+                 {:
+                    String[] partesOperando = oper2.toString().split(":");
+                    if(partesOperando[1].equals("int")|| partesOperando[1].equals("char")){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":"  + "No llega cargado de ni de tipo int ni char");
+                        RESULT = "dir:null";
+                    }
+                 :}
+                 ;
 
 //Acceso y asignacion array
 //arr[1] ó  arr[3] <= 4|
-accesoArray ::= PERSONA:per ABREEMPAQUE operando CIERRAEMPAQUE
-            | PERSONA:per ABREEMPAQUE operando CIERRAEMPAQUE ENTREGA operando FINREGALO
+accesoArray ::= PERSONA:per ABREEMPAQUE operando:oper1 CIERRAEMPAQUE
+            | PERSONA:per ABREEMPAQUE operando:oper2 CIERRAEMPAQUE ENTREGA operando:oper3 FINREGALO
             ;
 
 //Ciclos
@@ -654,7 +675,8 @@ llamadaNavidenia ::= PERSONA:per ABRECUENTO CIERRACUENTO
 
 llamadaNavideniaAux ::= llamadaNavidenia FINREGALO;
 
-// Parámetro: tipo identificador
+// Producción del parámetro para la función
+// tipo identificador
 ayudanteDeSanta ::= t_santas:tst PERSONA:per
                 {:
                 // Meterlo a la tabla de símbolos
@@ -668,6 +690,7 @@ ayudaDefFunNav ::= ayudanteDeSanta
 
 
 // Ayuda para la definición de funciones
+// function int func3
 ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per
                     {:
                         currentHash = per.toString();
@@ -683,7 +706,6 @@ ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per
 
                         // Se verifica si el valor de retorno es apropiado
                         if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
-                            //System.out.println("tipo de la función permitida");
                             RESULT = "dir:"+ tst;
                         }else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
@@ -693,7 +715,9 @@ ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per
                     :}
                     ;
 
-//function int func3() | function int func3(string b1)
+// Producción del cuerpo principal de la declaración de la función con parámetros y sin parámetros
+// function int func3( )
+// function int func3(int 1)
 definirFunNav ::=  ayudaDefinirFuncionNavi:defin ABRECUENTO CIERRACUENTO 
                 {:
                 String[] partesOperando = defin.toString().split(":");
@@ -711,19 +735,156 @@ definirFunNav ::=  ayudaDefinirFuncionNavi:defin ABRECUENTO CIERRACUENTO
 
 // Definición completa de la función
 bolsanavidenia ::= definirFunNav:defin
-                //{:System.out.println("es ayudafed: "+defin);:}
-                | definirFunNav:defin cuerpo:cuer
-                
                 {:
-                //System.out.println("es ayudafed: "+defin);
-                //System.out.println("es cuerpo: "+ cuer);
+                 String[] partesOperando1 = defin.toString().split(":");
+                 RESULT = "dir:" + partesOperando1[1];
+                :}
+                | definirFunNav:defin cuerpo:cuer               
+                {:
                 String[] partesOperando1 = defin.toString().split(":");
                 String[] partesOperando2 = cuer.toString().split(":");
                 if(!(partesOperando1[1].equals(partesOperando2[1]))){
                     System.out.println("Error Semántico: El retorno de la función no cumple con su tipo esperado de salida");
+                    RESULT = "dir:" + partesOperando1[1];
                 }
                 :};
 
+// Producción del return 
+//Return (Return operando;)
+envia ::= ENVIA operando:oper FINREGALO
+        {:
+            String[] partesOperando = oper.toString().split(":");
+                    // Se verifica si tipo de la variable
+                        if((partesOperando[1].equals("null") || partesOperando[1].equals("string"))){
+                           System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo de retorno de la función es nulo, revise si esa variable existe");
+                                RESULT = "dir:null"; 
+                        }else{ 
+                            RESULT = "dir:"+ partesOperando[1];
+                            //System.out.println("El tipo de retorno es: " + partesOperando[1]);
+                         }
+        :}
+        ;
+
+// Producción del break
+//Break (Break;)
+corta ::= CORTA FINREGALO;
+
+// Producción del print
+// print: print(operando);
+// Sólo puede imprimir literales y operandos de tipo int, float y string
+narraNavidad ::= NARRA ABRECUENTO operando:opernarra CIERRACUENTO FINREGALO
+                 {:
+                String[] partesOperando = opernarra.toString().split(":");
+                    if(partesOperando[1].equals("int")||partesOperando[1].equals("float") || partesOperando[1].equals("string")){
+                        RESULT = "dir:"+ partesOperando[1];
+                        System.out.println("tipo del read correcto");
+                    }else{
+                        RESULT = "dir:null";
+                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo del print erróneo, revise su tipo");
+                                RESULT = "dir:null"; 
+                    }
+                :}
+               ;
+                
+
+// Producción del read
+// read(operando)|
+// Sólo puede leer operandos y literales de tipo int y float
+escuchaNavidad ::= ESCUCHA ABRECUENTO operando:operescucha CIERRACUENTO FINREGALO
+                {:
+                String[] partesOperando = operescucha.toString().split(":");
+                    if(partesOperando[1].equals("int")||(partesOperando[1].equals("float"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                        System.out.println("tipo del read correcto");
+                    }else{
+                        RESULT = "dir:null";
+                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo del read erróneo");
+                                RESULT = "dir:null"; 
+                    }
+                :}
+                ;
+
+
+//Encapsula todas las expresiones para que se puedan colocar dentro de las funciones
+poloNorte  ::=  decl_G 
+                | creaRegalo
+                | creaRegaloAssign
+                | narraNavidad:narra
+                {:
+                    String[] partesOperando = narra.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                :}
+                | estructura
+                | envia:env
+                {:
+                    String[] partesOperando = env.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                :}
+                | exprUni:prUni
+                {:
+                    String[] partesOperando = prUni.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                :}
+
+                | escuchaNavidad:escucha
+                {:
+                    String[] partesOperando = escucha.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                :}
+                | corta
+                | llamadaNavideniaAux;
+
+// Varias expresiones
+regalo ::= poloNorte:poli1 
+            {:
+                if (poli1 != null) {
+                    RESULT = poli1;
+                } else {
+                    RESULT = "dir:null";
+                }
+            :}    
+            | regalo:reg poloNorte:poli2
+            {:
+                RESULT = poli2;
+            :} 
+            | arrayInitialization:arz
+            {:
+                if (arz != null) {
+                    RESULT = arz;
+                } else {
+                    RESULT = "dir:null";
+                }
+            :}
+            | arrayDeclaration:ard
+            {:
+                if (ard != null) {
+                    RESULT = ard;
+                } else {
+                    RESULT = "dir:null";
+                }
+            :}
+            ;
+
+// Varias funciones juntas
 pbolsanavideniaAux ::=  bolsanavidenia
                     | pbolsanavideniaAux bolsanavidenia;
 
@@ -752,24 +913,6 @@ entregaRegalos ::= {:
                     :};
 */
 
-//Produccion de expresiones
-regalo ::= poloNorte:poli1 
-            {:
-                if (poli1 != null) {
-                    //System.out.println("esto es poli1:" + poli1);
-                    RESULT = poli1;
-                } else {
-                    //System.out.println("poli1 es null");
-                    RESULT = "dir:null";
-                }
-            :}    
-            | regalo:reg poloNorte:poli2
-            {:
-                //System.out.println("esto es regalo:" + reg);
-                //System.out.println("esto es poli2:" + poli2);
-                RESULT = poli2;
-            :} 
-            ;
 
 antartica ::= bolsanavidenia | poloNorte;
 

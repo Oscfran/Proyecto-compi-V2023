@@ -92,13 +92,14 @@ char = "'" {InputCharacter} "'"
   "float"                        { return symbol(sym.SANNICOLAS, yytext());}
   "double"                       { return symbol(sym.SINTERKLASS, yytext());}
   "void"                         { return symbol(sym.VIEJITOPASCUERO, yytext());}
+  "static"                       { return symbol(sym.GALLETAQUIETA, yytext());}
   
   
   /* operadores comparación*/
-  "=="                           { return symbol(sym.ELFO1, yytext()); }
-  "!="                           { return symbol(sym.ELFO2, yytext()); }
-  ">"                            { return symbol(sym.ELFO3, yytext()); }
-  "<"                            { return symbol(sym.ELFO4, yytext()); }
+  "=="                           { return symbol(sym.ELFO1, yytext());}
+  "!="                           { return symbol(sym.ELFO2, yytext());}
+  ">"                            { return symbol(sym.ELFO3, yytext());}
+  "<"                            { return symbol(sym.ELFO4, yytext());}
   "=>"                           { return symbol(sym.ELFO5, yytext());}
   "=<"                           { return symbol(sym.ELFO6, yytext());}
 
@@ -116,7 +117,7 @@ char = "'" {InputCharacter} "'"
   "-"                            { return symbol(sym.COMETA, yytext()); }
   "*"                            { return symbol(sym.BAILARIN, yytext());}
   "/"                            { return symbol(sym.CUPIDO, yytext()); }
-  "?"                            { return symbol(sym.CUPIENTERO, yytext());} // PARA DIVISIÓN ENTERA
+  "//"                           { return symbol(sym.CUPIENTERO, yytext());} // PARA DIVISIÓN ENTERA
   "~"                            { return symbol(sym.DONNER, yytext()); }
   "**"                           { return symbol(sym.DASHER, yytext()); }
 
