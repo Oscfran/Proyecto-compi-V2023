@@ -863,7 +863,7 @@ class CUP$parser$actions {
                     }else{
                         RESULT = "dir:null";
                         System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                ", columna " + (cur_token.right) +": "  + "Tipo del print erróneo");
+                                ", columna " + (cur_token.right) +": "  + "Tipo del print erróneo, revise su tipo");
                                 RESULT = "dir:null"; 
                     }
                 
@@ -1471,10 +1471,13 @@ class CUP$parser$actions {
 		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
             String[] partesOperando = oper1.toString().split(":");
-            if(partesOperando[1] != "null"){
+            if(partesOperando[1].equals("int")){
                 RESULT = "dir:"+partesOperando[1];  
             }else{
                 RESULT = "dir:null";
+                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                            ", columna " + (cur_token.right) +": "  + "El tipo para su unario no es correcto");
+                        RESULT = "dir:null";
             }
             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("grinchYQuien",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

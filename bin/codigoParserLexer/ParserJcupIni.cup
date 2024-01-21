@@ -342,13 +342,17 @@ regaloprin ::= COMETA operando:oper3
 unidadNavidenia ::= GRINCH:gr {:RESULT = gr;:}
                  | QUIEN:qn {:RESULT = qn;:};
 
+// ++i, ++persona, --persona
 grinchYQuien ::= unidadNavidenia operando:oper1
             {:
             String[] partesOperando = oper1.toString().split(":");
-            if(partesOperando[1] != "null"){
+            if(partesOperando[1].equals("int")){
                 RESULT = "dir:"+partesOperando[1];  
             }else{
                 RESULT = "dir:null";
+                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                            ", columna " + (cur_token.right) +": "  + "El tipo para su unario no es correcto");
+                        RESULT = "dir:null";
             }
             :}
             ;

@@ -93,6 +93,7 @@ char = "'" {InputCharacter} "'"
   "double"                       { return symbol(sym.SINTERKLASS, yytext());}
   "void"                         { return symbol(sym.VIEJITOPASCUERO, yytext());}
   
+  
   /* operadores comparación*/
   "=="                           { return symbol(sym.ELFO1, yytext()); }
   "!="                           { return symbol(sym.ELFO2, yytext()); }
