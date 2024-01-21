@@ -110,7 +110,19 @@ literales_navidenios ::= l_SANTA:lst {:RESULT = lst + ":int";:}
                     | l_COLACHO:lst {:RESULT = lst + ":char";:};
 
 //print: print(operando);
-narraNavidad ::= NARRA ABRECUENTO operando:oper CIERRACUENTO FINREGALO
+narraNavidad ::= NARRA ABRECUENTO operando:opernarra CIERRACUENTO FINREGALO
+                 {:
+                String[] partesOperando = opernarra.toString().split(":");
+                    if(partesOperando[1].equals("int")||partesOperando[1].equals("float") || partesOperando[1].equals("string")){
+                        RESULT = "dir:"+ partesOperando[1];
+                        System.out.println("tipo del read correcto");
+                    }else{
+                        RESULT = "dir:null";
+                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo del print erróneo, revise su tipo");
+                                RESULT = "dir:null"; 
+                    }
+                :}
                ;
                 
 
@@ -169,7 +181,7 @@ elfos ::= ELFO1:elf {:RESULT = elf;:}// ==
 
 // Operadores aritméticos
 renos ::= COMETA:rn    {:RESULT = rn;:} // -
-         //| CUPIENTERO:rn {:RESULT = rn;:} // ?
+         //| CUPIENTERO:rn {:RESULT = rn;:} // ? Esta es la que puse para la divisón entera
          | RODOLFO:rn  {:RESULT = rn;:} // +
          | BAILARIN:rn {:RESULT = rn;:} // *
          | CUPIDO:rn   {:RESULT = rn;:} // /
@@ -181,7 +193,15 @@ renos ::= COMETA:rn    {:RESULT = rn;:} // -
 poloNorte  ::=  decl_G 
                 | creaRegalo
                 | creaRegaloAssign
-                | narraNavidad 
+                | narraNavidad:narra
+                {:
+                    String[] partesOperando = narra.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                :}
                 | estructura
                 | envia:env
                 {:

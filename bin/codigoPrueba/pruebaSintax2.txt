@@ -9,6 +9,7 @@
     local bool sinchona <= true|
     local bool palmares <= aguacate # sinchona|
 
+   print(sisirve)|
    read(true)|
    return bl1| @semantico
  }

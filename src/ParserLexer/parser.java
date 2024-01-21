@@ -852,10 +852,21 @@ class CUP$parser$actions {
           case 6: // narraNavidad ::= NARRA ABRECUENTO operando CIERRACUENTO FINREGALO 
             {
               Object RESULT =null;
-		int operleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
-		int operright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
-		Object oper = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
-
+		int opernarraleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int opernarraright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		Object opernarra = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		
+                String[] partesOperando = opernarra.toString().split(":");
+                    if(partesOperando[1].equals("int")||partesOperando[1].equals("float") || partesOperando[1].equals("string")){
+                        RESULT = "dir:"+ partesOperando[1];
+                        System.out.println("tipo del read correcto");
+                    }else{
+                        RESULT = "dir:null";
+                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +": "  + "Tipo del print erróneo");
+                                RESULT = "dir:null"; 
+                    }
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("narraNavidad",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1174,7 +1185,17 @@ class CUP$parser$actions {
           case 32: // poloNorte ::= narraNavidad 
             {
               Object RESULT =null;
-
+		int narraleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int narraright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object narra = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		
+                    String[] partesOperando = narra.toString().split(":");
+                    if(!(partesOperando[1].equals("null"))){
+                        RESULT = "dir:"+ partesOperando[1];
+                    }else{
+                        RESULT = "dir:null";
+                    }
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("poloNorte",0, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
