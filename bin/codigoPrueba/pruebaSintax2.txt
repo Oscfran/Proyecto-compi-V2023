@@ -1,26 +1,80 @@
  function int func3(string b1){ @semantico string
 
-  local char dafsd[1]|
+  local int a <= 102|
+  local int b <= 102|
+  local int c <= 102|
+
+  @local static char dafsd[1]|
+
+  @local static int qwre[3] <= {a, b, c}|
+  @local char dAS[3] <= {'a', 'n', 'c'}|
+  @local char dafs[3] <= {'a', 'n', 2}|@error semantico tipo erroneo
+
+
+  local char abc <= 'a'|
   local int prueba2 <= (102)+(104)|
+  @xyz <= 12|@error semantico variable no existente
+
+
+  @Unarios
   --prueba2|
+  ++prueba2|
+  @++prueba5|@error semantico no declarado
+  @++abc|@error semantico tipo incorrecto
+
   local int prueba3 <= 102|
   local int prueba4 <= 102|
+  @local int prueba5 <= 102.5|@error semantico
 
-   @print(sisirve)|
-   @read(true)|
+   @print(nosirve)|@error semantico
+   print("sisirve")|
+   read(prueba2)|
 
    local int i|
+   i <= 1|
    do {i+1000|} until(i < 10 + 20)|
 
-  local int SIRVAPORDIOS <= 20|
+  local int sirve <= 20|
 
-    if(i + SIRVAPORDIOS){
-      local int acomodarselapinga <= 3484|
-    }
-
-   return bl1| @semantico
+  if(i > sirve + 12){
+      local int acomodar <= 3484|
+  }
+  elif(i =< sirve + 16){
+    print("hola")|
+  }
+  elif(i != sirve + 20){
+    print("hola2")|
+  }
+  else{
+    break|
+  }
+   return prueba2| @semantico
  }
 
+ /_function int after(){
+       do{
+           print("do While")|
+       }until (true)|
+ }_/@error semantico funcion de tipo string
 
-
- 
+  function int sad(){ @function
+  /_
+  Comentario 1
+  _/ 
+  @comentario 2
+      local int b1|
+      local int in1|
+      in1 <= 4|
+      local float s1|
+      read(s1)| @semantico
+      print(b1)| @semantico
+      print("true")| @semantico
+      hola()|
+      adios('a',b)|
+      print(-6.7)|
+      miFunc(miFunc(),'a')| @semantico miFunc, hola
+      local bool bl0 <= true| @ok
+      local int bl1 <= in1 - 3 * (1-3)**2|
+      @local int bl2 <= in1 - 3 * (1-3)**2 + after()|@error semantico si la funcion sigue comentada por no existir
+      return bl1| @semantico
+  }

@@ -523,8 +523,8 @@ arrayDeclaration ::= POLO t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERR
 // Regla de inicialización de arrays
 //  local char arr[3] <= {a,b,3}|
 //  local int arr[3] <= {45,3,1}|
-//  static local char arr[3] <= {a,b,3}|
-//  static local int arr[3] <= {45,3,1}|
+//  local static char arr[3] <= {a,b,3}|
+//  local static int arr[3] <= {45,3,1}|
 arrayInitialization ::=  POLO t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones:lisexpr CIERRAREGALO FINREGALO
                     {:
                         listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());

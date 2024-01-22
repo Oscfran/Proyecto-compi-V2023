@@ -69,7 +69,7 @@ char = "'" {InputCharacter} "'"
 
   /* Literales flotante */
   {DecIntegerLiteral} "." {Digits}   { return symbol(sym.l_PASCUERO, yytext()); }
-  "0" "." {Digits}
+  "0" "." {Digits}                   { return symbol(sym.l_PASCUERO, yytext()); }
 
 
   /* Estructuras de control */
