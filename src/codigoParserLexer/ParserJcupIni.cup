@@ -506,7 +506,7 @@ arrayDeclaration ::= POLO t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERR
                             RESULT = "dir:null";
                         }
                     :}
-                    | POLO GALLETAQUIETA:gaie t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE
+                    | POLO GALLETAQUIETA:gaie t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE FINREGALO
                     {:
                      listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
                         if(tst.equals("int")|| tst.equals("char")){  
@@ -859,13 +859,28 @@ poloNorte  ::=  decl_G
                         RESULT = "dir:null";
                     }
                 :}
-
                 | escuchaNavidad:escucha
                 {:
                     String[] partesOperando = escucha.toString().split(":");
                     if(!(partesOperando[1].equals("null"))){
                         RESULT = "dir:"+ partesOperando[1];
                     }else{
+                        RESULT = "dir:null";
+                    }
+                :}
+                | arrayInitialization:arz
+                {:
+                    if (arz != null) {
+                        RESULT = arz;
+                    } else {
+                        RESULT = "dir:null";
+                    }
+                :}
+                | arrayDeclaration:ard
+                {:
+                    if (ard != null) {
+                        RESULT = ard;
+                    } else {
                         RESULT = "dir:null";
                     }
                 :}
@@ -886,22 +901,6 @@ regalo ::= poloNorte:poli1
             {:
                 RESULT = poli2;
             :} 
-            | arrayInitialization:arz
-            {:
-                if (arz != null) {
-                    RESULT = arz;
-                } else {
-                    RESULT = "dir:null";
-                }
-            :}
-            | arrayDeclaration:ard
-            {:
-                if (ard != null) {
-                    RESULT = ard;
-                } else {
-                    RESULT = "dir:null";
-                }
-            :}
             | error FINREGALO
             ;
 

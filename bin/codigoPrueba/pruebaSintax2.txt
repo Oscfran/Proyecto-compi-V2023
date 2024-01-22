@@ -4,10 +4,11 @@
   local int b <= 102|
   local int c <= 102|
 
-  @local static char dafsd[1]|
+  local char sdygf[12]|
+  local static char dafsd[1]|
 
-  @local static int qwre[3] <= {a, b, c}|
-  @local char dAS[3] <= {'a', 'n', 'c'}|
+  local static int qwre[3] <= {a, b, c}|
+  local char dAS[3] <= {'a', 'n', 'c'}|
   @local char dafs[3] <= {'a', 'n', 2}|@error semantico tipo erroneo
 
 
