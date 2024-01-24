@@ -1687,15 +1687,28 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        if(!(tst.equals("null"))){
-                            //System.out.println("Bien declarada la variable sin asignación");
-                            RESULT = "dir:"+ tst;
-                        }else{
-                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                            ", columna " + (cur_token.right) + " Mal declarada la variable sin asignación");
-                            RESULT = "dir:null";
-                        }
+                ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                String nuevaVariableLocal = "tipo:Local:" + per.toString() + ":" + tst.toString();
+
+                // Verificar si la variable local ya existe en la lista
+                if (!detallesFuncion.contains(nuevaVariableLocal)) {
+                    // Añadir la nueva variable local si no existe
+                    detallesFuncion.add(nuevaVariableLocal);
+
+                    if (!(tst.equals("null"))) {
+                        // Variable bien declarada
+                        RESULT = "dir:" + tst;
+                    } else {
+                        // Error si el tipo es 'null'
+                        System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                           ", columna " + (cur_token.right) + " Mal declarada la variable sin asignación");
+                        RESULT = "dir:null";
+                    }
+                } else {
+                    // Error si la variable local ya fue declarada
+                    System.err.println("Error semántico: Variable '" + per.toString() + "' ya declarada en el ámbito actual.");
+                    RESULT = "dir:null";
+                }
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("creaRegalo",18, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1715,26 +1728,39 @@ class CUP$parser$actions {
 		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                    String[] partesOperando = oper1.toString().split(":");
+                ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                String nuevaVariableLocal = "tipo:Local:" + per.toString() + ":" + tst.toString();
+                String[] partesOperando = oper1.toString().split(":");
 
-                    // Se verifica su tipo de la variable
-                        if(!(tst.equals("null"))){
-                            //System.out.println("tipo de la variable permitido");
-                            if(tst.equals(partesOperando[1])){
-                                //System.out.println("La variable coincide con su asignación");
-                                RESULT = "dir:"+ tst;
-                            }
-                            else{
-                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                ", columna " + (cur_token.right) +":"  + " Tipo de la variable no coincide con su tipo de asignación");
-                                RESULT = "dir:null";
-                            }
-                        }else{
+                // Verificar si la variable local ya existe en la lista
+                if (!detallesFuncion.contains(nuevaVariableLocal)) {
+                    // Añadir la nueva variable local si no existe
+                    detallesFuncion.add(nuevaVariableLocal);
+
+                    // Se verifica el tipo de la variable
+                    if (!(tst.equals("null"))) {
+                        if (tst.equals(partesOperando[1])) {
+                            // El tipo de la variable coincide con su asignación
+                            RESULT = "dir:" + tst;
+                        } else {
+                            // Error si el tipo de la variable no coincide con el tipo de su asignación
                             System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo de la variable vacía");
+                                               ", columna " + (cur_token.right) + ":" + 
+                                               " Tipo de la variable no coincide con su tipo de asignación");
                             RESULT = "dir:null";
                         }
+                    } else {
+                        // Error si el tipo es 'null'
+                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                           ", columna " + (cur_token.right) + ":" + 
+                                           " Tipo de la variable vacía");
+                        RESULT = "dir:null";
+                    }
+                } else {
+                    // Error si la variable local ya fue declarada
+                    System.err.println("Error semántico: Variable '" + per.toString() + "' ya declarada en el ámbito actual.");
+                    RESULT = "dir:null";
+                }
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("creaRegaloAssign",29, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -2276,8 +2302,14 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                // Meterlo a la tabla de símbolos
-                listaTablaSimbolos.get(currentHash).add("tipo:param:" + per.toString()+":"+ tst.toString());
+                ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                String nuevoParametro = "tipo:param:" + per.toString() + ":" + tst.toString();
+
+                // Verificar si el parámetro ya existe en la lista
+                if (!detallesFuncion.contains(nuevoParametro)) {
+                    // Añadir el nuevo parámetro si no existe
+                    detallesFuncion.add(nuevoParametro);
+                }
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ayudanteDeSanta",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
