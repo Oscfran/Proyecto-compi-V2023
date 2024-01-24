@@ -1749,11 +1749,13 @@ class CUP$parser$actions {
 		int regright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object reg = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-            String[] partesOperando = reg.toString().split(":");
-            if(!(partesOperando[1].equals("null"))){
-                RESULT = "dir:"+ partesOperando[1];
-            }else{
-                RESULT = "dir:null";
+            if(reg != null){
+                String[] partesOperando = reg.toString().split(":");
+                if(!(partesOperando[1].equals("null"))){
+                    RESULT = "dir:"+ partesOperando[1];
+                }else{
+                    RESULT = "dir:null";
+                }
             }
         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("cuerpo",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

@@ -479,11 +479,13 @@ decl_G ::= PERSONA ENTREGA operando FINREGALO;
 cuerpo ::= ABREREGALO CIERRAREGALO
         | ABREREGALO regalo:reg CIERRAREGALO
         {:
-            String[] partesOperando = reg.toString().split(":");
-            if(!(partesOperando[1].equals("null"))){
-                RESULT = "dir:"+ partesOperando[1];
-            }else{
-                RESULT = "dir:null";
+            if(reg != null){
+                String[] partesOperando = reg.toString().split(":");
+                if(!(partesOperando[1].equals("null"))){
+                    RESULT = "dir:"+ partesOperando[1];
+                }else{
+                    RESULT = "dir:null";
+                }
             }
         :}
         ;
