@@ -5,12 +5,16 @@ import java_cup.runtime.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 action code {:
 
     // Definición del HashMap
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
+    String codigoMIPS = "";
      
     // Función para imprimir la tabla de símbolos
     public void imprimirTablaSimbolos(){
@@ -36,6 +40,17 @@ action code {:
             }
         }
         return tipo;
+    }
+    // Generación de código MIPS
+    public void generarCodigoMIPS(String codigo){
+        codigoMIPS += codigo;
+    }
+
+    // Función para escribir el código MIPS en un archivo
+    public void escribirCodigoMIPSEnArchivo() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("src\\resultadoASM\\salida.asm"));
+        writer.write(codigoMIPS);
+        writer.flush();
     }
 :}
 
@@ -950,6 +965,7 @@ navidad ::= {:
                 pbolsanavideniaAux
                 {:
                 imprimirTablaSimbolos();
+                escribirCodigoMIPSEnArchivo();
                 System.out.println("Termina el asunto");
                 :};
 

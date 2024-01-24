@@ -5,12 +5,16 @@ import java_cup.runtime.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 action code {:
 
     // Definición del HashMap
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
+    String codigoMIPS = "";
      
     // Función para imprimir la tabla de símbolos
     public void imprimirTablaSimbolos(){
@@ -36,6 +40,17 @@ action code {:
             }
         }
         return tipo;
+    }
+    // Generación de código MIPS
+    public void generarCodigoMIPS(String codigo){
+        codigoMIPS += codigo;
+    }
+
+    // Función para escribir el código MIPS en un archivo
+    public void escribirCodigoMIPSEnArchivo() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("src\\resultadoASM\\salida.asm"));
+        writer.write(codigoMIPS);
+        writer.flush();
     }
 :}
 
@@ -712,41 +727,59 @@ ayudaDefFunNav ::= ayudanteDeSanta
 // Ayuda para la definición de funciones
 // function int func3
 ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per 
+                    
                     {:
-                        currentHash = per.toString();
-                        String tipoTabla = "main";
-                        tipoTabla = "tipo:function:"+tst.toString();
-                        ArrayList<String> funcionMain = new ArrayList<String>();
-                        funcionMain.add(tipoTabla);
-                        listaTablaSimbolos.put(currentHash, funcionMain);
+                        if (!listaTablaSimbolos.containsKey(per.toString())) {
+                            // La función no existe, entonces se agrega
+                            currentHash = per.toString();
+                            String tipoTabla = "tipo:function:" + tst.toString();
+                            ArrayList<String> funcionMain = new ArrayList<String>();
+                            funcionMain.add(tipoTabla);
+                            listaTablaSimbolos.put(currentHash, funcionMain);
 
-                        // Se verifica si el valor de retorno es apropiado
-                        if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
-                            RESULT = "dir:"+ tst;
-                        }else{
+                            // Se verifica si el valor de retorno es apropiado
+                            if ((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))) {
+                                RESULT = "dir:"+tst;
+                            } else {
+                                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                                ", columna " + (cur_token.right) + ": Este tipo de función no es permitido: " + tst);
+                                RESULT = "dir:null";
+                            }
+                        } else {
+                            // La función ya existe, se muestra un mensaje de error
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                             ", columna " + (cur_token.right) +": "  + "Este tipo de función no es permitido: "+ tst);
-                             RESULT = "dir:null";
+                                            ", columna " + (cur_token.right) + ": Esta función ya existe con este nombre");
+                            RESULT = "dir:null";     
                         }
                     :}
+
                     | EMPEZONAVIDAD t_santas:tst ENTREGAREGALOS:per
-                    {:
-                        currentHash = per.toString();
-                        String tipoTabla = "main";
-                        tipoTabla = "tipo:main:"+tst.toString();
-                        ArrayList<String> funcionMain = new ArrayList<String>();
-                        funcionMain.add(tipoTabla);
-                        listaTablaSimbolos.put(currentHash, funcionMain);
 
-                        // Se verifica si el valor de retorno es apropiado
-                        if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
-                            RESULT = "dir:"+ tst;
-                        }else{
+                    {:
+                        if (listaTablaSimbolos.containsKey("main")) {
+                            // Si ya existe un 'main', se muestra un mensaje de error
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                             ", columna " + (cur_token.right) +": "  + "Este tipo de función no es permitido: "+ tst);
-                             RESULT = "dir:null";
+                                            ", columna " + (cur_token.right) + ": Solo puede haber un 'main' en el programa");
+                            RESULT = "dir:null"; 
+                        } else {
+                            // Si no existe un 'main', se agrega a la tabla de símbolos
+                            currentHash = per.toString(); 
+                            String tipoTabla = "tipo:main:" + tst.toString();
+                            ArrayList<String> funcionMain = new ArrayList<String>();
+                            funcionMain.add(tipoTabla);
+                            listaTablaSimbolos.put(currentHash, funcionMain);
+
+                            // Se verifica si el valor de retorno es apropiado
+                            if ((tst.equals("int"))) {
+                                RESULT = "dir:" + tst;
+                            } else {
+                                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                                ", columna " + (cur_token.right) + ": Este tipo de función no es permitido: " + tst);
+                                RESULT = "dir:null";
+                            }
                         }
                     :}
+
                     ;
 
 // Producción del cuerpo principal de la declaración de la función con parámetros y sin parámetros
@@ -932,6 +965,7 @@ navidad ::= {:
                 pbolsanavideniaAux
                 {:
                 imprimirTablaSimbolos();
+                escribirCodigoMIPSEnArchivo();
                 System.out.println("Termina el asunto");
                 :};
 

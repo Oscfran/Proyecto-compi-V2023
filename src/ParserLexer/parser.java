@@ -9,6 +9,9 @@ import java_cup.runtime.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -787,6 +790,7 @@ class CUP$parser$actions {
     // Definición del HashMap
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
+    String codigoMIPS = "";
      
     // Función para imprimir la tabla de símbolos
     public void imprimirTablaSimbolos(){
@@ -812,6 +816,17 @@ class CUP$parser$actions {
             }
         }
         return tipo;
+    }
+    // Generación de código MIPS
+    public void generarCodigoMIPS(String codigo){
+        codigoMIPS += codigo;
+    }
+
+    // Función para escribir el código MIPS en un archivo
+    public void escribirCodigoMIPSEnArchivo() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("src\\resultadoASM\\salida.asm"));
+        writer.write(codigoMIPS);
+        writer.flush();
     }
 
   private final parser parser;
@@ -2781,6 +2796,7 @@ class CUP$parser$actions {
                 RESULT = (Object) ((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
                 imprimirTablaSimbolos();
+                escribirCodigoMIPSEnArchivo();
                 System.out.println("Termina el asunto");
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("navidad",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
