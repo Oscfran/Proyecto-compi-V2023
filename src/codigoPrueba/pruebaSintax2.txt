@@ -1,14 +1,86 @@
-function int pan(int arroz){
-	local int pruebareturn <= 10|
-	local int jsjsjsj <= 10|
-	local char jsjsjsj <= '2'|
-	return pruebareturn|
- }
-  function int main(int ajiji){
+
+   function int main(int ajiji){
 
 	local int jsjsjsj <= 10|
-	local char jsjsjsj <= '2'|
 	return jsjsjsj|
  }
 
+ function float func1(){
+	x <= 1.2| @semantico
+	local char y|
+	local char y| @semantico
+	local char a <= -23 + -24| @semantico
+	local int b <= 2.3 ** 2.4| @semantico
+	local float c <= 5 ~ 6| @semantico
+	local string d <= 50 / 60| @semantico
+	local bool e <= "hola" + false|
+	print("entra func 1")| 
+	@semantico no hay return
+ } 
 
+@funcion repetida
+function float func1(char x22,char x22){@semantico borrar parametro
+	local char x22 <= '!'| @semantico x22
+	local char miChar<='!'|
+	local string str1<= "Hola $%&/#$&) mundo"|
+	local float fl1|
+	local float fl1<=56.6| @semantico fl1
+	local int in1<= false| @semantico
+	local char arr[20]|
+	local char arr2[20]|
+	local int comida|
+	local int nani|
+	local bool mibool <= comida < nani|
+	return -5.6|@cambio en retorno genera semantico
+
+} 
+
+function float miFunc(int dif,char otra,char otra2){
+	local int i|	
+	for(i <= 10,i<30*2,++i)@semantico i
+	{
+		do{
+			var <= var - 1| @semantico
+			print("do")|
+		}until( (34+33)>12)| @semantico
+
+		if (var==0){
+			print("entra al if")|
+			break|
+		}
+		elif(1)@semántico
+		{
+			print("entra a elif")|
+		}
+		else
+		{
+			local int j|
+			local int k|
+			for(j <= 10,j<30*2,++j){
+				for(k <= 10,k<30*2,++k){
+					print("entra al for anidado")|
+				}
+			}
+		}
+		local float varF|
+		if (varF==0.1){@semantico
+			break|
+		} elif(true) {
+			print("segundo elif")|
+		}
+	}
+	return 1| @semantico
+}
+
+function int mainprofe(){ @function
+	
+@comentario 2
+	local bool b1|
+	local string s1|
+	read(s1)| @semantico
+	print(b1)| @semantico
+	print(true)| @semantico
+	print(-6.7)|
+	print("final")|
+	return bl1| @semantico
+}
