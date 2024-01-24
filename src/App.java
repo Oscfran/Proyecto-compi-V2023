@@ -89,6 +89,7 @@ public class App {
         ejecutar las pruebas en la primera pasada los cambio no se han guardado y dirá que tiene errores o directamente no se mostraran los cambios, 
         pero en la segunda ejecución ya no estarán dichos errores)*/
 
+        
         //generarLexerParser();
         pruebasLexerParser();
 

@@ -1838,15 +1838,27 @@ class CUP$parser$actions {
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        if(tst.equals("int")|| tst.equals("char")){  
-                            RESULT = "dir:"+tst;
-                        }
-                        else{
+                    ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                    String nombreArray = "tipo:Local:" + per.toString() + ":" + tst.toString();
+
+                    // Verificar si el nombre del arreglo ya existe en la lista
+                    if (!detallesFuncion.contains(nombreArray)) {
+                        // Añadir el nuevo arreglo si no existe
+                        detallesFuncion.add(nombreArray);
+
+                        if (tst.equals("int") || tst.equals("char")) {
+                            RESULT = "dir:" + tst;
+                        } else {
                             System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de tipo char o int");
+                                               ", columna " + (cur_token.right) + ":" + 
+                                               "Tipo de iniciación de array incorrecto, sólo puede ser de tipo char o int");
                             RESULT = "dir:null";
                         }
+                    } else {
+                        // Error si el arreglo ya fue declarado
+                        System.err.println("Error semántico: Arreglo '" + per.toString() + "' ya declarado en el ámbito actual.");
+                        RESULT = "dir:null";
+                    }
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayDeclaration",47, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1869,15 +1881,25 @@ class CUP$parser$actions {
 		int lstright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object lst = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-                     listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        if(tst.equals("int")|| tst.equals("char")){  
-                            RESULT = "dir:"+tst;
-                        }
-                        else{
+                    ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                    String nombreArray = "tipo:Local:" + per.toString() + ":" + tst.toString();
+
+                    // La misma verificación y lógica para la otra opción de declaración de arreglo
+                    if (!detallesFuncion.contains(nombreArray)) {
+                        detallesFuncion.add(nombreArray);
+
+                        if (tst.equals("int") || tst.equals("char")) {
+                            RESULT = "dir:" + tst;
+                        } else {
                             System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de tipo char o int");
+                                               ", columna " + (cur_token.right) + ":" + 
+                                               "Tipo de iniciación de array incorrecto, sólo puede ser de tipo char o int");
                             RESULT = "dir:null";
                         }
+                    } else {
+                        System.err.println("Error semántico: Arreglo '" + per.toString() + "' ya declarado en el ámbito actual.");
+                        RESULT = "dir:null";
+                    }
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayDeclaration",47, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1900,43 +1922,55 @@ class CUP$parser$actions {
 		int lisexprright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object lisexpr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-                        listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        String[] partesOperando = lisexpr.toString().split(":");
-                        if(tst.equals("int")){  
-                            if((partesOperando[1].equals("int"))){
-                                if(tst.equals(partesOperando[1])){
-                                    System.out.println("Tipo de array y contenido dentro de llaves parejo INT");
-                                    RESULT = "dir:"+ partesOperando[1];
+                       ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                        String nombreArray = "tipo:Local:" + per.toString();
+
+                        // Verificar si el nombre del arreglo ya existe en la lista
+                        if (detallesFuncion.stream().noneMatch(s -> s.startsWith(nombreArray + ":"))) {
+                            detallesFuncion.add(nombreArray + ":" + tst.toString());
+                            String[] partesOperando = lisexpr.toString().split(":");
+
+                            if(tst.equals("int")){  
+                                // Validación e inicialización para arreglos de tipo 'int'
+                                if((partesOperando[1].equals("int"))){
+                                    if(tst.equals(partesOperando[1])){
+                                        System.out.println("Tipo de array y contenido dentro de llaves parejo INT");
+                                        RESULT = "dir:"+ partesOperando[1];
+                                    }else{
+                                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        RESULT = "dir:null";
+                                    }
                                 }else{
                                     System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
                                     RESULT = "dir:null";
                                 }
-                            }else{
-                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
-                                RESULT = "dir:null";
                             }
-                        }
-                        else if(tst.equals("char")){
-                            if((partesOperando[1].equals("char"))){
-                                if(tst.equals(partesOperando[1])){
-                                    System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
-                                    RESULT = "dir:"+ partesOperando[1];
+                            else if(tst.equals("char")){
+                                // Validación e inicialización para arreglos de tipo 'char'
+                                if((partesOperando[1].equals("char"))){
+                                    if(tst.equals(partesOperando[1])){
+                                        System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
+                                        RESULT = "dir:"+ partesOperando[1];
+                                    }else{
+                                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        RESULT = "dir:null";
+                                    }
                                 }else{
                                     System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
                                     RESULT = "dir:null";
                                 }
-                            }else{
+                            }
+                            else{
                                 System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
+                                ", columna " + (cur_token.right) +":"  + "Tipo de iniciación de array incorrecto, sólo puede ser de tipo char o int");
                                 RESULT = "dir:null";
                             }
-                        }
-                        else{
-                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de char o int");
+                        } else {
+                            System.err.println("Error semántico: Arreglo '" + per.toString() + "' ya declarado en el ámbito actual.");
                             RESULT = "dir:null";
                         }
                     
@@ -1964,42 +1998,54 @@ class CUP$parser$actions {
 		int lisexprright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Object lisexpr = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-                        listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        String[] partesOperando = lisexpr.toString().split(":");
-                        if(tst.equals("int")){  
-                            if((partesOperando[1].equals("int"))){
-                                if(tst.equals(partesOperando[1])){
-                                    RESULT = "dir:"+ partesOperando[1];
+                        ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                        String nombreArray = "tipo:Local:" + per.toString();
+
+                        // Verificar si el nombre del arreglo ya existe en la lista
+                        if (detallesFuncion.stream().noneMatch(s -> s.startsWith(nombreArray + ":"))) {
+                            detallesFuncion.add(nombreArray + ":" + tst.toString());
+                            String[] partesOperando = lisexpr.toString().split(":");
+
+                            if(tst.equals("int")){  
+                                // Lógica para arreglos de tipo 'int'
+                                if((partesOperando[1].equals("int"))){
+                                    if(tst.equals(partesOperando[1])){
+                                        RESULT = "dir:"+ partesOperando[1];
+                                    }else{
+                                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        RESULT = "dir:null";
+                                    }
                                 }else{
                                     System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
                                     RESULT = "dir:null";
                                 }
-                            }else{
-                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
-                                RESULT = "dir:null";
                             }
-                        }
-                        else if(tst.equals("char")){
-                            if((partesOperando[1].equals("char"))){
-                                if(tst.equals(partesOperando[1])){
-                                    System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
-                                    RESULT = "dir:"+ partesOperando[1];
+                            else if(tst.equals("char")){
+                                // Lógica para arreglos de tipo 'char'
+                                if((partesOperando[1].equals("char"))){
+                                    if(tst.equals(partesOperando[1])){
+                                        System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
+                                        RESULT = "dir:"+ partesOperando[1];
+                                    }else{
+                                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        RESULT = "dir:null";
+                                    }
                                 }else{
                                     System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
                                     RESULT = "dir:null";
                                 }
-                            }else{
+                            }
+                            else{
                                 System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
+                                ", columna " + (cur_token.right) +":"  + "Tipo de iniciación de array incorrecto, sólo puede ser de char o int");
                                 RESULT = "dir:null";
                             }
-                        }
-                        else{
-                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de char o int");
+                        } else {
+                            System.err.println("Error semántico: Arreglo '" + per.toString() + "' ya declarado en el ámbito actual.");
                             RESULT = "dir:null";
                         }
                     
