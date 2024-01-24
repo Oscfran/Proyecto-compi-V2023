@@ -1,41 +1,20 @@
- function int tra(string b1){ @semantico string
-
-  local char dafsd[1]|
-  local int prueba2 <= (102)+(104)|
-  --prueba2|
-  local int prueba3 <= 102|
-  local int prueba4 <= 102|
-
-   @print(sisirve)|
-   @read(true)|
-
-   local int i|
-   do {i+1000|} until(i < 10 + 20)|
-
-  local int sirve <= 20|
-
-    if(i + sirve){
-      local int acomodarse <= 3484|
-    }
-    elif (i + sirve){
-      print("hola")|
-      print("adios")|
-      local int acomoda <= 32|
-      local int desacomoda <= 13|
-    }
-    else{
-      local int acomodarse1 <= 3484|
-      local int acomodarse2 <= 34|
-      local int acomodarse3 <= 3|
-    }
-   return prueba2| @semantico
- }
- function int main(string b2){
-     do{
-         local int acomodarse2 <= 34|
-         local int acomodarse3 <= 3|
-    }until (true)|
+function int pan(int arroz){
+	local int pruebareturn <= 10|
+	return pruebareturn|
  }
 
+  function int pan(int arroz){
+	return arroz|
+ }
 
- 
+   function int main(int ajiji){
+
+	local int jsjsjsj <= 10|
+	return jsjsjsj|
+ }
+
+ function int main(int ajiji){
+
+	local int jsjsjsj <= 10|
+	return jsjsjsj|
+ }

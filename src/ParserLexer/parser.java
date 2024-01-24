@@ -2297,20 +2297,27 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        currentHash = per.toString();
-                        String tipoTabla = "main";
-                        tipoTabla = "tipo:function:"+tst.toString();
-                        ArrayList<String> funcionMain = new ArrayList<String>();
-                        funcionMain.add(tipoTabla);
-                        listaTablaSimbolos.put(currentHash, funcionMain);
+                        if (!listaTablaSimbolos.containsKey(per.toString())) {
+                            // La función no existe, entonces se agrega
+                            currentHash = per.toString();
+                            String tipoTabla = "tipo:function:" + tst.toString();
+                            ArrayList<String> funcionMain = new ArrayList<String>();
+                            funcionMain.add(tipoTabla);
+                            listaTablaSimbolos.put(currentHash, funcionMain);
 
-                        // Se verifica si el valor de retorno es apropiado
-                        if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
-                            RESULT = "dir:"+ tst;
-                        }else{
+                            // Se verifica si el valor de retorno es apropiado
+                            if ((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))) {
+                                RESULT = "dir:"+tst;
+                            } else {
+                                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                                ", columna " + (cur_token.right) + ": Este tipo de función no es permitido: " + tst);
+                                RESULT = "dir:null";
+                            }
+                        } else {
+                            // La función ya existe, se muestra un mensaje de error
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                             ", columna " + (cur_token.right) +": "  + "Este tipo de función no es permitido: "+ tst);
-                             RESULT = "dir:null";
+                                            ", columna " + (cur_token.right) + ": Esta función ya existe con este nombre");
+                            RESULT = "dir:null";     
                         }
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ayudaDefinirFuncionNavi",42, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2328,20 +2335,27 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                        currentHash = per.toString();
-                        String tipoTabla = "main";
-                        tipoTabla = "tipo:main:"+tst.toString();
-                        ArrayList<String> funcionMain = new ArrayList<String>();
-                        funcionMain.add(tipoTabla);
-                        listaTablaSimbolos.put(currentHash, funcionMain);
-
-                        // Se verifica si el valor de retorno es apropiado
-                        if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
-                            RESULT = "dir:"+ tst;
-                        }else{
+                        if (listaTablaSimbolos.containsKey("main")) {
+                            // Si ya existe un 'main', se muestra un mensaje de error
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                             ", columna " + (cur_token.right) +": "  + "Este tipo de función no es permitido: "+ tst);
-                             RESULT = "dir:null";
+                                            ", columna " + (cur_token.right) + ": Solo puede haber un 'main' en el programa");
+                            RESULT = "dir:null"; 
+                        } else {
+                            // Si no existe un 'main', se agrega a la tabla de símbolos
+                            currentHash = per.toString(); 
+                            String tipoTabla = "tipo:main:" + tst.toString();
+                            ArrayList<String> funcionMain = new ArrayList<String>();
+                            funcionMain.add(tipoTabla);
+                            listaTablaSimbolos.put(currentHash, funcionMain);
+
+                            // Se verifica si el valor de retorno es apropiado
+                            if ((tst.equals("int"))) {
+                                RESULT = "dir:" + tst;
+                            } else {
+                                System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                                ", columna " + (cur_token.right) + ": Este tipo de función no es permitido: " + tst);
+                                RESULT = "dir:null";
+                            }
                         }
                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ayudaDefinirFuncionNavi",42, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
