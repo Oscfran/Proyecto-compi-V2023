@@ -1,20 +1,14 @@
 function int pan(int arroz){
 	local int pruebareturn <= 10|
+	local int jsjsjsj <= 10|
+	local char jsjsjsj <= '2'|
 	return pruebareturn|
  }
-
-  function int pan(int arroz){
-	return arroz|
- }
-
-   function int main(int ajiji){
+  function int main(int ajiji){
 
 	local int jsjsjsj <= 10|
+	local char jsjsjsj <= '2'|
 	return jsjsjsj|
  }
 
- function int main(int ajiji){
 
-	local int jsjsjsj <= 10|
-	return jsjsjsj|
- }

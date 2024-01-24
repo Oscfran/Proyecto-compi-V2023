@@ -1687,29 +1687,33 @@ class CUP$parser$actions {
 		int perright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
-                String nuevaVariableLocal = "tipo:Local:" + per.toString() + ":" + tst.toString();
+              ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+              String nombreVariableLocal = "tipo:Local:" + per.toString();
 
-                // Verificar si la variable local ya existe en la lista
-                if (!detallesFuncion.contains(nuevaVariableLocal)) {
-                    // Añadir la nueva variable local si no existe
-                    detallesFuncion.add(nuevaVariableLocal);
+              // Verificar si el nombre de la variable local ya existe en la lista, independientemente del tipo
+              boolean variableYaDeclarada = detallesFuncion.stream()
+                                              .anyMatch(v -> v.startsWith(nombreVariableLocal));
 
-                    if (!(tst.equals("null"))) {
-                        // Variable bien declarada
-                        RESULT = "dir:" + tst;
-                    } else {
-                        // Error si el tipo es 'null'
-                        System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                                           ", columna " + (cur_token.right) + " Mal declarada la variable sin asignación");
-                        RESULT = "dir:null";
-                    }
-                } else {
-                    // Error si la variable local ya fue declarada
-                    System.err.println("Error semántico: Variable '" + per.toString() + "' ya declarada en el ámbito actual.");
-                    RESULT = "dir:null";
-                }
-                
+              if (!variableYaDeclarada) {
+                  String nuevaVariableLocal = nombreVariableLocal + ":" + tst.toString();
+                  detallesFuncion.add(nuevaVariableLocal);
+
+                  if (!tst.equals("null")) {
+                      // Variable bien declarada
+                      RESULT = "dir:" + tst;
+                  } else {
+                      // Error si el tipo es 'null'
+                      System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                         ", columna " + (cur_token.right) + ": Mal declarada la variable sin asignación");
+                      RESULT = "dir:null";
+                  }
+              } else {
+                  // Error si la variable local ya fue declarada
+                  System.err.println("Error semántico en la línea" + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":" +" Variable '" + per.toString() + "' ya declarada en el ámbito actual.");
+                  RESULT = "dir:null";
+              }
+              
               CUP$parser$result = parser.getSymbolFactory().newSymbol("creaRegalo",18, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1728,40 +1732,44 @@ class CUP$parser$actions {
 		int oper1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Object oper1 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
-                String nuevaVariableLocal = "tipo:Local:" + per.toString() + ":" + tst.toString();
-                String[] partesOperando = oper1.toString().split(":");
+                    ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                    String nombreVariableLocal = "tipo:Local:" + per.toString();
 
-                // Verificar si la variable local ya existe en la lista
-                if (!detallesFuncion.contains(nuevaVariableLocal)) {
-                    // Añadir la nueva variable local si no existe
-                    detallesFuncion.add(nuevaVariableLocal);
+                    // Verificar si el nombre de la variable local ya existe en la lista
+                    boolean variableYaDeclarada = detallesFuncion.stream()
+                                                    .anyMatch(v -> v.startsWith(nombreVariableLocal));
 
-                    // Se verifica el tipo de la variable
-                    if (!(tst.equals("null"))) {
-                        if (tst.equals(partesOperando[1])) {
-                            // El tipo de la variable coincide con su asignación
-                            RESULT = "dir:" + tst;
+                    if (!variableYaDeclarada) {
+                        String nuevaVariableLocal = nombreVariableLocal + ":" + tst.toString();
+                        detallesFuncion.add(nuevaVariableLocal);
+
+                        // Se verifica el tipo de la variable
+                        if (!tst.equals("null")) {
+                            String[] partesOperando = oper1.toString().split(":");
+                            if (tst.equals(partesOperando[1])) {
+                                // El tipo de la variable coincide con su asignación
+                                RESULT = "dir:" + tst;
+                            } else {
+                                // Error si el tipo de la variable no coincide con el tipo de su asignación
+                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                                   ", columna " + (cur_token.right) + ":" + 
+                                                   " Tipo de la variable no coincide con su tipo de asignación");
+                                RESULT = "dir:null";
+                            }
                         } else {
-                            // Error si el tipo de la variable no coincide con el tipo de su asignación
+                            // Error si el tipo es 'null'
                             System.err.println("Error semántico en la línea " + (cur_token.left) + 
                                                ", columna " + (cur_token.right) + ":" + 
-                                               " Tipo de la variable no coincide con su tipo de asignación");
+                                               " Tipo de la variable vacía");
                             RESULT = "dir:null";
                         }
                     } else {
-                        // Error si el tipo es 'null'
-                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                           ", columna " + (cur_token.right) + ":" + 
-                                           " Tipo de la variable vacía");
+                        // Error si la variable local ya fue declarada
+                        System.err.println("Error semántico en la línea" + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":" +" Variable '" + per.toString() + "' ya declarada en el ámbito actual.");
                         RESULT = "dir:null";
                     }
-                } else {
-                    // Error si la variable local ya fue declarada
-                    System.err.println("Error semántico: Variable '" + per.toString() + "' ya declarada en el ámbito actual.");
-                    RESULT = "dir:null";
-                }
-                
+                    
               CUP$parser$result = parser.getSymbolFactory().newSymbol("creaRegaloAssign",29, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2495,7 +2503,8 @@ class CUP$parser$actions {
                 String[] partesOperando1 = defin.toString().split(":");
                 String[] partesOperando2 = cuer.toString().split(":");
                 if(!(partesOperando1[1].equals(partesOperando2[1]))){
-                    System.out.println("Error Semántico: El retorno de la función no cumple con su tipo esperado de salida");
+                    System.out.println("Error Semántico en la línea:" + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +":"+"El tipo de la función no cumple con su tipo de retorno esperado");
                     RESULT = "dir:" + partesOperando1[1];
                 }
                 
