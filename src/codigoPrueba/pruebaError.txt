@@ -1,4 +1,7 @@
- public main (){
-    print("hola")|
-    break|
- } 
+ function int main (){
+   print("hola")|
+	print("\nadios")|
+	print("\ntalvez")|
+	print("\nno")|
+	return 1|
+ }  

@@ -15,8 +15,14 @@ action code {:
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
     String hashPrevio;
-    String codigoMIPS = "";
-     
+    String data = ".data\nhelloworld: .asciiz \"Hello World!\"\n";
+    int nData = 0;
+    String codigoMIPS = "exit:\n\tli $v0, 10\n\tsyscall\n\n";
+    String funP = "\nmain:\n";
+    
+    public int getnData(){
+        return nData;
+    }
     // Función para imprimir la tabla de símbolos
     public void imprimirTablaSimbolos(){
         for (String key: listaTablaSimbolos.keySet()){  
@@ -42,6 +48,16 @@ action code {:
         }
         return tipo;
     }
+
+    //Data
+    public void addData(String cadena){
+        data += ( "m" + nData ) + ": .asciiz " + cadena +"\n";
+        nData++;
+    }
+    public void addFunp(String cadena){
+        funP += cadena;
+    }
+
     // Generación de código MIPS
     public void generarCodigoMIPS(String codigo){
         codigoMIPS += codigo;
@@ -50,8 +66,23 @@ action code {:
     // Función para escribir el código MIPS en un archivo
     public void escribirCodigoMIPSEnArchivo() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("src\\resultadoASM\\salida.asm"));
-        writer.write(codigoMIPS);
+        writer.write(data + "\n\n.text\n");
+        writer.write(codigoMIPS+"\tj exit");
+        writer.write(funP);
+        writer.write("\tj exit");
         writer.flush();
+    }
+
+    public String getNombre(ArrayList<String> tablasSimbolos, String id){
+        String nombre = "null";
+        for(String token : tablasSimbolos){
+            String[] partesToken = token.split(":");
+            if(id.equals(partesToken[2])){
+                nombre = partesToken[2];
+                
+            }
+        }
+        return nombre;
     }
 :}
 
@@ -256,6 +287,20 @@ regaloprin ::= COMETA operando:oper3
                     if(partesOperando1[1].equals(partesOperando2[1])){
                         if(partesOperando1[1].equals("int") || partesOperando1[1].equals("float")){
                                 RESULT = "dir:"+partesOperando1[1];
+                                System.out.println(oper2.toString());
+                                if (partesOperando1.length > 2 && partesOperando2.length > 2){
+                                    if(rn.equals("+")){
+                                        ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
+                                        generarCodigoMIPS("lw $t0, " + partesOperando1[2] + "\n" + "lw $t1, " + partesOperando2[2] + "\n" + "add $t2, $t0, $t1 \n");
+                                    }
+                                    else if (rn.equals("-")){
+                                        generarCodigoMIPS("lw $t0, " + partesOperando1[2] + "\n" + "lw $t1, " + partesOperando2[2] + "\n" + "sub $t2, $t0, $t1 \n");
+                                    }
+                                    else if (rn.equals("*")){
+                                        generarCodigoMIPS("lw $t0, " + partesOperando1[2] + "\n" + "lw $t1, " + partesOperando2[2] + "\n" + "mul $t2, $t0, $t1 \n");
+                                    }
+                                } 
+
                         }
                         else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
@@ -403,7 +448,7 @@ operando ::= PERSONA:per
         {:
             String[] partesOperando = lst.toString().split(":");
             if(partesOperando[1] != "null"){
-                RESULT = "dir:"+partesOperando[1]; 
+                RESULT = "dir:"+partesOperando[1] + ":" + partesOperando[0]; 
             }else{
                 RESULT = "dir:null";
             }
@@ -415,7 +460,7 @@ operando ::= PERSONA:per
             //System.out.println("pr es:" +pr);
             String[] partesOperando = pr.toString().split(":");
             if(partesOperando[1] != "null"){
-                RESULT = "dir:"+partesOperando[1];  
+                RESULT = "dir:"+partesOperando[1] + ":" + partesOperando[0];
             }else{
                 RESULT = "dir:null";
             }
@@ -518,6 +563,7 @@ creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREG
                         RESULT = "dir:null";
                     }
                     :}
+                    | error ELFO
                     ;
 
                 
@@ -932,6 +978,9 @@ narraNavidad ::= NARRA ABRECUENTO operando:opernarra CIERRACUENTO FINREGALO
                 String[] partesOperando = opernarra.toString().split(":");
                     if(partesOperando[1].equals("int")||partesOperando[1].equals("float") || partesOperando[1].equals("string")){
                         RESULT = "dir:"+ partesOperando[1];
+                        addData(partesOperando[2]);
+                        addFunp("\tj bloquePrint"+(getnData()-1)+"\n");
+                        generarCodigoMIPS(String.format("bloquePrint"+(getnData()-1)+ ":" + "\n\tli $v0, 4\n" + "\tla $a0, %s\n", ( "m" + (getnData()-1))) +"\tsyscall\n\n");
                         System.out.println("tipo del print correcto");
                     }else{
                         RESULT = "dir:null";

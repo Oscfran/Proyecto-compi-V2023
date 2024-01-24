@@ -14,8 +14,15 @@ action code {:
     // Definición del HashMap
     HashMap<String, ArrayList<String>> listaTablaSimbolos = new HashMap<String, ArrayList<String>>();
     String currentHash;
-    String codigoMIPS = "";
-     
+    String hashPrevio;
+    String data = ".data\nhelloworld: .asciiz \"Hello World!\"\n";
+    int nData = 0;
+    String codigoMIPS = "exit:\n\tli $v0, 10\n\tsyscall\n\n";
+    String funP = "\nmain:\n";
+    
+    public int getnData(){
+        return nData;
+    }
     // Función para imprimir la tabla de símbolos
     public void imprimirTablaSimbolos(){
         for (String key: listaTablaSimbolos.keySet()){  
@@ -41,6 +48,16 @@ action code {:
         }
         return tipo;
     }
+
+    //Data
+    public void addData(String cadena){
+        data += ( "m" + nData ) + ": .asciiz " + cadena +"\n";
+        nData++;
+    }
+    public void addFunp(String cadena){
+        funP += cadena;
+    }
+
     // Generación de código MIPS
     public void generarCodigoMIPS(String codigo){
         codigoMIPS += codigo;
@@ -49,8 +66,23 @@ action code {:
     // Función para escribir el código MIPS en un archivo
     public void escribirCodigoMIPSEnArchivo() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("src\\resultadoASM\\salida.asm"));
-        writer.write(codigoMIPS);
+        writer.write(data + "\n\n.text\n");
+        writer.write(codigoMIPS+"\tj exit");
+        writer.write(funP);
+        writer.write("\tj exit");
         writer.flush();
+    }
+
+    public String getNombre(ArrayList<String> tablasSimbolos, String id){
+        String nombre = "null";
+        for(String token : tablasSimbolos){
+            String[] partesToken = token.split(":");
+            if(id.equals(partesToken[2])){
+                nombre = partesToken[2];
+                
+            }
+        }
+        return nombre;
     }
 :}
 
@@ -177,7 +209,7 @@ exprUni ::= exprP:pr FINREGALO
             :}
             ;
 
-// Expresión que junta operaciones aritméticas, las relaciones
+// Expresión que junta operaciones aritméticas y relacionales
 exprP ::= regaloprin:prin
         {:
             String[] partesOperando = prin.toString().split(":");
@@ -255,6 +287,20 @@ regaloprin ::= COMETA operando:oper3
                     if(partesOperando1[1].equals(partesOperando2[1])){
                         if(partesOperando1[1].equals("int") || partesOperando1[1].equals("float")){
                                 RESULT = "dir:"+partesOperando1[1];
+                                System.out.println(oper2.toString());
+                                if (partesOperando1.length > 2 && partesOperando2.length > 2){
+                                    if(rn.equals("+")){
+                                        ArrayList<String> ts = listaTablaSimbolos.get(currentHash);
+                                        generarCodigoMIPS("lw $t0, " + partesOperando1[2] + "\n" + "lw $t1, " + partesOperando2[2] + "\n" + "add $t2, $t0, $t1 \n");
+                                    }
+                                    else if (rn.equals("-")){
+                                        generarCodigoMIPS("lw $t0, " + partesOperando1[2] + "\n" + "lw $t1, " + partesOperando2[2] + "\n" + "sub $t2, $t0, $t1 \n");
+                                    }
+                                    else if (rn.equals("*")){
+                                        generarCodigoMIPS("lw $t0, " + partesOperando1[2] + "\n" + "lw $t1, " + partesOperando2[2] + "\n" + "mul $t2, $t0, $t1 \n");
+                                    }
+                                } 
+
                         }
                         else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
@@ -297,10 +343,8 @@ regaloCompradoAux ::= operando:oper1 elfos:elf operando:oper2
                 // Permite expresiones relacionales (==, !=) del mismo tipo, mientras que sean int, float y bool
                 if((elf.equals("==") || elf.equals("!="))){
                     if (partesOperando1[1].equals(partesOperando2[1])){
-                        //System.out.println("Los tipos de los operadores == y != son los mismos");
-                        if ((partesOperando1[1].equals("int")|| partesOperando1[1].equals("float")|| partesOperando1[1].equals("bool"))){
-                            //System.out.println("Los tipos int, float y bool son permitidos");
-                            RESULT = "dir:"+partesOperando1[1];
+                        if ((partesOperando1[1].equals("int") || partesOperando1[1].equals("float") || partesOperando1[1].equals("bool"))){
+                            RESULT = "dir:bool"; // El resultado de estas operaciones es booleano
                         }
                         else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
@@ -317,10 +361,8 @@ regaloCompradoAux ::= operando:oper1 elfos:elf operando:oper2
                 // Permite expresiones relacionales (<, >, =>, =<) del mismo tipo, mientras que sean int y float
                 else{
                     if (partesOperando1[1].equals(partesOperando2[1])){
-                        //System.out.println("Los tipos del resto de operadores relacionales son los mismos");
                         if (partesOperando1[1].equals("int") || partesOperando1[1].equals("float")){
-                            //System.out.println("Los tipos int, float son permitidos");
-                            RESULT = "dir:"+partesOperando1[1];
+                            RESULT = "dir:bool"; // El resultado de estas operaciones también es booleano
                         }
                         else{
                             System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
@@ -336,6 +378,7 @@ regaloCompradoAux ::= operando:oper1 elfos:elf operando:oper2
                 }
             :}
             ;
+
 // Combinación de expresiones lógicas y relacionales
 regaloCompradoLogRel ::= regaloCompradoAux:relaux 
             {:
@@ -405,7 +448,7 @@ operando ::= PERSONA:per
         {:
             String[] partesOperando = lst.toString().split(":");
             if(partesOperando[1] != "null"){
-                RESULT = "dir:"+partesOperando[1]; 
+                RESULT = "dir:"+partesOperando[1] + ":" + partesOperando[0]; 
             }else{
                 RESULT = "dir:null";
             }
@@ -417,7 +460,7 @@ operando ::= PERSONA:per
             //System.out.println("pr es:" +pr);
             String[] partesOperando = pr.toString().split(":");
             if(partesOperando[1] != "null"){
-                RESULT = "dir:"+partesOperando[1];  
+                RESULT = "dir:"+partesOperando[1] + ":" + partesOperando[0];
             }else{
                 RESULT = "dir:null";
             }
@@ -447,46 +490,82 @@ operando ::= PERSONA:per
 //Declaracion de variable sin asignación
 //local tipo arroz|
 creaRegalo ::= POLO t_santas:tst PERSONA:per FINREGALO
-                {:
-                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        if(!(tst.equals("null"))){
-                            //System.out.println("Bien declarada la variable sin asignación");
-                            RESULT = "dir:"+ tst;
-                        }else{
-                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
-                            ", columna " + (cur_token.right) + " Mal declarada la variable sin asignación");
-                            RESULT = "dir:null";
-                        }
-                :}
-                ;
+              {:
+              ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+              String nombreVariableLocal = "tipo:Local:" + per.toString();
+
+              // Verificar si el nombre de la variable local ya existe en la lista, independientemente del tipo
+              boolean variableYaDeclarada = detallesFuncion.stream()
+                                              .anyMatch(v -> v.startsWith(nombreVariableLocal));
+
+              if (!variableYaDeclarada) {
+                  String nuevaVariableLocal = nombreVariableLocal + ":" + tst.toString();
+                  detallesFuncion.add(nuevaVariableLocal);
+
+                  if (!tst.equals("null")) {
+                      // Variable bien declarada
+                      RESULT = "dir:" + tst;
+                  } else {
+                      // Error si el tipo es 'null'
+                      System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                                         ", columna " + (cur_token.right) + ": Mal declarada la variable sin asignación");
+                      RESULT = "dir:null";
+                  }
+              } else {
+                  // Error si la variable local ya fue declarada
+                  System.err.println("Error semántico en la línea" + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":" +" Variable '" + per.toString() + "' ya declarada en el ámbito actual.");
+                  RESULT = "dir:null";
+              }
+              :}
+              | error EMPEZONAVIDAD
+              ;
 
 // Declaración de variable con asignación
 //local tipo arroz <= 14|
 creaRegaloAssign ::= POLO t_santas:tst PERSONA:per ENTREGA operando:oper1 FINREGALO
-                {:
-                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                    String[] partesOperando = oper1.toString().split(":");
+                    {:
+                    ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                    String nombreVariableLocal = "tipo:Local:" + per.toString();
 
-                    // Se verifica su tipo de la variable
-                        if(!(tst.equals("null"))){
-                            //System.out.println("tipo de la variable permitido");
-                            if(tst.equals(partesOperando[1])){
-                                //System.out.println("La variable coincide con su asignación");
-                                RESULT = "dir:"+ tst;
-                            }
-                            else{
+                    // Verificar si el nombre de la variable local ya existe en la lista
+                    boolean variableYaDeclarada = detallesFuncion.stream()
+                                                    .anyMatch(v -> v.startsWith(nombreVariableLocal));
+
+                    if (!variableYaDeclarada) {
+                        String nuevaVariableLocal = nombreVariableLocal + ":" + tst.toString();
+                        detallesFuncion.add(nuevaVariableLocal);
+
+                        // Se verifica el tipo de la variable
+                        if (!tst.equals("null")) {
+                            String[] partesOperando = oper1.toString().split(":");
+                            if (tst.equals(partesOperando[1])) {
+                                // El tipo de la variable coincide con su asignación
+                                RESULT = "dir:" + tst;
+                            } else {
+                                // Error si el tipo de la variable no coincide con el tipo de su asignación
                                 System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                ", columna " + (cur_token.right) +":"  + " Tipo de la variable no coincide con su tipo de asignación");
+                                                   ", columna " + (cur_token.right) + ":" + 
+                                                   " Tipo de la variable no coincide con su tipo de asignación");
                                 RESULT = "dir:null";
                             }
-                        }else{
+                        } else {
+                            // Error si el tipo es 'null'
                             System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo de la variable vacía");
+                                               ", columna " + (cur_token.right) + ":" + 
+                                               " Tipo de la variable vacía");
                             RESULT = "dir:null";
                         }
-                :}
+                    } else {
+                        // Error si la variable local ya fue declarada
+                        System.err.println("Error semántico en la línea" + (cur_token.left) + 
+                            ", columna " + (cur_token.right) +":" +" Variable '" + per.toString() + "' ya declarada en el ámbito actual.");
+                        RESULT = "dir:null";
+                    }
+                    :}
+                    | error ELFO
+                    ;
 
-                ;
                 
 //Redeclaración de variables
 decl_G ::= PERSONA ENTREGA operando FINREGALO;
@@ -513,119 +592,165 @@ cuerpo ::= ABREREGALO CIERRAREGALO
 //local static char array[2]|
 arrayDeclaration ::= POLO t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE FINREGALO
                     {:
-                    listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        if(tst.equals("int")|| tst.equals("char")){  
-                            RESULT = "dir:"+tst;
-                        }
-                        else{
+                    ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                    String nombreArray = "tipo:Local:" + per.toString() + ":" + tst.toString();
+
+                    // Verificar si el nombre del arreglo ya existe en la lista
+                    if (!detallesFuncion.contains(nombreArray)) {
+                        // Añadir el nuevo arreglo si no existe
+                        detallesFuncion.add(nombreArray);
+
+                        if (tst.equals("int") || tst.equals("char")) {
+                            RESULT = "dir:" + tst;
+                        } else {
                             System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de tipo char o int");
+                                               ", columna " + (cur_token.right) + ":" + 
+                                               "Tipo de iniciación de array incorrecto, sólo puede ser de tipo char o int");
                             RESULT = "dir:null";
                         }
+                    } else {
+                        // Error si el arreglo ya fue declarado
+                        System.err.println("Error semántico: Arreglo '" + per.toString() + "' ya declarado en el ámbito actual.");
+                        RESULT = "dir:null";
+                    }
                     :}
                     | POLO GALLETAQUIETA:gaie t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE FINREGALO
                     {:
-                     listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        if(tst.equals("int")|| tst.equals("char")){  
-                            RESULT = "dir:"+tst;
-                        }
-                        else{
+                    ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                    String nombreArray = "tipo:Local:" + per.toString() + ":" + tst.toString();
+
+                    // La misma verificación y lógica para la otra opción de declaración de arreglo
+                    if (!detallesFuncion.contains(nombreArray)) {
+                        detallesFuncion.add(nombreArray);
+
+                        if (tst.equals("int") || tst.equals("char")) {
+                            RESULT = "dir:" + tst;
+                        } else {
                             System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de tipo char o int");
+                                               ", columna " + (cur_token.right) + ":" + 
+                                               "Tipo de iniciación de array incorrecto, sólo puede ser de tipo char o int");
                             RESULT = "dir:null";
                         }
+                    } else {
+                        System.err.println("Error semántico: Arreglo '" + per.toString() + "' ya declarado en el ámbito actual.");
+                        RESULT = "dir:null";
+                    }
                     :}
                     ;
 
 // Regla de inicialización de arrays
-//  local char arr[3] <= {a,b,3}|
+//  local char arr[3] <= {'a'}|
 //  local int arr[3] <= {45,3,1}|
-//  local static char arr[3] <= {a,b,3}|
+//  local static char arr[3] <= {'a'}|
 //  local static int arr[3] <= {45,3,1}|
 arrayInitialization ::=  POLO t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones:lisexpr CIERRAREGALO FINREGALO
                     {:
-                        listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        String[] partesOperando = lisexpr.toString().split(":");
-                        if(tst.equals("int")){  
-                            if((partesOperando[1].equals("int"))){
-                                if(tst.equals(partesOperando[1])){
-                                    System.out.println("Tipo de array y contenido dentro de llaves parejo INT");
-                                    RESULT = "dir:"+ partesOperando[1];
+                       ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                        String nombreArray = "tipo:Local:" + per.toString();
+
+                        // Verificar si el nombre del arreglo ya existe en la lista
+                        if (detallesFuncion.stream().noneMatch(s -> s.startsWith(nombreArray + ":"))) {
+                            detallesFuncion.add(nombreArray + ":" + tst.toString());
+                            String[] partesOperando = lisexpr.toString().split(":");
+
+                            if(tst.equals("int")){  
+                                // Validación e inicialización para arreglos de tipo 'int'
+                                if((partesOperando[1].equals("int"))){
+                                    if(tst.equals(partesOperando[1])){
+                                        System.out.println("Tipo de array y contenido dentro de llaves parejo INT");
+                                        RESULT = "dir:"+ partesOperando[1];
+                                    }else{
+                                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        RESULT = "dir:null";
+                                    }
                                 }else{
                                     System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
                                     RESULT = "dir:null";
                                 }
-                            }else{
-                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
-                                RESULT = "dir:null";
                             }
-                        }
-                        else if(tst.equals("char")){
-                            if((partesOperando[1].equals("char"))){
-                                if(tst.equals(partesOperando[1])){
-                                    System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
-                                    RESULT = "dir:"+ partesOperando[1];
+                            else if(tst.equals("char")){
+                                // Validación e inicialización para arreglos de tipo 'char'
+                                if((partesOperando[1].equals("char"))){
+                                    if(tst.equals(partesOperando[1])){
+                                        System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
+                                        RESULT = "dir:"+ partesOperando[1];
+                                    }else{
+                                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        RESULT = "dir:null";
+                                    }
                                 }else{
                                     System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
                                     RESULT = "dir:null";
                                 }
-                            }else{
+                            }
+                            else{
                                 System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
+                                ", columna " + (cur_token.right) +":"  + "Tipo de iniciación de array incorrecto, sólo puede ser de tipo char o int");
                                 RESULT = "dir:null";
                             }
-                        }
-                        else{
-                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de char o int");
+                        } else {
+                            System.err.println("Error semántico: Arreglo '" + per.toString() + "' ya declarado en el ámbito actual.");
                             RESULT = "dir:null";
                         }
                     :} 
                     | POLO GALLETAQUIETA:gaie t_santas:tst PERSONA:per ABREEMPAQUE l_SANTA:lst CIERRAEMPAQUE ENTREGA ABREREGALO listaExpresiones:lisexpr CIERRAREGALO FINREGALO
                     {:
-                        listaTablaSimbolos.get(currentHash).add("tipo:Local:" + per.toString()+":"+ tst.toString());
-                        String[] partesOperando = lisexpr.toString().split(":");
-                        if(tst.equals("int")){  
-                            if((partesOperando[1].equals("int"))){
-                                if(tst.equals(partesOperando[1])){
-                                    RESULT = "dir:"+ partesOperando[1];
+                        ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                        String nombreArray = "tipo:Local:" + per.toString();
+
+                        // Verificar si el nombre del arreglo ya existe en la lista
+                        if (detallesFuncion.stream().noneMatch(s -> s.startsWith(nombreArray + ":"))) {
+                            detallesFuncion.add(nombreArray + ":" + tst.toString());
+                            String[] partesOperando = lisexpr.toString().split(":");
+
+                            if(tst.equals("int")){  
+                                // Lógica para arreglos de tipo 'int'
+                                if((partesOperando[1].equals("int"))){
+                                    if(tst.equals(partesOperando[1])){
+                                        RESULT = "dir:"+ partesOperando[1];
+                                    }else{
+                                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        RESULT = "dir:null";
+                                    }
                                 }else{
                                     System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
                                     RESULT = "dir:null";
                                 }
-                            }else{
-                                System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
-                                RESULT = "dir:null";
                             }
-                        }
-                        else if(tst.equals("char")){
-                            if((partesOperando[1].equals("char"))){
-                                if(tst.equals(partesOperando[1])){
-                                    System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
-                                    RESULT = "dir:"+ partesOperando[1];
+                            else if(tst.equals("char")){
+                                // Lógica para arreglos de tipo 'char'
+                                if((partesOperando[1].equals("char"))){
+                                    if(tst.equals(partesOperando[1])){
+                                        System.out.println("Tipo de array y contenido dentro de llaves parejo CHAR");
+                                        RESULT = "dir:"+ partesOperando[1];
+                                    }else{
+                                        System.err.println("Error semántico en la línea " + (cur_token.left) + 
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        RESULT = "dir:null";
+                                    }
                                 }else{
                                     System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves incorrecto");
+                                        ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
                                     RESULT = "dir:null";
                                 }
-                            }else{
+                            }
+                            else{
                                 System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                                    ", columna " + (cur_token.right) +":"  + "Tipo de array y contenido dentro de llaves no concuerda");
+                                ", columna " + (cur_token.right) +":"  + "Tipo de iniciación de array incorrecto, sólo puede ser de char o int");
                                 RESULT = "dir:null";
                             }
-                        }
-                        else{
-                            System.err.println("Error semántico en la línea " + (cur_token.left) + 
-                            ", columna " + (cur_token.right) +":"  + "Tipo iniciación de array incorrecto, sólo puede ser de char o int");
+                        } else {
+                            System.err.println("Error semántico: Arreglo '" + per.toString() + "' ya declarado en el ámbito actual.");
                             RESULT = "dir:null";
                         }
-                    :} 
-                    ;
+                    :} ;
+
 
 // Regla para acompañar la asignación de arrays
 listaExpresiones ::= operando:oper1
@@ -714,8 +839,14 @@ llamadaNavideniaAux ::= llamadaNavidenia FINREGALO;
 // tipo identificador
 ayudanteDeSanta ::= t_santas:tst PERSONA:per
                 {:
-                // Meterlo a la tabla de símbolos
-                listaTablaSimbolos.get(currentHash).add("tipo:param:" + per.toString()+":"+ tst.toString());
+                ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
+                String nuevoParametro = "tipo:param:" + per.toString() + ":" + tst.toString();
+
+                // Verificar si el parámetro ya existe en la lista
+                if (!detallesFuncion.contains(nuevoParametro)) {
+                    // Añadir el nuevo parámetro si no existe
+                    detallesFuncion.add(nuevoParametro);
+                }
                 :};
 
 // Varios parámetros
@@ -728,7 +859,7 @@ ayudaDefFunNav ::= ayudanteDeSanta
 // function int func3
 ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per 
                     
-                    {:
+                    {:  
                         if (!listaTablaSimbolos.containsKey(per.toString())) {
                             // La función no existe, entonces se agrega
                             currentHash = per.toString();
@@ -811,7 +942,8 @@ bolsanavidenia ::= definirFunNav:defin
                 String[] partesOperando1 = defin.toString().split(":");
                 String[] partesOperando2 = cuer.toString().split(":");
                 if(!(partesOperando1[1].equals(partesOperando2[1]))){
-                    System.out.println("Error Semántico: El retorno de la función no cumple con su tipo esperado de salida");
+                    System.out.println("Error Semántico en la línea:" + (cur_token.left) + 
+                                ", columna " + (cur_token.right) +":"+"El tipo de la función no cumple con su tipo de retorno esperado");
                     RESULT = "dir:" + partesOperando1[1];
                 }
                 :}
@@ -846,6 +978,9 @@ narraNavidad ::= NARRA ABRECUENTO operando:opernarra CIERRACUENTO FINREGALO
                 String[] partesOperando = opernarra.toString().split(":");
                     if(partesOperando[1].equals("int")||partesOperando[1].equals("float") || partesOperando[1].equals("string")){
                         RESULT = "dir:"+ partesOperando[1];
+                        addData(partesOperando[2]);
+                        addFunp("\tj bloquePrint"+(getnData()-1)+"\n");
+                        generarCodigoMIPS(String.format("bloquePrint"+(getnData()-1)+ ":" + "\n\tli $v0, 4\n" + "\tla $a0, %s\n", ( "m" + (getnData()-1))) +"\tsyscall\n\n");
                         System.out.println("tipo del print correcto");
                     }else{
                         RESULT = "dir:null";
