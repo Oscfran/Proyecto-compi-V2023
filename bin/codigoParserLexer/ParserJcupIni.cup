@@ -73,10 +73,10 @@ scan with {: return lex.next_token(); :};
 terminal            EMPEZONAVIDAD, PERSONA, l_SANTA , l_SANTA_CLAUS, l_PAPANOEL, l_PASCUERO, l_COLACHO, ENTREGA, ELFO1, ELFO2, ELFO3, ELFO4, ELFO5, ELFO6;
 terminal            GRINCH, QUIEN, RODOLFO, COMETA, BAILARIN, CUPIDO, DONNER, DASHER, ELFO, HADA, DUENDE, ENVUELVE, ENVOLTURA, HACE, REVISA, ENVIA, CORTA, MELCHOR, GASPAR, BALTASAR, POLO;
 terminal            ABRECUENTO, CIERRACUENTO, ABREEMPAQUE, CIERRAEMPAQUE, ABREREGALO, CIERRAREGALO, FINREGALO, SANTACLAUS, PAPANOEL, SANNICOLAS, SINTERKLASS, VIEJITOPASCUERO, COLACHO;
-terminal            ENTREGAREGALOS, MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA, CUPIENTERO, GALLETAQUIETA;
+terminal            MUERDAGO, NARRA, ESCUCHA, SANTACLAUSULA, CUPIENTERO, GALLETAQUIETA, ENTREGAREGALOS;
 
 /* No terminales */
-non terminal            poloNorte, navidad,t_santas, literales_navidenios, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad, entregaRegalos;
+non terminal            poloNorte, navidad,t_santas, literales_navidenios, bolsanavidenia, pbolsanavideniaAux, narraNavidad, escuchaNavidad;
 non terminal            grinchYQuien, unidadNavidenia, logisticadeNavidad, regalo, cuerpo, ayudanteDeSanta, ayudaDefFunNav, definirFunNav, corta;
 non terminal            elfos, creaRegalo, estructura, exprUni, exprP, regaloprin, regaloCompradoLogRel, regaloCompradoAux, regaloManualAux, operando, operandoLog;
 non terminal            opciones,creaRegaloAssign, forStmt, cuerpoMain, regaloExtn, antartica, doUntilStmt, envia, elfoStm, hadaStm, hadaMulti, duendeStm, renos;
@@ -715,14 +715,28 @@ ayudaDefinirFuncionNavi ::= EMPEZONAVIDAD t_santas:tst PERSONA:per
                     {:
                         currentHash = per.toString();
                         String tipoTabla = "main";
-                        if (per.toString().equals("main")){
-                            tipoTabla = "tipo:main:"+tst.toString();
+                        tipoTabla = "tipo:function:"+tst.toString();
+                        ArrayList<String> funcionMain = new ArrayList<String>();
+                        funcionMain.add(tipoTabla);
+                        listaTablaSimbolos.put(currentHash, funcionMain);
+
+                        // Se verifica si el valor de retorno es apropiado
+                        if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
+                            RESULT = "dir:"+ tst;
                         }else{
-                            tipoTabla = "tipo:function:"+tst.toString();
-                            ArrayList<String> funcionMain = new ArrayList<String>();
-                            funcionMain.add(tipoTabla);
-                            listaTablaSimbolos.put(currentHash, funcionMain);
+                            System.err.println("Error semántico en la línea " + (cur_token.left+1) + 
+                             ", columna " + (cur_token.right) +": "  + "Este tipo de función no es permitido: "+ tst);
+                             RESULT = "dir:null";
                         }
+                    :}
+                    | EMPEZONAVIDAD t_santas:tst ENTREGAREGALOS:per
+                    {:
+                        currentHash = per.toString();
+                        String tipoTabla = "main";
+                        tipoTabla = "tipo:main:"+tst.toString();
+                        ArrayList<String> funcionMain = new ArrayList<String>();
+                        funcionMain.add(tipoTabla);
+                        listaTablaSimbolos.put(currentHash, funcionMain);
 
                         // Se verifica si el valor de retorno es apropiado
                         if((tst.equals("int") || tst.equals("float") || tst.equals("char") || tst.equals("bool"))){
@@ -799,7 +813,7 @@ narraNavidad ::= NARRA ABRECUENTO operando:opernarra CIERRACUENTO FINREGALO
                 String[] partesOperando = opernarra.toString().split(":");
                     if(partesOperando[1].equals("int")||partesOperando[1].equals("float") || partesOperando[1].equals("string")){
                         RESULT = "dir:"+ partesOperando[1];
-                        System.out.println("tipo del read correcto");
+                        System.out.println("tipo del print correcto");
                     }else{
                         RESULT = "dir:null";
                         System.err.println("Error semántico en la línea " + (cur_token.left) + 

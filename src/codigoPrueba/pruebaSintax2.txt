@@ -1,4 +1,4 @@
- function int func3(string b1){ @semantico string
+ function int tra(string b1){ @semantico string
 
   local char dafsd[1]|
   local int prueba2 <= (102)+(104)|
@@ -30,7 +30,12 @@
     }
    return prueba2| @semantico
  }
-
+ function int main(string b2){
+     do{
+         local int acomodarse2 <= 34|
+         local int acomodarse3 <= 3|
+    }until (true)|
+ }
 
 
  

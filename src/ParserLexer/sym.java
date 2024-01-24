@@ -24,13 +24,13 @@ public class sym {
   public static final int ENTREGA = 9;
   public static final int VIEJITOPASCUERO = 48;
   public static final int ABREEMPAQUE = 39;
-  public static final int GALLETAQUIETA = 56;
+  public static final int GALLETAQUIETA = 55;
   public static final int RODOLFO = 18;
   public static final int CIERRAEMPAQUE = 40;
-  public static final int ENTREGAREGALOS = 50;
+  public static final int ENTREGAREGALOS = 56;
   public static final int l_SANTA_CLAUS = 5;
   public static final int l_PAPANOEL = 6;
-  public static final int NARRA = 52;
+  public static final int NARRA = 51;
   public static final int HACE = 29;
   public static final int ENVUELVE = 27;
   public static final int PAPANOEL = 45;
@@ -45,16 +45,16 @@ public class sym {
   public static final int BALTASAR = 35;
   public static final int ABRECUENTO = 37;
   public static final int GASPAR = 34;
-  public static final int ESCUCHA = 53;
+  public static final int ESCUCHA = 52;
   public static final int ABREREGALO = 41;
   public static final int DASHER = 23;
   public static final int CUPIDO = 21;
   public static final int ENVIA = 31;
   public static final int COLACHO = 49;
-  public static final int CUPIENTERO = 55;
+  public static final int CUPIENTERO = 54;
   public static final int BAILARIN = 20;
-  public static final int MUERDAGO = 51;
-  public static final int SANTACLAUSULA = 54;
+  public static final int MUERDAGO = 50;
+  public static final int SANTACLAUSULA = 53;
   public static final int ELFO = 24;
   public static final int ELFO6 = 15;
   public static final int ENVOLTURA = 28;
@@ -116,13 +116,13 @@ public class sym {
   "SINTERKLASS",
   "VIEJITOPASCUERO",
   "COLACHO",
-  "ENTREGAREGALOS",
   "MUERDAGO",
   "NARRA",
   "ESCUCHA",
   "SANTACLAUSULA",
   "CUPIENTERO",
-  "GALLETAQUIETA"
+  "GALLETAQUIETA",
+  "ENTREGAREGALOS"
   };
 }
 
