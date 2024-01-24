@@ -2427,12 +2427,20 @@ class CUP$parser$actions {
 		Object per = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
                 ArrayList<String> detallesFuncion = listaTablaSimbolos.get(currentHash);
-                String nuevoParametro = "tipo:param:" + per.toString() + ":" + tst.toString();
+                String nombreParametro = "tipo:param:" + per.toString();
 
-                // Verificar si el parámetro ya existe en la lista
-                if (!detallesFuncion.contains(nuevoParametro)) {
+                // Verificar si ya existe un parámetro con el mismo nombre
+                boolean parametroYaExiste = detallesFuncion.stream()
+                    .anyMatch(param -> param.startsWith(nombreParametro));
+
+                if (!parametroYaExiste) {
                     // Añadir el nuevo parámetro si no existe
+                    String nuevoParametro = nombreParametro + ":" + tst.toString();
                     detallesFuncion.add(nuevoParametro);
+                } else {
+                    // Manejar el caso en que el parámetro con ese nombre ya exista
+                    System.err.println("Error Semántico: "+ (cur_token.left+1) + 
+                                                ", columna " + (cur_token.right) + " " + "Parámetro '" + per.toString() + "' ya declarado en la función.");
                 }
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ayudanteDeSanta",13, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2806,11 +2814,11 @@ class CUP$parser$actions {
           case 108: // poloNorte ::= escuchaNavidad 
             {
               Object RESULT =null;
-		int escuchaleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
-		int escucharight = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
-		Object escucha = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		int escuchleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int escuchright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Object escuch = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                    String[] partesOperando = escucha.toString().split(":");
+                    String[] partesOperando = escuch.toString().split(":");
                     if(!(partesOperando[1].equals("null"))){
                         RESULT = "dir:"+ partesOperando[1];
                     }else{

@@ -1,10 +1,106 @@
 
-   function int main(int ajiji){
+function int main(int ajiji){
 	local int jsjsjsj <= 10|
-	local char arr[3]|
+	local char bobo[3]|
+	local int uno <= 1|
+	local int kokook <= 10|
 	local static char arr[3] <= {'a'}|
     local static int arr[3] <= {45,3,1}|
 	return jsjsjsj|
  }
+
+
+
+
+  @esto es un comentario inicial
+ function float func1(){
+	x <= 1.2| @semantico
+	local char y|
+	local char y| @semantico
+	local char a <= -23 + -24| @semantico
+	local int b <= 2.3 ** 2.4| @semantico
+	local float c <= 5 ~ 6| @semantico
+	local string d <= 50 / 60| @semantico
+	local bool e <= "hola" + false|
+	print("entra func 1")| 
+	@semantico no hay return
+ } 
+@funcion repetida
+function float func1(char x22,char x22){@semantico borrar parametro
+	local char x22 <= '!'| @semantico x22
+	local char miChar<='!'|
+	local string str1<="Hola $%&/#$&) mundo"|
+	local float fl1|
+	local float fl1<=56.6| @semantico fl1
+	local int in1<= false| @semantico
+	in1<= ++x22| @semantico
+	local char arr[20]|
+	@arr[x22] <= 'c'| @semantico x22
+	local char arr2[20]|
+	local bool mibool <= true|
+
+	@local int in2<= --fl1 ~ -14/++in1+7- 15 **  arr[67] * func1 (hola, true, "hola mundo", 4.5, 'a') | @semantico fl1, func1, arreglo 67
+	mibool <= (3.7 * fl1 + (-45.6~76)) < 56 ^ true # mibool # !mibool  | @semantico literal 76
+
+	return -5.6|@cambio en retorno genera semantico
+
+} 
+
+function float miFunc(int dif,char otra,char otra2){	
+	for(i <= 10,i<30*2,++i)@semantico i
+	{
+		do{
+			var <= var - 1| @semantico
+			print("do")|
+		}until(var2>12.2 # (34+33)>12)| @semantico
+
+		if (var==0)
+		{
+			print("entra al if")|
+			break|
+		}
+		elif(1)@semántico
+		{
+			print("entra a elif")|
+		}
+		else
+		{
+			for(j <= 10,j<30*2,++j){
+				for(k <= 10,k<30*2,++k){
+					print("entra al for anidado")|
+				}
+			}
+		}
+		if (varF==0.1){@semantico
+			break|
+		} elif(true) {
+			print("segundo elif")|
+		}
+	}
+	return 1| @semantico
+}
+
+function string func3(string b1){ @semantico string
+	return b1| 
+}
+
+function int main(){ @function
+
+@Comentario 1
+
+	
+@comentario 2
+	local bool b1|
+	local string s1|
+	read(s1)| @semantico
+	print(b1)| @semantico
+	print(true)| @semantico
+	print(-6.7)|
+	@miFunc(miFunc(),'a')| @semantico miFunc, hola
+	local bool bl0 <= 6.7 != 8.9| @ok
+	@local bool bl1 <= in1 => fl1 ^ false # !(func2(3,in1) > 56)| @semantico in1 >= fl1, func2
+	print("final")|
+	return bl1| @semantico
+}
 
  
